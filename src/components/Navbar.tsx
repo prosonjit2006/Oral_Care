@@ -1,31 +1,31 @@
-
+import logo from '../assets/images/home/logo.png'
 
 const Navbar = () => {
   return (
-    <div className=" flex justify-between align-middle p-2">
+    <section className="container mx-auto flex justify-between align-middle mt-5 bg-transparent fixed top-0 left-0 right-0 w-full z-50">
 
         {/* logo part */}
       <div className="logo">
         <a href="#">
-            <img src="./" alt="logo" />
+            <img src={logo} alt="logo" />
         </a>
       </div>
       
       {/* navlist part */}
         <div className="navlist">
-            <ul className="navitems flex gap-3">
-                <li><a href="#"> Home </a></li>
-                <li><a href="#"> Services </a></li>
-                <li><a href="#"> Team </a></li>
-                <li><a href="#"> Subscriptions </a></li>
-                <li><a href="#"> Contact Us </a></li>
+            <ul className="navitems flex gap-5">
+                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Home </a></li>
+                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Services </a></li>
+                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Team </a></li>
+                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Subscriptions </a></li>
+                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Contact Us </a></li>
             </ul>
         </div>
         <div className="navBtn">
-            <a href="#" className=" border border-black"> Get Appointment </a>
+            <a href="#" className=" border border-white text-white p-2 rounded"> Get Appointment </a>
         </div>
 
-    </div>
+    </section>
   )
 }
 
