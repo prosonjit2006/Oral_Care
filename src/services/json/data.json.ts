@@ -131,3 +131,34 @@ export const reviewsRowTwo: ReviewsData[] = [
     avatar: avatar5,
   },
 ];
+
+
+// footer data part 
+
+import { Home, Briefcase, Users, Phone, Mail, Instagram, Facebook, Twitter } from "lucide-react";
+
+export const navigationLinks = [
+  { name: "Home", icon: Home },
+  { name: "Services", icon: Briefcase },
+  { name: "Subscriptions", icon: Briefcase },
+  { name: "Team", icon: Users },
+  { name: "Contact Us", icon: Phone },
+];
+
+export const contactLinks = [
+  { name: "oralcare@mail.com", icon: Mail },
+  { name: "+28352032032-940", icon: Phone },
+];
+
+export const socialLinks = [
+  { name: "Instagram", icon: Instagram },
+  { name: "Facebook", icon: Facebook },
+  { name: "Twitter", icon: Twitter },
+];
+
+export const bottomLinks = [
+  "Offers",
+  "Offers",
+  "Privacy Policy",
+  "Cookie Settings",
+];

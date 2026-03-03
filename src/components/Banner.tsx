@@ -1,4 +1,4 @@
-import bannerImg from "../assets/images/landingPage/home/hero-section.png";
+import bannerImg from "../../public/hero-section.png";
 
 const Banner = () => {
   return (
