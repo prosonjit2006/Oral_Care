@@ -6,7 +6,7 @@ const AboutTeams = () => {
     <section className="py-16 bg-gray-100">
       <div className="container">
         {/* Section Heading */}
-        <div className="mb-10">
+        <div className="mb-10 text-center md:text-left">
           <p className="text-gray-500 text-lg">
             About Teams /
             <span className="text-blue-700 font-semibold ml-2">

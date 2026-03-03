@@ -17,6 +17,16 @@ export default {
       fontFamily: {
         sans: ["Lato", "sans-serif"],
       },
+
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
+      animation: {
+        marquee: "marquee 35s linear infinite", // e is missing
+      },
     },
   },
   plugins: [],
