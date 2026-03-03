@@ -4,7 +4,6 @@ const Plans = () => {
   return (
     <section className="py-20 bg-[#f4f7fb] relative overflow-hidden">
       <div className="container">
-
         {/* Header */}
         <div className="flex justify-between items-center mb-16">
           <p className="text-gray-600 text-lg">
@@ -21,10 +20,8 @@ const Plans = () => {
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
           {/* Monthly */}
           <div className="rounded-3xl border border-blue-200 bg-gradient-to-br from-purple-200 to-blue-200 overflow-hidden">
-
             <div className="p-8">
               <p className="text-gray-700">Monthly</p>
               <h3 className="text-3xl font-bold mt-2">
@@ -60,7 +57,6 @@ const Plans = () => {
 
           {/* Quarterly */}
           <div className="rounded-3xl border border-blue-200 bg-gradient-to-br from-purple-200 to-blue-200 overflow-hidden">
-
             <div className="p-8">
               <p className="text-gray-700">Quarterly</p>
               <h3 className="text-3xl font-bold mt-2">
@@ -100,7 +96,6 @@ const Plans = () => {
 
           {/* Yearly (Highlighted) */}
           <div className="relative rounded-3xl border-2 border-blue-700 bg-gradient-to-br from-purple-200 to-blue-200 overflow-hidden">
-
             {/* Recommended Badge */}
             <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-700 text-white text-xs px-4 py-1 rounded-full">
               Recommended
@@ -138,9 +133,7 @@ const Plans = () => {
               Choose Yearly
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );

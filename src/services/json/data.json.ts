@@ -132,10 +132,18 @@ export const reviewsRowTwo: ReviewsData[] = [
   },
 ];
 
+// footer data part
 
-// footer data part 
-
-import { Home, Briefcase, Users, Phone, Mail, Instagram, Facebook, Twitter } from "lucide-react";
+import {
+  Home,
+  Briefcase,
+  Users,
+  Phone,
+  Mail,
+  Instagram,
+  Facebook,
+  Twitter,
+} from "lucide-react";
 
 export const navigationLinks = [
   { name: "Home", icon: Home },

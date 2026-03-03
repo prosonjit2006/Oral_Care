@@ -10,7 +10,6 @@ export interface Props {
   team: AboutTeams;
 }
 
-
 export interface ReviewsData {
   id: number;
   type: "text" | "image";

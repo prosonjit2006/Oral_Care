@@ -1,16 +1,11 @@
-
 import img from "../assets/images/landingPage/serviceBooking/img.png";
 
 const ServicesBooking = () => {
   return (
     <section className="w-full">
-
       <div className="grid grid-cols-1 lg:grid-cols-2">
-
         {/* left side - image */}
         <div className="relative h-[500px] lg:h-auto">
-
-          
           <img
             src={img}
             alt="Dental Clinic"
@@ -28,9 +23,9 @@ const ServicesBooking = () => {
 
             <p className="text-sm md:text-base mb-6 leading-relaxed">
               Taking care of your smile has never been easier. Our expert team
-              is here to provide the care you deserve, at a time that works
-              for you. Don’t wait - Book Your Appointment Now and take the
-              first step towards better oral health.
+              is here to provide the care you deserve, at a time that works for
+              you. Don’t wait - Book Your Appointment Now and take the first
+              step towards better oral health.
             </p>
 
             <button className="bg-blue-700 hover:bg-blue-800 px-6 py-3 rounded-full text-sm font-medium transition">
@@ -41,9 +36,7 @@ const ServicesBooking = () => {
 
         {/* right side - form */}
         <div className="bg-gradient-to-tr from-[#CEEBFE] to-[#EDD6FF] p-10">
-
           <form className="space-y-6">
-
             {/* Row 1 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -114,10 +107,8 @@ const ServicesBooking = () => {
                 Book Now
               </button>
             </div>
-
           </form>
         </div>
-
       </div>
     </section>
   );
