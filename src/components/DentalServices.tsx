@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
 
 const DentalServices = () => {
   return (
-    <div>
-        <p className="text-black text-3xl text-center my-16 ">Slider using react awsome slider</p>
-    </div>
-  )
-}
+    <section>
+      <div className="container">
+        <p className="text-black text-3xl text-center my-16 ">
+          Slider using react awsome slider
+        </p>
+      </div>
+    </section>
+  );
+};
 
-export default DentalServices
+export default DentalServices;

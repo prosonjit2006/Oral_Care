@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@utility container {
-    max-width: 1820px;
-    padding-inline: 15px;
-    margin-inline: auto;
-}
-
-/* .container{
-    max-width: 1820px;
-    padding: 0 15px;
-    margin: 0 auto;
-} */
-
-.btn{
-    padding: 10px 15px;
-    border: 1px solid gray;
-    border-radius: 50px;
+body {
+  @apply font-sans;
 }
