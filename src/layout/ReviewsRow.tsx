@@ -1,11 +1,6 @@
-import type { ReviewsData } from "../type/interface/global.interface";
+import type { ReviewProps } from "../type/type/global.type";
 
-interface Props {
-  direction?: "left" | "right";
-  data: ReviewsData[];
-}
-
-const ReviewsRow = ({ direction = "left", data }: Props) => {
+const ReviewsRow = ({ direction = "left", data }: ReviewProps) => {
   return (
     <div className="relative overflow-hidden py-6 sm:py-8">
       <div

@@ -1,16 +1,19 @@
-// import React from 'react'
-import AboutTeams from "../components/AboutTeams";
-import AboutUs from "../components/AboutUs";
-import Appointment from "../components/Appointment";
-import Banner from "../components/Banner";
-import DentalServices from "../components/DentalServices";
-import Plans from "../components/Plans";
-import Reviews from "../components/Reviews";
-import ServicesBooking from "../components/ServicesBooking";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+import AboutTeams from "../layout/AboutTeams";
+import AboutUs from "../layout/AboutUs";
+import Appointment from "../layout/Appointment";
+import Banner from "../layout/Banner";
+import DentalServices from "../layout/DentalServices";
+import Plans from "../layout/Plans";
+import Reviews from "../layout/Reviews";
+import ServicesBooking from "../layout/ServicesBooking";
 
 const Home = () => {
   return (
     <>
+      <Navbar />
+
       <Banner />
       <DentalServices />
       <AboutUs />
@@ -19,6 +22,8 @@ const Home = () => {
       <Reviews />
       <Plans />
       <ServicesBooking />
+
+      <Footer />
     </>
   );
 };

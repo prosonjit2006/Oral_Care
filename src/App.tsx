@@ -1,14 +1,12 @@
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
+import Service from "./pages/Service";
 
 const App = () => {
   return (
     <>
-      <Navbar />
-      <Home />
-
-      <Footer />
+      {/* <Home /> */}
+      <Service />
+      
     </>
   );
 };

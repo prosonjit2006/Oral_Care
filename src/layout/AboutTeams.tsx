@@ -1,5 +1,5 @@
+import AboutTeamsCard from "../components/AboutTeamsCard";
 import { aboutTeams } from "../services/json/data.json";
-import AboutTeamsCard from "./AboutTeamsCard";
 
 const AboutTeams = () => {
   return (
@@ -25,8 +25,8 @@ const AboutTeams = () => {
                         xl:grid-cols-5
                         gap-5 sm:gap-6 md:gap-7 lg:gap-8"
         >
-          {aboutTeams.map((item, idx) => (
-            <AboutTeamsCard key={idx} team={item} />
+          {aboutTeams.map((data, idx) => (
+            <AboutTeamsCard key={idx} team={data} />
           ))}
         </div>
       </div>

@@ -6,12 +6,9 @@ export interface AboutTeams {
   img: string;
 }
 
-export interface Props {
-  team: AboutTeams;
-}
-
 export interface ReviewsData {
   id: number;
+  key?: number | string;
   type: "text" | "image";
   title?: string;
   description?: string;
@@ -20,11 +17,6 @@ export interface ReviewsData {
   avatar?: string;
   image?: string;
 }
-
-export interface Props {
-  item: ReviewsData;
-}
-
 
 export interface DentalService {
   id: number;

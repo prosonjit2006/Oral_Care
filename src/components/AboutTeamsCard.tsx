@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import type { Props } from "../type/interface/global.interface";
+import type { Props } from "../type/type/global.type";
 
 const AboutTeamsCard = ({ team }: Props) => {
   return (
