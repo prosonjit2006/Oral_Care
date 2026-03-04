@@ -8,6 +8,7 @@ import img5 from "../../assets/images/landingPage/aboutTeams/img5.png";
 
 import type {
   AboutTeams,
+  DentalService,
   ReviewsData,
 } from "../../type/interface/global.interface";
 
@@ -136,8 +137,10 @@ export const reviewsRowTwo: ReviewsData[] = [
 
 import {
   Home,
-  Briefcase,
+  Bolt,
+  CreditCard,
   Users,
+  BookUser,
   Phone,
   Mail,
   Instagram,
@@ -147,10 +150,10 @@ import {
 
 export const navigationLinks = [
   { name: "Home", icon: Home },
-  { name: "Services", icon: Briefcase },
-  { name: "Subscriptions", icon: Briefcase },
+  { name: "Services", icon: Bolt },
+  { name: "Subscriptions", icon: CreditCard },
   { name: "Team", icon: Users },
-  { name: "Contact Us", icon: Phone },
+  { name: "Contact Us", icon: BookUser },
 ];
 
 export const contactLinks = [
@@ -169,4 +172,36 @@ export const bottomLinks = [
   "Offers",
   "Privacy Policy",
   "Cookie Settings",
+];
+
+// dentalservices slider data part
+
+
+
+import ds_img1 from "../../assets/images/landingPage/dentalServices/img1.png";
+import ds_img2 from "../../assets/images/landingPage/dentalServices/img2.png";
+import ds_img3 from "../../assets/images/landingPage/dentalServices/img3.png";
+import ds_img4 from "../../assets/images/landingPage/dentalServices/img4.png";
+
+export const dentalServices: DentalService[] = [
+  {
+    id: 1,
+    title: "General Checkups",
+    image: ds_img1,
+  },
+  {
+    id: 2,
+    title: "Teeth Whitening",
+    image: ds_img2,
+  },
+  {
+    id: 3,
+    title: "Root Canal & Surgery",
+    image: ds_img3,
+  },
+  {
+    id: 4,
+    title: "Kids Dental Care",
+    image: ds_img4,
+  },
 ];

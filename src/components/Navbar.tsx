@@ -1,45 +1,84 @@
-import logo from "../../public/logo.png";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import logo from "/logo.png";
 
 const Navbar = () => {
+  const navItems = ["Home", "Services", "Team", "Subscriptions", "Contact Us"];
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <section className="container mx-auto flex justify-between align-middle items-center mt-5 bg-transparent fixed top-0 left-0 right-0 w-full z-50">
-      {/* logo part */}
-      <div className="logo">
-        <a href="#">
-          <img src={logo} alt="logo" />
-        </a>
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? "bg-black/40 backdrop-blur-md shadow-lg" : "bg-transparent"
+      }`}
+    >
+      <div className="container flex items-center justify-between py-4 px-4">
+        <div className="flex items-center">
+          <img src={logo} alt="Oral Care Logo" className="h-8" />
+        </div>
+
+        <nav className="hidden lg:block bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2">
+          <ul className="flex items-center gap-6 text-sm text-white">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <a
+                  href="#"
+                  className="hover:text-blue-700 hover:underline transition duration-300"
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="flex items-center gap-4">
+          <button className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700 transition">
+            Get Appointment
+          </button>
+
+          <button
+            onClick={() => setOpen(!open)}
+            className="lg:hidden text-white"
+          >
+            {open ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
-      {/* navlist part */}
-      <ul className="navlist flex gap-5">
-        {["Home", "Services", "Team", "Subscription", "Contact Us"].map(
-          (item, idx) => (
-            <li key={idx}>
-              <a href="#" className=' hover:scale-600 hover:to-blue-400 text-white' >{item}</a>
-            </li>
-          ),
-        )}
+      {open && (
+        <div className="lg:hidden bg-white/90 backdrop-blur-md shadow-lg">
+          <ul className="flex flex-col items-center gap-6 py-6 text-gray-700">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <a href="#" className="hover:text-blue-600">
+                  {item}
+                </a>
+              </li>
+            ))}
 
-        {/* <ul className="navitems flex gap-5">
-                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Home </a></li>
-                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Services </a></li>
-                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Team </a></li>
-                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Subscriptions </a></li>
-                <li><a href="#" className=' hover:scale-600 hover:to-blue-400 text-white'> Contact Us </a></li>
-            </ul> */}
-      </ul>
-      <div className="navBtn">
-        <a href="#" className=" border border-white text-white p-2 rounded">
-          {" "}
-          Get Appointment{" "}
-        </a>
-      </div>
-    </section>
+            <button className="sm:hidden bg-blue-600 text-white px-5 py-2 rounded-full text-sm">
+              Get Appointment
+            </button>
+          </ul>
+        </div>
+      )}
+    </header>
   );
 };
 
 export default Navbar;
-
-// {["Home","About Us","Shop","Blog","Contact"].map((item,index)=>(
-//                     <li key={index}><a href="#">{item}</a></li>
-//                 ))}

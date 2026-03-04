@@ -2,10 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @theme {
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+}
+
+@utility container {
+  width: 100%;
+  max-width: 1140px;
+  padding-inline: 15px;
+  margin-inline: auto;
+} */
+
 body {
   @apply font-sans;
 }
 
+/* html body {
+  overflow-x: hidden !important;
+} */
+
 .reverse {
   animation-direction: reverse;
+}
+
+/* selider custom css */
+.service-slider .awssld__controls {
+  display: none;
+}
+
+.service-slider .awssld__bullets {
+  display: none;
+}
+
+.service-slider .awssld {
+  background: transparent;
+}
+
+.service-slider .awssld__content {
+  background: transparent;
+  align-items: center;
+}
+
+/* Fix the huge gap */
+.service-slider {
+  --slider-height-percentage: 40%;
+  /* height: 280px; */
+}
+
+.service-slider .awssld__wrapper {
+  padding-bottom: 0 !important;
 }

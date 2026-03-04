@@ -24,3 +24,10 @@ export interface ReviewsData {
 export interface Props {
   item: ReviewsData;
 }
+
+
+export interface DentalService {
+  id: number;
+  title: string;
+  image: string;
+}
