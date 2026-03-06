@@ -37,12 +37,3 @@ export interface OurServices {
 }
 
 
-// OurDentalService
-
-export const services = [
-  { id: "01", title: "General Check-ups" },
-  { id: "02", title: "Cosmetic Dentistry" },
-  { id: "03", title: "Root Canal & Surgery" },
-  { id: "04", title: "Kids' Dental Care" }
-];
-

@@ -1,6 +1,6 @@
 import { ArrowUpRight, Play } from "lucide-react";
-import { services } from "../type/interface/global.interface";
 import img from "../assets/images/servicesPage/ourDentalService/img.png";
+import { services } from "../services/json/data.json";
 
 const OurDentalService = () => {
   return (

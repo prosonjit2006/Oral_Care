@@ -154,6 +154,8 @@ import {
   HandHeart,
   History,
   HeartHandshake,
+  GraduationCap,
+  Star,
 } from "lucide-react";
 
 export const navigationLinks = [
@@ -250,5 +252,41 @@ export const OurServiceData: OurServices[] = [
     icon: HeartHandshake,
     bgColor: "bg-purple-200",
     height: "h-72"
+  },
+];
+
+
+// OurDentalService
+
+export const services = [
+  { id: "01", title: "General Check-ups" },
+  { id: "02", title: "Cosmetic Dentistry" },
+  { id: "03", title: "Root Canal & Surgery" },
+  { id: "04", title: "Kids' Dental Care" }
+];
+
+// special offer 
+
+export const offers = [
+  {
+    id: 1,
+    title: "Family Discounts",
+    description:
+      "Enroll 3+ family members and save a flat 15% on your total monthly or annual bill.",
+    icon: Users,
+  },
+  {
+    id: 2,
+    title: "Student Discount",
+    description:
+      "Student with valid ID get an extra whitening session annually and flexible payment terms.",
+    icon: GraduationCap,
+  },
+  {
+    id: 3,
+    title: "Referral Reward",
+    description:
+      "Get a free professional cleaning for every friend you refer who sign up for an annual plan.",
+    icon: Star,
   },
 ];
