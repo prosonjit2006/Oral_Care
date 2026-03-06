@@ -9,6 +9,7 @@ import img5 from "../../assets/images/landingPage/aboutTeams/img5.png";
 import type {
   AboutTeams,
   DentalService,
+  OurServices,
   ReviewsData,
 } from "../../type/interface/global.interface";
 
@@ -136,6 +137,7 @@ export const reviewsRowTwo: ReviewsData[] = [
 // footer data part
 
 import {
+  // for footer part
   Home,
   Bolt,
   CreditCard,
@@ -146,6 +148,12 @@ import {
   Instagram,
   Facebook,
   Twitter,
+
+  // for ourservice part
+  Stethoscope,
+  HandHeart,
+  History,
+  HeartHandshake,
 } from "lucide-react";
 
 export const navigationLinks = [
@@ -176,8 +184,6 @@ export const bottomLinks = [
 
 // dentalservices slider data part
 
-
-
 import ds_img1 from "../../assets/images/landingPage/dentalServices/img1.png";
 import ds_img2 from "../../assets/images/landingPage/dentalServices/img2.png";
 import ds_img3 from "../../assets/images/landingPage/dentalServices/img3.png";
@@ -203,5 +209,46 @@ export const dentalServices: DentalService[] = [
     id: 4,
     title: "Kids Dental Care",
     image: ds_img4,
+  },
+];
+
+// our services part
+
+export const OurServiceData: OurServices[] = [
+  {
+    id: 1,
+    title: "Experienced Specialists",
+    description:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
+    icon: Stethoscope,
+    bgColor: "bg-purple-200",
+    height: "h-72"
+  },
+  {
+    id: 2,
+    title: "Personalized Care",
+    description:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
+    icon: HandHeart,
+    bgColor: "bg-blue-200",
+    height: "h-56"
+  },
+  {
+    id: 3,
+    title: "24/7 Services",
+    description:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
+    icon: History,
+    bgColor: "bg-blue-200",
+    height: "h-56"
+  },
+  {
+    id: 4,
+    title: "State-of-the-Art Facility",
+    description:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
+    icon: HeartHandshake,
+    bgColor: "bg-purple-200",
+    height: "h-72"
   },
 ];

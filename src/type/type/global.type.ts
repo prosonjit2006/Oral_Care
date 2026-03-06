@@ -1,4 +1,4 @@
-import type { AboutTeams, ReviewsData } from "../interface/global.interface";
+import type { AboutTeams, OurServices, ReviewsData } from "../interface/global.interface";
 
 // for about Teams data
 
@@ -12,3 +12,7 @@ export type ReviewProps = {
   direction?: "left" | "right";
   data: ReviewsData[];
 };
+
+export interface OurServiceCardType {
+  item: OurServices;
+}
