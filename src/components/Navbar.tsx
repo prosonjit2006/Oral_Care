@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import logo from "/logo.png";
+
 
 const Navbar = () => {
   const navItems = ["Home", "Services", "Team", "Subscriptions", "Contact Us"];
@@ -28,7 +28,10 @@ const Navbar = () => {
     >
       <div className="container flex items-center justify-between py-4 px-4">
         <div className="flex items-center">
-          <img src={logo} alt="Oral Care Logo" className="h-8" />
+        <a href="#">
+          <img src="/logo.png" alt="Oral Care Logo" className="h-8" />
+
+        </a>
         </div>
 
         <nav className="hidden lg:block bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2">

@@ -1,4 +1,3 @@
-import footerLogo from "../../public/footer-logo.png";
 
 import {
   bottomLinks,
@@ -18,7 +17,7 @@ const Footer = () => {
             <div className="logo">
               <a href="#">
                 <img
-                  src={footerLogo}
+                  src="/footer-logo.png"
                   alt="logo"
                   className="w-36 sm:w-40 md:w-44"
                 />

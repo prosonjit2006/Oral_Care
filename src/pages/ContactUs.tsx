@@ -5,15 +5,17 @@ import ContuctUsHeroSection from "../layout/ContuctUsHeroSection";
 import KnowImprovement from "../layout/KnowImprovement";
 
 const ContactUs = () => {
-  return <>
-    <Navbar />
+  return (
+    <>
+      <Navbar />
 
-    <ContuctUsHeroSection />
-    <ContactSection />
-    <KnowImprovement />
+      <ContuctUsHeroSection />
+      <ContactSection />
+      <KnowImprovement />
 
-    <Footer />
-  </>;
+      <Footer />
+    </>
+  );
 };
 
 export default ContactUs;

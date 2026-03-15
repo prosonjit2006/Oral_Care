@@ -11,22 +11,23 @@ import {
 
 const ContactSection = () => {
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-r from-[#b7cbe0] to-[#d4c7df]">
+    <section className="py-12 md:py-20 bg-gradient-to-r from-[#b7cbe0] to-[#d4c7df]">
       <div className="container px-4 sm:px-6">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 ">
           {/* LEFT SIDE */}
-          <div>
-            {/* Title */}
-            <p className="text-gray-700 mb-2">
+          <div className="flex flex-col justify-between">
+            <div>
+              {/* Title */}
+            <p className="text-gray-700 mb-2 ">
               Lorem Ipsam /
-              <span className="text-blue-800 text-xl md:text-2xl font-semibold ml-1">
+              <span className="text-blue-800 text-xl md:text-3xl font-semibold ml-2 ">
                 Get In Touch With Us
               </span>
             </p>
 
             <h3 className="font-semibold text-lg mt-4">We are here from you</h3>
 
-            <p className="text-gray-700 mt-4 max-w-md">
+            <p className="text-gray-700 mt-4 max-w-max">
               For more info or inquiry about our products projects, and pricing
               please feel free to get in touch with us.
             </p>
@@ -66,9 +67,10 @@ const ContactSection = () => {
                 </p>
               </div>
             </div>
+            </div>
 
             {/* Social Icons */}
-            <div className="flex items-center gap-4 mt-8">
+            <div className="flex items-center gap-4 mt-3">
               <span className="text-blue-800 font-medium">Follow Us:</span>
 
               <Facebook
@@ -105,21 +107,6 @@ const ContactSection = () => {
         </div>
       </div>
 
-      <div className="bg-blue-700 h-14 mt-14"></div>
-
-      {/* <div className="w-full bg-blue-800 overflow-hidden">
-        <div className="flex whitespace-nowrap animate-marquee">
-          <span className="text-white px-4 py-2">
-            Oral Care • Oral Care • Oral Care • Oral Care • Oral Care • Oral
-            Care • Oral Care •
-          </span>
-
-          <span className="text-white px-4 py-2">
-            Oral Care • Oral Care • Oral Care • Oral Care • Oral Care • Oral
-            Care • Oral Care •
-          </span>
-        </div>
-      </div> */}
     </section>
   );
 };
