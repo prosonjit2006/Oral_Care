@@ -51,9 +51,9 @@ const Plans = () => {
               </ul>
             </div>
 
-            <div className="bg-blue-100 text-center py-3 sm:py-4 font-medium text-blue-800 text-sm sm:text-base">
+            <button className="bg-blue-100 text-center py-3 sm:py-4 font-medium text-blue-800 text-sm sm:text-base">
               Choose Monthly
-            </div>
+            </button>
           </div>
 
           {/* Quarterly */}
@@ -91,9 +91,9 @@ const Plans = () => {
               </ul>
             </div>
 
-            <div className="bg-blue-100 text-center py-3 sm:py-4 font-medium text-blue-800 text-sm sm:text-base">
+            <button className="bg-blue-100 text-center py-3 sm:py-4 font-medium text-blue-800 text-sm sm:text-base">
               Choose Quarterly
-            </div>
+            </button>
           </div>
 
           {/* Yearly */}
@@ -132,9 +132,9 @@ const Plans = () => {
               </ul>
             </div>
 
-            <div className="bg-blue-800 text-white text-center py-3 sm:py-4 font-medium rounded-bl-[22px] rounded-br-[22px] text-sm sm:text-base">
+            <button className="bg-blue-800 text-white text-center py-3 sm:py-4 font-medium rounded-bl-[22px] rounded-br-[22px] text-sm sm:text-base">
               Choose Yearly
-            </div>
+            </button>
           </div>
         </div>
       </div>
