@@ -299,3 +299,59 @@ const teamImg4 = "src/assets/images/teamPage/teamMembers/img4.png";
 const teamImg5 = "src/assets/images/teamPage/teamMembers/img5.png";
 
 export const teamImages = [teamImg1, teamImg2, teamImg3, teamImg4, teamImg5];
+
+// team picture wall part images
+
+const wallImg1 = "src/assets/images/teamPage/photoWall/img1.png";
+const wallImg2 = "src/assets/images/teamPage/photoWall/img2.png";
+const wallImg3 = "src/assets/images/teamPage/photoWall/img3.png";
+const wallImg4 = "src/assets/images/teamPage/photoWall/img4.png";
+const wallImg5 = "src/assets/images/teamPage/photoWall/img5.png";
+const wallImg6 = "src/assets/images/teamPage/photoWall/img6.png";
+const wallImg7 = "src/assets/images/teamPage/photoWall/img7.png";
+const wallImg8 = "src/assets/images/teamPage/photoWall/img8.png";
+const wallImg9 = "src/assets/images/teamPage/photoWall/img9.png";
+const wallImg10 = "src/assets/images/teamPage/photoWall/img10.png";
+
+export const photoWall = [
+  wallImg1,
+  wallImg2,
+  wallImg3,
+  wallImg4,
+  wallImg5,
+  wallImg6,
+  wallImg7,
+  wallImg8,
+  wallImg9,
+  wallImg10,
+];
+
+// team bonus tips part images
+
+const tipsImg1 = " src/assets/images/teamPage/bonusTips/img1.png";
+const tipsImg2 = " src/assets/images/teamPage/bonusTips/img2.png";
+const tipsImg3 = " src/assets/images/teamPage/bonusTips/img3.png";
+const tipsImg4 = " src/assets/images/teamPage/bonusTips/img4.png";
+
+export const tipsImages = [
+  {
+    id: 1,
+    img: tipsImg1,
+    desc: "There are many variations of passages of Lorem Ipsum.",
+  },
+  {
+    id: 2,
+    img: tipsImg2,
+    desc: "Available, but the majority have suffered alteration.",
+  },
+  {
+    id: 3,
+    img: tipsImg3,
+    desc: "There are many variations of passages of Lorem Ipsum.",
+  },
+  {
+    id: 4,
+    img: tipsImg4,
+    desc: "Available, but the majority have suffered alteration.",
+  },
+];
