@@ -224,7 +224,7 @@ export const OurServiceData: OurServices[] = [
       "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
     icon: Stethoscope,
     bgColor: "bg-purple-200",
-    height: "h-72"
+    height: "h-72",
   },
   {
     id: 2,
@@ -233,7 +233,7 @@ export const OurServiceData: OurServices[] = [
       "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
     icon: HandHeart,
     bgColor: "bg-blue-200",
-    height: "h-56"
+    height: "h-56",
   },
   {
     id: 3,
@@ -242,7 +242,7 @@ export const OurServiceData: OurServices[] = [
       "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
     icon: History,
     bgColor: "bg-blue-200",
-    height: "h-56"
+    height: "h-56",
   },
   {
     id: 4,
@@ -251,10 +251,9 @@ export const OurServiceData: OurServices[] = [
       "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some.",
     icon: HeartHandshake,
     bgColor: "bg-purple-200",
-    height: "h-72"
+    height: "h-72",
   },
 ];
-
 
 // OurDentalService
 
@@ -262,10 +261,10 @@ export const services = [
   { id: "01", title: "General Check-ups" },
   { id: "02", title: "Cosmetic Dentistry" },
   { id: "03", title: "Root Canal & Surgery" },
-  { id: "04", title: "Kids' Dental Care" }
+  { id: "04", title: "Kids' Dental Care" },
 ];
 
-// special offer 
+// special offer
 
 export const offers = [
   {
@@ -290,3 +289,13 @@ export const offers = [
     icon: Star,
   },
 ];
+
+// team members image data
+
+const teamImg1 = "src/assets/images/teamPage/teamMembers/img1.png";
+const teamImg2 = "src/assets/images/teamPage/teamMembers/img2.png";
+const teamImg3 = "src/assets/images/teamPage/teamMembers/img3.png";
+const teamImg4 = "src/assets/images/teamPage/teamMembers/img4.png";
+const teamImg5 = "src/assets/images/teamPage/teamMembers/img5.png";
+
+export const teamImages = [teamImg1, teamImg2, teamImg3, teamImg4, teamImg5];
