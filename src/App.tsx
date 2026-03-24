@@ -1,15 +1,15 @@
-// import Home from "./pages/Home";
+import Home from "./pages/Home";
 // import Service from "./pages/Service";
-import Team from "./pages/Team";
+// import Team from "./pages/Team";
 // import Subscription from "./pages/Subscription";
 // import ContactUs from "./pages/ContactUs";
 
 const App = () => {
   return (
     <>
-      {/* <Home /> */}
+      <Home />
       {/* <Service /> */}
-      <Team />
+      {/* <Team /> */}
       {/* <Subscription /> */}
       {/* <ContactUs /> */}
     </>

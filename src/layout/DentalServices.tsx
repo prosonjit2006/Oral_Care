@@ -1,5 +1,5 @@
-import AwesomeSlider from "react-awesome-slider";
-import "react-awesome-slider/dist/styles.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
 
 import { dentalServices } from "../services/json/data.json";
 
@@ -15,19 +15,18 @@ const DentalServices = () => {
   const sliderRef = useRef<any>(null);
 
   const nextSlide = () => {
-    sliderRef.current?.next();
+    sliderRef.current?.slideNext();
   };
 
   const prevSlide = () => {
-    sliderRef.current?.previous();
+    sliderRef.current?.slidePrev();
   };
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-100 to-purple-100 ">
+    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-100 to-purple-100">
       <div className="container px-4 sm:px-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 lg:mb-12">
-          {/* Left Text */}
           <div>
             <p className="text-gray-600 text-sm sm:text-md mb-1">
               Our Services /
@@ -67,7 +66,7 @@ const DentalServices = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center w-full gap-6 lg:gap-4">
-          {/* Slider Controls */}
+          {/* Controls */}
           <div className="flex flex-row gap-3 sm:gap-4">
             <button
               onClick={prevSlide}
@@ -84,30 +83,29 @@ const DentalServices = () => {
             </button>
           </div>
 
-          {/* Slider */}
-          <AwesomeSlider
-            ref={sliderRef}
-            bullets={false}
-            buttons={false}
-            className="service-slider h-fit w-full"
+          {/* Swiper Slider */}
+          <Swiper
+            onSwiper={(swiper) => (sliderRef.current = swiper)}
+            slidesPerView={1}
+            spaceBetween={10}
+            className="w-full"
           >
             {Array.from({ length: Math.ceil(dentalServices.length / 4) }).map(
               (_, index) => {
                 const group = dentalServices.slice(index * 4, index * 4 + 4);
 
                 return (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
-                  >
-                    {group.map((service) => (
-                      <ServiceCard key={service.id} service={service} />
-                    ))}
-                  </div>
+                  <SwiperSlide key={index}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                      {group.map((service) => (
+                        <ServiceCard key={service.id} service={service} />
+                      ))}
+                    </div>
+                  </SwiperSlide>
                 );
               },
             )}
-          </AwesomeSlider>
+          </Swiper>
         </div>
       </div>
     </section>
