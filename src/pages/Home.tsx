@@ -1,5 +1,3 @@
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import AboutTeams from "../layout/AboutTeams";
 import AboutUs from "../layout/AboutUs";
 import Appointment from "../layout/Appointment";
@@ -12,8 +10,6 @@ import ServicesBooking from "../layout/ServicesBooking";
 const Home = () => {
   return (
     <>
-      <Navbar />
-
       <Banner />
       <DentalServices />
       <AboutUs />
@@ -22,8 +18,6 @@ const Home = () => {
       <Reviews />
       <Plans />
       <ServicesBooking />
-
-      <Footer />
     </>
   );
 };

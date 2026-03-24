@@ -1,11 +1,31 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const navItems = ["Home", "Services", "Team", "Subscriptions", "Contact Us"];
+  // const navItems = ["Home", "Services", "Team", "Subscriptions", "Contact Us"];
+  const navItems = [
+    { name: "Home", path: "/" },
+    {
+      name: "Services",
+      path: "/services",
+    },
+    {
+      name: "Team",
+      path: "/team",
+    },
+    {
+      name: "Subscriptions",
+      path: "/subscription",
+    },
+    {
+      name: "Contact Us",
+      path: "/contactus",
+    },
+  ];
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,20 +43,21 @@ const Navbar = () => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-black/40 backdrop-blur-sm shadow-lg transition-all duration-300" : "bg-transparent"
+        scrolled
+          ? "bg-black/40 backdrop-blur-sm shadow-lg transition-all duration-300"
+          : "bg-transparent"
       }`}
     >
       <div className="container flex items-center justify-between py-4 px-4">
         <div className="flex items-center">
-        <a href="#">
-          <img src="/logo.png" alt="Oral Care Logo" className="h-8" />
-
-        </a>
+          <a href="#">
+            <img src="/logo.png" alt="Oral Care Logo" className="h-8" />
+          </a>
         </div>
 
         <nav className="hidden lg:block bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2">
           <ul className="flex items-center gap-6 text-sm text-white">
-            {navItems.map((item, index) => (
+            {/* {navItems.map((item, index) => (
               <li key={index}>
                 <a
                   href="#"
@@ -45,7 +66,27 @@ const Navbar = () => {
                   {item}
                 </a>
               </li>
+            ))} */}
+
+            {navItems.map((item, index) => (
+              <NavLink
+                key={index}
+                to={item.path}
+                onClick={() => navigate(item.path)}
+              >
+                {item.name}
+              </NavLink>
             ))}
+            {/* 
+            {navItems.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => navigate(item.path)}
+                className="cursor-pointer"
+              >
+                {item.name}
+              </li>
+            ))} */}
           </ul>
         </nav>
 
@@ -63,7 +104,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {open && (
+      {/* {open && (
         <div className="lg:hidden bg-white/90 backdrop-blur-md shadow-lg">
           <ul className="flex flex-col items-center gap-6 py-6 text-gray-700">
             {navItems.map((item, index) => (
@@ -79,7 +120,7 @@ const Navbar = () => {
             </button>
           </ul>
         </div>
-      )}
+      )} */}
     </header>
   );
 };
