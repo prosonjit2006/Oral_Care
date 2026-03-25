@@ -1,5 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
+import "swiper/css";
+
+import { Autoplay } from "swiper/modules";
 
 import { dentalServices } from "../services/json/data.json";
 
@@ -44,18 +46,13 @@ const DentalServices = () => {
           {/* Reviews */}
           <div className="flex items-center gap-3 mt-5 lg:mt-0">
             <div className="flex -space-x-3">
-              <img
-                src={img1}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
-              />
-              <img
-                src={img2}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
-              />
-              <img
-                src={img3}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
-              />
+              {[img1, img2, img3].map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
+                />
+              ))}
             </div>
 
             <div>
@@ -65,28 +62,34 @@ const DentalServices = () => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-start lg:items-center w-full gap-6 lg:gap-4">
+        {/* Slider + Controls */}
+        <div className="flex flex-col lg:flex-row items-center w-full gap-6">
           {/* Controls */}
-          <div className="flex flex-row gap-3 sm:gap-4">
+          <div className="flex gap-3 sm:gap-4">
             <button
               onClick={prevSlide}
-              className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-purple-200 text-purple-700"
+              className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-blue-700 transition"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={20} />
             </button>
 
             <button
               onClick={nextSlide}
-              className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-blue-700 text-white"
+              className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-blue-700 transition"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={20} />
             </button>
           </div>
 
-          {/* Swiper Slider */}
+          {/* Swiper */}
           <Swiper
+            modules={[Autoplay]}
             onSwiper={(swiper) => (sliderRef.current = swiper)}
-            slidesPerView={1}
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
             spaceBetween={10}
             className="w-full"
           >
@@ -96,7 +99,7 @@ const DentalServices = () => {
 
                 return (
                   <SwiperSlide key={index}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                       {group.map((service) => (
                         <ServiceCard key={service.id} service={service} />
                       ))}
