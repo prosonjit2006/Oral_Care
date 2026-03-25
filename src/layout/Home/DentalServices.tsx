@@ -3,17 +3,18 @@ import "swiper/css";
 
 import { Autoplay } from "swiper/modules";
 
-import { dentalServices } from "../services/json/data.json";
+import { dentalServices } from "../../services/json/data.json";
 
-import img1 from "../assets/images/landingPage/dentalServices/avatar1.png";
-import img2 from "../assets/images/landingPage/dentalServices/avatar2.png";
-import img3 from "../assets/images/landingPage/dentalServices/avatar3.png";
+import img1 from "../../assets/images/landingPage/dentalServices/avatar1.png";
+import img2 from "../../assets/images/landingPage/dentalServices/avatar2.png";
+import img3 from "../../assets/images/landingPage/dentalServices/avatar3.png";
 
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import ServiceCard from "../components/ServiceCard";
+import ServiceCard from "../../components/ServiceCard";
 
 const DentalServices = () => {
+
   const sliderRef = useRef<any>(null);
 
   const nextSlide = () => {

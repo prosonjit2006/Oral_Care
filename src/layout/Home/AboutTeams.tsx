@@ -1,5 +1,5 @@
-import AboutTeamsCard from "../components/AboutTeamsCard";
-import { aboutTeams } from "../services/json/data.json";
+import AboutTeamsCard from "../../components/AboutTeamsCard";
+import { aboutTeams } from "../../services/json/data.json";
 
 const AboutTeams = () => {
   return (

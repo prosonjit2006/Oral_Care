@@ -1,5 +1,5 @@
 import { ThumbsUp } from "lucide-react";
-import { tipsImages } from "../services/json/data.json";
+import { tipsImages } from "../../services/json/data.json";
 
 const BonusTips = () => {
   return (

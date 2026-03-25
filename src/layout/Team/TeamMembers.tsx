@@ -1,4 +1,4 @@
-import { teamImages } from "../services/json/data.json";
+import { teamImages } from "../../services/json/data.json";
 
 
 const TeamMembers = () => {

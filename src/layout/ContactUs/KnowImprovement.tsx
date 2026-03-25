@@ -1,4 +1,4 @@
-import doctorImg from "../assets/images/contuctUs/doctor.png";
+import doctorImg from "../../assets/images/contuctUs/doctor.png";
 
 const brands = [
   "Oral Care",

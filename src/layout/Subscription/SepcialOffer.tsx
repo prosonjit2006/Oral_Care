@@ -1,4 +1,4 @@
-import { offers } from "../services/json/data.json";
+import { offers } from "../../services/json/data.json";
 
 const SpecialOffer = () => {
   return (

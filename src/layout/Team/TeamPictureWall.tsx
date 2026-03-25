@@ -1,4 +1,4 @@
-import { photoWall } from "../services/json/data.json";
+import { photoWall } from "../../services/json/data.json";
 
 const TeamPictureWall = () => {
   return (

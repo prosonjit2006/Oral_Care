@@ -1,5 +1,5 @@
-import OurServiceCard from "../components/OurServiceCard";
-import { OurServiceData } from "../services/json/data.json";
+import OurServiceCard from "../../components/OurServiceCard";
+import { OurServiceData } from "../../services/json/data.json";
 
 const OurService = () => {
   return (

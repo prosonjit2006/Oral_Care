@@ -1,4 +1,4 @@
-import type { ReviewProps } from "../type/type/global.type";
+import type { ReviewProps } from "../../type/type/global.type";
 
 const ReviewsRow = ({ direction = "left", data }: ReviewProps) => {
   return (

@@ -1,4 +1,4 @@
-import img from "../assets/images/landingPage/serviceBooking/img.png";
+import img from "../../assets/images/landingPage/serviceBooking/img.png";
 
 const ServicesBooking = () => {
   return (

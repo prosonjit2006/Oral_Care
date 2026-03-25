@@ -1,5 +1,5 @@
-import img1 from "../assets/images/landingPage/appointment/img1.png";
-import img2 from "../assets/images/landingPage/appointment/img2.png";
+import img1 from "../../assets/images/landingPage/appointment/img1.png";
+import img2 from "../../assets/images/landingPage/appointment/img2.png";
 import { HeartPulse, Smile } from "lucide-react";
 
 const Appointment = () => {

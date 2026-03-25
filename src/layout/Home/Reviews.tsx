@@ -1,5 +1,5 @@
-import { reviewsRowOne, reviewsRowTwo } from "../services/json/data.json";
-import ReviewsRow from "../layout/ReviewsRow";
+import { reviewsRowOne, reviewsRowTwo } from "../../services/json/data.json";
+import ReviewsRow from "./ReviewsRow";
 
 const Reviews = () => {
   return (

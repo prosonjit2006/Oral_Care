@@ -1,6 +1,6 @@
-import ContactSection from "../layout/ContactSection";
-import ContuctUsHeroSection from "../layout/ContuctUsHeroSection";
-import KnowImprovement from "../layout/KnowImprovement";
+import ContactSection from "../layout/ContactUs/ContactSection";
+import ContuctUsHeroSection from "../layout/ContactUs/ContuctUsHeroSection";
+import KnowImprovement from "../layout/ContactUs/KnowImprovement";
 
 const ContactUs = () => {
   return (

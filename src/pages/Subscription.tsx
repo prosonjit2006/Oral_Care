@@ -1,6 +1,6 @@
-import PlanHeroSection from "../layout/PlanHeroSection";
-import SpecialOffer from "../layout/SepcialOffer";
-import SubscriptionPlan from "../layout/SubscriptionPlans";
+import PlanHeroSection from "../layout/Subscription/PlanHeroSection";
+import SpecialOffer from "../layout/Subscription/SepcialOffer";
+import SubscriptionPlan from "../layout/Subscription/SubscriptionPlans";
 
 const Subscription = () => {
   return (

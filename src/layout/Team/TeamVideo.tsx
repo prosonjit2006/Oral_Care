@@ -1,5 +1,5 @@
 import { Play } from "lucide-react";
-import img from "../assets/images/teamPage/teamVideo/img.png";
+import img from "../../assets/images/teamPage/teamVideo/img.png";
 
 const TeamVideo = () => {
   return (

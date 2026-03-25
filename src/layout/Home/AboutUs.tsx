@@ -1,5 +1,5 @@
-import imgFront from "../assets/images/landingPage/aboutUs/img2.png";
-import imgBack from "../assets/images/landingPage/aboutUs/img1.png";
+import imgFront from "../../assets/images/landingPage/aboutUs/img2.png";
+import imgBack from "../../assets/images/landingPage/aboutUs/img1.png";
 
 const AboutUs = () => {
   return (
