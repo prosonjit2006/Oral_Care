@@ -1,126 +1,85 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  // const navItems = ["Home", "Services", "Team", "Subscriptions", "Contact Us"];
   const navItems = [
     { name: "Home", path: "/" },
-    {
-      name: "Services",
-      path: "/services",
-    },
-    {
-      name: "Team",
-      path: "/team",
-    },
-    {
-      name: "Subscriptions",
-      path: "/subscription",
-    },
-    {
-      name: "Contact Us",
-      path: "/contactus",
-    },
+    { name: "Services", path: "/services" },
+    { name: "Team", path: "/team" },
+    { name: "Subscriptions", path: "/subscription" },
+    { name: "Contact Us", path: "/contactus" },
   ];
+
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-black/40 backdrop-blur-sm shadow-lg transition-all duration-300"
-          : "bg-transparent"
+      className={`fixed top-0 left-0 w-full z-50 transition ${
+        scrolled ? "bg-black/40 backdrop-blur-sm shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="container flex items-center justify-between py-4 px-4">
-        <div className="flex items-center">
-          <a href="#">
-            <img src="/logo.png" alt="Oral Care Logo" className="h-8" />
-          </a>
-        </div>
+        {/* Logo */}
+        <img src="/logo.png" alt="Logo" className="h-8" />
 
+        {/* Desktop Nav */}
         <nav className="hidden lg:block bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2">
-          <ul className="flex items-center gap-6 text-sm text-white">
-            {/* {navItems.map((item, index) => (
-              <li key={index}>
-                <a
-                  href="#"
-                  className="hover:text-blue-700 hover:underline transition duration-300"
-                >
-                  {item}
-                </a>
-              </li>
-            ))} */}
-
-            {navItems.map((item, index) => (
-              <NavLink
-                key={index}
-                to={item.path}
-                onClick={() => navigate(item.path)}
-              >
+          <ul className="flex gap-6 text-sm text-white">
+            {navItems.map((item, i) => (
+              <NavLink key={i} to={item.path}>
                 {item.name}
               </NavLink>
             ))}
-            {/* 
-            {navItems.map((item, index) => (
-              <li
-                key={index}
-                onClick={() => navigate(item.path)}
-                className="cursor-pointer"
-              >
-                {item.name}
-              </li>
-            ))} */}
           </ul>
         </nav>
 
-        <div className="flex items-center gap-4">
-          <button className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700 transition">
+        {/* Right Section */}
+        <div className="flex items-center gap-3">
+          {/* Button always before toggle */}
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm hidden sm:block lg:block">
             Get Appointment
           </button>
 
+          {/* Mobile button (same design) */}
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-full text-xs sm:hidden">
+            Get Appointment
+          </button>
+
+          {/* Toggle */}
           <button
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen((prev) => !prev)}
             className="lg:hidden text-white"
           >
-            {open ? <X size={28} /> : <Menu size={28} />}
+            {open ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
       </div>
 
-      {/* {open && (
-        <div className="lg:hidden bg-white/90 backdrop-blur-md shadow-lg">
-          <ul className="flex flex-col items-center gap-6 py-6 text-gray-700">
-            {navItems.map((item, index) => (
-              <li key={index}>
-                <a href="#" className="hover:text-blue-600">
-                  {item}
-                </a>
-              </li>
+      {/* Mobile Menu */}
+      {open && (
+        <div className="lg:hidden bg-white/95 backdrop-blur-md shadow-lg">
+          <ul className="flex flex-col items-center gap-6 py-6 text-gray-800">
+            {navItems.map((item, i) => (
+              <NavLink
+                key={i}
+                to={item.path}
+                onClick={() => setOpen(false)}
+                className="text-lg hover:text-blue-600"
+              >
+                {item.name}
+              </NavLink>
             ))}
-
-            <button className="sm:hidden bg-blue-600 text-white px-5 py-2 rounded-full text-sm">
-              Get Appointment
-            </button>
           </ul>
         </div>
-      )} */}
+      )}
     </header>
   );
 };

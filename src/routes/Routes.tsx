@@ -36,17 +36,15 @@ const Routes = createBrowserRouter([
       },
     ],
   },
-  
+
   {
     path: "*",
     element: <NotFound />,
-    errorElement: <ErrorBoundary />,
   },
-  {
-    path: "/err",
-    element: <ErrorBoundary />,
-    
-  }
+  // {
+  //   path: "/err",
+  //   element: <ErrorBoundary />,
+  // }
 ]);
 
 export default Routes;
