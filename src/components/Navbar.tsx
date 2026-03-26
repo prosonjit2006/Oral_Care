@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import type { NavLinkProps } from "react-router-dom";
 
 const Navbar = () => {
   const navItems = [
@@ -20,18 +21,14 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const linkStyle = ({ isActive }) =>
+  const linkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `transition ${
-      isActive
-        ? "text-blue-800 underline "
-        : "text-white hover:text-blue-300"
+      isActive ? "text-blue-800 underline " : "text-white hover:text-blue-300"
     }`;
 
-  const mobileLinkStyle = ({ isActive }) =>
+  const mobileLinkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `text-lg transition ${
-      isActive
-        ? "text-blue-800 underline"
-        : "text-blue-500 hover:text-blue-600"
+      isActive ? "text-blue-800 underline" : "text-blue-500 hover:text-blue-600"
     }`;
 
   return (
@@ -51,7 +48,7 @@ const Navbar = () => {
               <NavLink
                 key={i}
                 to={item.path}
-                end={item.path === "/"}   // FIX for isActive
+                end={item.path === "/"} // FIX for isActive
                 className={linkStyle}
               >
                 {item.name}
@@ -74,7 +71,7 @@ const Navbar = () => {
 
           {/* Toggle */}
           <button
-            onClick={() => setOpen(prev => !prev)}
+            onClick={() => setOpen((prev) => !prev)}
             className="lg:hidden text-white"
           >
             {open ? <X size={26} /> : <Menu size={26} />}
@@ -90,7 +87,7 @@ const Navbar = () => {
               <NavLink
                 key={i}
                 to={item.path}
-                end={item.path === "/"}   // FIX here also
+                end={item.path === "/"} // FIX here also
                 onClick={() => setOpen(false)}
                 className={mobileLinkStyle}
               >
