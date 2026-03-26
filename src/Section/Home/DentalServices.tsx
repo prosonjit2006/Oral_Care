@@ -1,9 +1,9 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-
 import { Autoplay } from "swiper/modules";
 
 import { dentalServices } from "../../services/json/data.json";
+import ServiceCard from "../../components/ServiceCard";
 
 import img1 from "../../assets/images/landingPage/dentalServices/avatar1.png";
 import img2 from "../../assets/images/landingPage/dentalServices/avatar2.png";
@@ -11,19 +11,21 @@ import img3 from "../../assets/images/landingPage/dentalServices/avatar3.png";
 
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import ServiceCard from "../../components/ServiceCard";
 
 const DentalServices = () => {
-
   const sliderRef = useRef<any>(null);
 
-  const nextSlide = () => {
-    sliderRef.current?.slideNext();
-  };
+  // ✅ ensure loop works
+  const safeData =
+    dentalServices.length < 8
+      ? [...dentalServices, ...dentalServices]
+      : dentalServices;
 
-  const prevSlide = () => {
-    sliderRef.current?.slidePrev();
-  };
+  // ✅ group into 4 cards per slide
+  const grouped = [];
+  for (let i = 0; i < safeData.length; i += 4) {
+    grouped.push(safeData.slice(i, i + 4));
+  }
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-100 to-purple-100">
@@ -68,14 +70,14 @@ const DentalServices = () => {
           {/* Controls */}
           <div className="flex gap-3 sm:gap-4">
             <button
-              onClick={prevSlide}
+              onClick={() => sliderRef.current?.slidePrev()}
               className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-blue-700 transition"
             >
               <ChevronLeft size={20} />
             </button>
 
             <button
-              onClick={nextSlide}
+              onClick={() => sliderRef.current?.slideNext()}
               className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-blue-700 transition"
             >
               <ChevronRight size={20} />
@@ -87,28 +89,23 @@ const DentalServices = () => {
             modules={[Autoplay]}
             onSwiper={(swiper) => (sliderRef.current = swiper)}
             autoplay={{
-              delay: 2000,
+              delay: 3000,
               disableOnInteraction: false,
             }}
             loop={true}
-            spaceBetween={10}
+            spaceBetween={16}
+            slidesPerView={1}
             className="w-full"
           >
-            {Array.from({ length: Math.ceil(dentalServices.length / 4) }).map(
-              (_, index) => {
-                const group = dentalServices.slice(index * 4, index * 4 + 4);
-
-                return (
-                  <SwiperSlide key={index}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                      {group.map((service) => (
-                        <ServiceCard key={service.id} service={service} />
-                      ))}
-                    </div>
-                  </SwiperSlide>
-                );
-              },
-            )}
+            {grouped.map((group, i) => (
+              <SwiperSlide key={i}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                  {group.map((item) => (
+                    <ServiceCard key={item.id} service={item} />
+                  ))}
+                </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

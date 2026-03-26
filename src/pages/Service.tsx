@@ -1,8 +1,8 @@
-import ServiceHeroSection from "../layout/Service/ServiceHeroSection";
-import OurService from "../layout/Service/OurService";
-import OurDentalService from "../layout/Service/OurDentalService";
-import AboutTeams from "../layout/Home/AboutTeams";
-import AboutDental from "../layout/Service/AboutDental";
+import ServiceHeroSection from "../Section/Service/ServiceHeroSection";
+import OurService from "../Section/Service/OurService";
+import OurDentalService from "../Section/Service/OurDentalService";
+import AboutTeams from "../Section/Home/AboutTeams";
+import AboutDental from "../Section/Service/AboutDental";
 
 const Service = () => {
   return (

@@ -1,12 +1,22 @@
-import Lottie from 'lottie-react'
-import notFound from '../services/json/notFound.json'
+import Lottie from "lottie-react";
+import notFound from "../services/json/notFound.json";
+import Navbar from "../components/Navbar";
+import { useLocation } from "react-router-dom";
 
 const NotFound = () => {
-  return (
-    <div className='h-screen w-full '>
-      < Lottie animationData={notFound} loop className=' max-w-4xl mx-auto h-auto'/>
-    </div>
-  )
-}
+  const location = useLocation();
+  console.log("location :", location);
 
-export default NotFound
+  return (
+    <div className="h-screen w-full bg-black/50">
+        <Navbar />
+      <Lottie
+        animationData={notFound}
+        loop
+        className=" max-w-3xl mx-auto h-auto pt-10"
+      />
+    </div>
+  );
+};
+
+export default NotFound;

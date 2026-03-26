@@ -1,11 +1,11 @@
-import AboutTeams from "../layout/Home/AboutTeams";
-import AboutUs from "../layout/Home/AboutUs";
-import Appointment from "../layout/Home/Appointment";
-import Banner from "../layout/Home/Banner";
-import DentalServices from "../layout/Home/DentalServices";
-import Plans from "../layout/Home/Plans";
-import Reviews from "../layout/Home/Reviews";
-import ServicesBooking from "../layout/Home/ServicesBooking";
+import AboutTeams from "../Section/Home/AboutTeams";
+import AboutUs from "../Section/Home/AboutUs";
+import Appointment from "../Section/Home/Appointment";
+import Banner from "../Section/Home/Banner";
+import DentalServices from "../Section/Home/DentalServices";
+import Plans from "../Section/Home/Plans";
+import Reviews from "../Section/Home/Reviews";
+import ServicesBooking from "../Section/Home/ServicesBooking";
 
 const Home = () => {
   return (
