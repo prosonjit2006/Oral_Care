@@ -30,7 +30,7 @@ const TeamMembers = () => {
         {/* right part */}
         <div className="flex flex-col justify-between pt-4 sm:pt-7">
           {/* top part */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 text-[#0C4FA7] px-2 sm:px-8 gap-3 sm:gap-0">
+          <div className="grid grid-cols-3 text-[#0C4FA7] px-2 sm:px-8 gap-3 sm:gap-0">
             <p className="flex flex-col text-center text-lg sm:text-xl font-bold">
               15+
               <span className="text-sm sm:text-xl">Years Experience</span>
@@ -67,8 +67,8 @@ const TeamMembers = () => {
       </div>
 
       {/* image section */}
-      <div className="flex justify-center items-center h-[300px] sm:h-[380px] md:h-[480px] mt-6">
-        <div className="relative group w-[220px] sm:w-[280px] md:w-[320px] h-[260px] sm:h-[320px] md:h-[380px]">
+      <div className="flex justify-center items-center h-[270px] sm:h-[380px] md:h-[480px] mt-6">
+        <div className="relative group w-[170px] sm:w-[280px] md:w-[320px] h-[220px] sm:h-[320px] md:h-[380px]">
           {teamImages.map((img, index) => (
             <img
               key={index}
@@ -83,14 +83,14 @@ const TeamMembers = () => {
 
               ${
                 index === 0
-                  ? "-translate-x-20 sm:-translate-x-32 md:-translate-x-52 group-hover:-translate-x-[200px] md:group-hover:-translate-x-[550px] group-hover:scale-90"
+                  ? "-translate-x-20 sm:-translate-x-32 md:-translate-x-52 group-hover:-translate-x-[120px] md:group-hover:-translate-x-[550px] group-hover:scale-90"
                   : index === 1
-                    ? "-translate-x-10 sm:-translate-x-20 md:-translate-x-32 group-hover:-translate-x-[120px] md:group-hover:-translate-x-[290px] group-hover:scale-95"
+                    ? "-translate-x-10 sm:-translate-x-20 md:-translate-x-32 group-hover:-translate-x-[80px] md:group-hover:-translate-x-[290px] group-hover:scale-95"
                     : index === 2
                       ? "group-hover:scale-110"
                       : index === 3
-                        ? "translate-x-10 sm:translate-x-20 md:translate-x-32 group-hover:translate-x-[120px] md:group-hover:translate-x-[290px] group-hover:scale-95"
-                        : "translate-x-20 sm:translate-x-32 md:translate-x-52 group-hover:translate-x-[200px] md:group-hover:translate-x-[550px] group-hover:scale-90 -z-20"
+                        ? "translate-x-10 sm:translate-x-20 md:translate-x-32 group-hover:translate-x-[80px] md:group-hover:translate-x-[290px] group-hover:scale-95 z-10"
+                        : "translate-x-20 sm:translate-x-32 md:translate-x-52 group-hover:translate-x-[120px] md:group-hover:translate-x-[550px] group-hover:scale-90 -z-10"
               }
             `}
             />

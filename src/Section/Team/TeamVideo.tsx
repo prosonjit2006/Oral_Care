@@ -5,7 +5,7 @@ const TeamVideo = () => {
   return (
     <section className="w-full h-full bg-gradient-to-r from-[#CEEBFE] to-[#EDD6FF]">
       <div className="container">
-        <p className="text-center text-2xl max-w-[850px] mx-auto py-6">
+        <p className="text-center text-sm md:text-2xl max-w-[850px] mx-auto py-6">
           More than just healthy teeth, We believe in creating happy experience,
           our team listens, Understanding, And guides you through every step,{" "}
           <span className="text-gray-500">
@@ -16,7 +16,7 @@ const TeamVideo = () => {
       </div>
       <div className=" relative">
         <img src={img} alt="video img" />
-        <div className="bg-blue-300 rounded-full p-3 absolute top-[50%] left-[50%]">
+        <div className="bg-blue-300 rounded-full p-1 md:p-3 absolute top-[42%] md:top-[50%] left-[44%] md:left-[50%]">
           {" "}
           <Play size={20} />{" "}
         </div>

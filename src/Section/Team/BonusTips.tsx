@@ -5,15 +5,15 @@ const BonusTips = () => {
   return (
     <section className="w-full h-full py-10">
       <div className="container">
-        <p className="flex items-center text-xl">
+        <p className="flex items-center text-md">
           Bonus Tips /
-          <span className="text-[#0C4FA7] text-3xl font-bold ml-1">
+          <span className="text-[#0C4FA7] text-xl lg:text-3xl font-bold ml-1">
             {" "}
             Stay updated with dental wellness tips
           </span>
         </p>
 
-        <div className="p-4 grid grid-cols-4 gap-4 mt-4">
+        <div className="p-4 grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4">
           {tipsImages.map((obj) => (
             <div key={obj.id}>
               <img

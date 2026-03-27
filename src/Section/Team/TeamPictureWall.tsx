@@ -4,9 +4,9 @@ const TeamPictureWall = () => {
   return (
     <section className="w-full h-full py-10">
       <div className="container">
-        <p className="flex items-center text-xl">
+        <p className="flex items-center text-sm md:text-xl">
           Picture Wall /
-          <span className="text-[#0C4FA7] text-3xl font-bold ml-1">
+          <span className="text-[#0C4FA7] text-xl md:text-3xl font-bold ml-1">
             {" "}
             Our Customers
           </span>
