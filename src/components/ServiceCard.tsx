@@ -11,6 +11,7 @@ const ServiceCard = ({ service }: Props) => {
       {/* Image */}
       <img
         src={service.image}
+        loading="lazy"
         alt={service.title}
         className="w-full h-[220px] sm:h-[240px] md:h-[260px] object-cover transition-transform duration-500 group-hover:scale-110"
       />
