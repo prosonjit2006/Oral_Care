@@ -89,7 +89,7 @@ const TeamMembers = () => {
                       ? "group-hover:scale-110"
                       : index === 3
                         ? "translate-x-10 sm:translate-x-20 md:translate-x-32 group-hover:translate-x-[80px] md:group-hover:translate-x-[290px] group-hover:scale-95 z-10"
-                        : "translate-x-20 sm:translate-x-32 md:translate-x-52 group-hover:translate-x-[120px] md:group-hover:translate-x-[550px] group-hover:scale-90 -z-10"
+                        : "translate-x-20 sm:translate-x-32 md:translate-x-52 group-hover:translate-x-[120px] md:group-hover:translate-x-[550px] group-hover:scale-90 -z-50"
               }
             `}
             />
