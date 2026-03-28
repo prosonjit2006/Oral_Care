@@ -292,26 +292,26 @@ export const offers = [
 
 // team members image data
 
-const teamImg1 = "src/assets/images/teamPage/teamMembers/img1.png";
-const teamImg2 = "src/assets/images/teamPage/teamMembers/img2.png";
-const teamImg3 = "src/assets/images/teamPage/teamMembers/img3.png";
-const teamImg4 = "src/assets/images/teamPage/teamMembers/img4.png";
-const teamImg5 = "src/assets/images/teamPage/teamMembers/img5.png";
+import teamImg1 from "../../assets/images/teamPage/teamMembers/img1.png";
+import teamImg2 from "../../assets/images/teamPage/teamMembers/img2.png";
+import teamImg3 from "../../assets/images/teamPage/teamMembers/img3.png";
+import teamImg4 from "../../assets/images/teamPage/teamMembers/img4.png";
+import teamImg5 from "../../assets/images/teamPage/teamMembers/img5.png";
 
 export const teamImages = [teamImg1, teamImg2, teamImg3, teamImg4, teamImg5];
 
 // team picture wall part images
 
-const wallImg1 = "src/assets/images/teamPage/photoWall/img1.png";
-const wallImg2 = "src/assets/images/teamPage/photoWall/img2.png";
-const wallImg3 = "src/assets/images/teamPage/photoWall/img3.png";
-const wallImg4 = "src/assets/images/teamPage/photoWall/img4.png";
-const wallImg5 = "src/assets/images/teamPage/photoWall/img5.png";
-const wallImg6 = "src/assets/images/teamPage/photoWall/img6.png";
-const wallImg7 = "src/assets/images/teamPage/photoWall/img7.png";
-const wallImg8 = "src/assets/images/teamPage/photoWall/img8.png";
-const wallImg9 = "src/assets/images/teamPage/photoWall/img9.png";
-const wallImg10 = "src/assets/images/teamPage/photoWall/img10.png";
+import wallImg1 from "../../assets/images/teamPage/photoWall/img1.png";
+import wallImg2 from "../../assets/images/teamPage/photoWall/img2.png";
+import wallImg3 from "../../assets/images/teamPage/photoWall/img3.png";
+import wallImg4 from "../../assets/images/teamPage/photoWall/img4.png";
+import wallImg5 from "../../assets/images/teamPage/photoWall/img5.png";
+import wallImg6 from "../../assets/images/teamPage/photoWall/img6.png";
+import wallImg7 from "../../assets/images/teamPage/photoWall/img7.png";
+import wallImg8 from "../../assets/images/teamPage/photoWall/img8.png";
+import wallImg9 from "../../assets/images/teamPage/photoWall/img9.png";
+import wallImg10 from "../../assets/images/teamPage/photoWall/img10.png";
 
 export const photoWall = [
   wallImg1,
@@ -328,10 +328,10 @@ export const photoWall = [
 
 // team bonus tips part images
 
-const tipsImg1 = " src/assets/images/teamPage/bonusTips/img1.png";
-const tipsImg2 = " src/assets/images/teamPage/bonusTips/img2.png";
-const tipsImg3 = " src/assets/images/teamPage/bonusTips/img3.png";
-const tipsImg4 = " src/assets/images/teamPage/bonusTips/img4.png";
+import tipsImg1 from "../../assets/images/teamPage/bonusTips/img1.png";
+import tipsImg2 from "../../assets/images/teamPage/bonusTips/img2.png";
+import tipsImg3 from "../../assets/images/teamPage/bonusTips/img3.png";
+import tipsImg4 from "../../assets/images/teamPage/bonusTips/img4.png";
 
 export const tipsImages = [
   {
