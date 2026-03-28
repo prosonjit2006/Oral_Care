@@ -73,7 +73,6 @@ const TeamMembers = () => {
             <img
               key={index}
               src={img}
-              loading="lazy"
               alt="team"
               className={`
               absolute w-full h-full object-cover rounded-2xl shadow-lg
