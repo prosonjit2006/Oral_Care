@@ -400,7 +400,6 @@ export const plans: Plan[] = [
   },
 ];
 
-
 export const brands = [
   "Oral Care",
   "Oral Care",

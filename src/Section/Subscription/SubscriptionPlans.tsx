@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { plans } from "../../services/json/data.json";
-
-type BillingType = "monthly" | "yearly";
+import type { BillingType } from "../../type/type/global.type";
 
 const SubscriptionPlans = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
