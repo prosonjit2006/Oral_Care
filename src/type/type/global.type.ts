@@ -1,4 +1,8 @@
-import type { AboutTeams, OurServices, ReviewsData } from "../interface/global.interface";
+import type {
+  AboutTeams,
+  OurServices,
+  ReviewsData,
+} from "../interface/global.interface";
 
 // for about Teams data
 
@@ -16,3 +20,5 @@ export type ReviewProps = {
 export interface OurServiceCardType {
   item: OurServices;
 }
+
+export type BillingType = "monthly" | "quarterly" | "yearly";

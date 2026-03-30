@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-
+import type { BillingType } from "../type/global.type";
 
 export interface AboutTeams {
   name: string;
@@ -31,9 +31,24 @@ export interface OurServices {
   id: number;
   title: string;
   description: string;
-  icon: LucideIcon ;
+  icon: LucideIcon;
   bgColor: string;
-  height?: string
+  height?: string;
 }
 
 
+
+export interface PlanFeature {
+  id: string;
+  label: string;
+}
+
+export interface Plan {
+  id: BillingType;
+  title: string;
+  price: number;
+  durationLabel: string; // "/mo"
+  description: string;
+  features: PlanFeature[];
+  isRecommended?: boolean;
+}

@@ -10,6 +10,7 @@ import type {
   AboutTeams,
   DentalService,
   OurServices,
+  Plan,
   ReviewsData,
 } from "../../type/interface/global.interface";
 
@@ -353,5 +354,48 @@ export const tipsImages = [
     id: 4,
     img: tipsImg4,
     desc: "Available, but the majority have suffered alteration.",
+  },
+];
+
+// landing page plans part
+
+export const plans: Plan[] = [
+  {
+    id: "monthly",
+    title: "Monthly",
+    price: 29,
+    durationLabel: "/mo",
+    description: "Perfect for maintaining dental health.",
+    features: [
+      { id: "f1", label: "Basic Check-up access" },
+      { id: "f2", label: "1x-ray per year" },
+      { id: "f3", label: "5% off basic fillings" },
+    ],
+  },
+  {
+    id: "quarterly",
+    title: "Quarterly",
+    price: 129,
+    durationLabel: "/mo",
+    description: "Regular care for a brighter smile.",
+    features: [
+      { id: "f1", label: "Free Check-up every 3 months" },
+      { id: "f2", label: "20% off on medicine" },
+      { id: "f3", label: "10% off on treatments" },
+      { id: "f4", label: "Fluoride treatment included" },
+    ],
+  },
+  {
+    id: "yearly",
+    title: "Yearly",
+    price: 239,
+    durationLabel: "/mo",
+    description: "Comprehensive coverage & priority.",
+    isRecommended: true,
+    features: [
+      { id: "f1", label: "Free Check-up quarterly" },
+      { id: "f2", label: "20% off on treatments" },
+      { id: "f3", label: "Emergency priority Schedule" },
+    ],
   },
 ];

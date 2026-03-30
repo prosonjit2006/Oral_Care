@@ -15,13 +15,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const DentalServices = () => {
   const sliderRef = useRef<any>(null);
 
-  // ✅ ensure loop works
+  //  ensure loop works
   const safeData =
     dentalServices.length < 8
       ? [...dentalServices, ...dentalServices]
       : dentalServices;
 
-  // ✅ group into 4 cards per slide
+  //  group into 4 cards per slide
   const grouped = [];
   for (let i = 0; i < safeData.length; i += 4) {
     grouped.push(safeData.slice(i, i + 4));
@@ -30,7 +30,7 @@ const DentalServices = () => {
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-100 to-purple-100">
       <div className="container px-4 sm:px-6">
-        {/* Header */}
+        {/* header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 lg:mb-12">
           <div>
             <p className="text-gray-600 text-sm sm:text-md mb-1">
@@ -65,10 +65,10 @@ const DentalServices = () => {
           </div>
         </div>
 
-        {/* Slider + Controls */}
-        <div className="flex flex-col lg:flex-row items-center w-full gap-6">
-          {/* Controls */}
-          <div className="flex gap-3 sm:gap-4">
+        {/* slider + controls */}
+        <div className="flex flex-col lg:flex-row items-end lg:items-center w-full gap-6">
+          {/* controls */}
+          <div className="flex place-items-end gap-3 sm:gap-4">
             <button
               onClick={() => sliderRef.current?.slidePrev()}
               className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-blue-700 transition"
@@ -84,12 +84,12 @@ const DentalServices = () => {
             </button>
           </div>
 
-          {/* Swiper */}
+          {/* swiper */}
           <Swiper
             modules={[Autoplay]}
             onSwiper={(swiper) => (sliderRef.current = swiper)}
             autoplay={{
-              delay: 3000,
+              delay: 4350,
               disableOnInteraction: false,
             }}
             loop={true}
