@@ -23,12 +23,12 @@ const Navbar = () => {
 
   const linkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `transition ${
-      isActive ? "text-blue-600 underline " : "text-white hover:text-blue-300"
+      isActive ? "text-blue-600 underline underline-offset-1 " : "text-white hover:text-blue-300"
     }`;
 
   const mobileLinkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `text-lg transition ${
-      isActive ? "text-blue-600 underline" : "text-blue-500 hover:text-blue-600"
+      isActive ? "text-blue-600 underline underline-offset-1" : "text-blue-500 hover:text-blue-600"
     }`;
 
   return (
@@ -37,7 +37,7 @@ const Navbar = () => {
         scrolled ? "bg-black/40 backdrop-blur-sm shadow-lg" : "bg-transparent"
       }`}
     >
-      <div className="container flex items-center justify-between py-4 px-4">
+      <div className="container flex items-center justify-between py-4 px-4 ">
         {/* Logo */}
         <img src="/logo.png" alt="Logo" className="h-8" />
 
