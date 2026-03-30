@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 import {
   bottomLinks,
   contactLinks,
@@ -7,12 +7,14 @@ import {
 } from "../services/json/data.json";
 
 const Footer = () => {
+  const [language, setLanguage] = useState<"eng" | "hin">("eng");
+
   return (
     <footer className="bg-[#030b2a] text-white pt-10 sm:pt-12 md:pt-16 lg:h-[550px] h-auto relative overflow-hidden">
       <div className="container px-4 sm:px-6">
-        {/* Top Section */}
+        {/* top section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10">
-          {/* Brand */}
+          {/* brand */}
           <div>
             <div className="logo">
               <a href="#">
@@ -29,7 +31,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Navigation */}
+          {/* navigation */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
               NAVIGATION
@@ -58,7 +60,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contacts */}
+          {/* contacts */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
               CONTACTS
@@ -87,7 +89,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* social */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
               SOCIAL MEDIA
@@ -116,13 +118,22 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Language Toggle */}
+          {/* language toggle */}
           <div className="flex mt-4 sm:mt-6 border border-white rounded overflow-hidden h-fit w-fit">
-            <button className="px-3 sm:px-4 py-1 text-sm sm:text-base bg-blue-700">
+            <button
+              onClick={() => setLanguage("eng")}
+              className={`px-3 sm:px-4 py-1 text-sm sm:text-base transition
+      ${language === "eng" ? "bg-blue-700 text-white" : "bg-white text-black"} `}
+            >
               ENG
             </button>
 
-            <button className="px-3 sm:px-4 py-1 text-sm sm:text-base bg-white text-black">
+            <button
+              onClick={() => setLanguage("hin")}
+              className={`px-3 sm:px-4 py-1 text-sm sm:text-base transition
+      ${language === "hin" ? "bg-blue-700 text-white" : "bg-white text-black"}
+    `}
+            >
               HIN
             </button>
           </div>
@@ -142,7 +153,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Large Background Text */}
+      {/* large background text */}
       <div
         className="absolute bottom-0 left-0 w-full text-center font-bold text-teal-900 opacity-25 whitespace-nowrap overflow-hidden
       text-[24px] sm:text-[50px] md:text-[80px] lg:text-[100px] xl:text-[110px]"
