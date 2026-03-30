@@ -23,12 +23,12 @@ const Navbar = () => {
 
   const linkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `transition ${
-      isActive ? "text-blue-600 underline underline-offset-1 " : "text-white hover:text-blue-300"
+      isActive ? "text-white font-bold underline underline-offset-2 " : "text-white hover:text-blue-300"
     }`;
 
   const mobileLinkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `text-lg transition ${
-      isActive ? "text-blue-600 underline underline-offset-1" : "text-blue-500 hover:text-blue-600"
+      isActive ? "text-white font-bold underline underline-offset-2" : "text-blue-500 hover:text-blue-600"
     }`;
 
   return (
