@@ -7,11 +7,14 @@ import Routes from "./routes/Routes";
 // import Team from "./pages/Team";
 // import Subscription from "./pages/Subscription";
 // import ContactUs from "./pages/ContactUs";
+import {ThemeProvider} from "@mui/material"
 
 const App = () => {
   return (
     <>
-      <RouterProvider router={Routes} />
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={Routes} />
+      </ThemeProvider>
       {/* <BrowserRouter>
         <Navbar />
         <Footer />
