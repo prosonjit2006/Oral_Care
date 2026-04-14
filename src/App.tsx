@@ -7,12 +7,14 @@ import Routes from "./routes/Routes";
 // import Team from "./pages/Team";
 // import Subscription from "./pages/Subscription";
 // import ContactUs from "./pages/ContactUs";
-import {ThemeProvider} from "@mui/material"
+import {CssBaseline, ThemeProvider} from "@mui/material"
+import Theme from "./theme/Theme";
 
 const App = () => {
   return (
     <>
       <ThemeProvider theme={Theme}>
+        <CssBaseline />
         <RouterProvider router={Routes} />
       </ThemeProvider>
       {/* <BrowserRouter>

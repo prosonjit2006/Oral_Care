@@ -1,6 +1,6 @@
 import Lottie from "lottie-react";
 import notFound from "../services/json/notFound.json";
-import Navbar from "../components/Navbar";
+import Navbar from "../layout/user/Navbar";
 
 const NotFound = () => {
   return (

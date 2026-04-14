@@ -4,7 +4,7 @@ import {
   contactLinks,
   navigationLinks,
   socialLinks,
-} from "../services/json/data.json";
+} from "../../services/json/data.json";
 
 const Footer = () => {
   const [language, setLanguage] = useState<"eng" | "hin">("eng");

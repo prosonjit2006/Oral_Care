@@ -1,16 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-//  lazy load pages
 const Home = lazy(() => import("../pages/Home"));
 const Service = lazy(() => import("../pages/Service"));
 const Team = lazy(() => import("../pages/Team"));
 const Subscription = lazy(() => import("../pages/Subscription"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
 const NotFound = lazy(() => import("../pages/NotFound"));
-
-//  keep layout normal (no lazy needed)
-import HomeWrapper from "../layout/Home/HomeWrapper";
+import HomeWrapper from "../layout/user/HomeWrapper";
 import ErrorBoundary from "../pages/ErrorBoundary";
 
 // fallback UI
