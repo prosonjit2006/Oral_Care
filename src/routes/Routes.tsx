@@ -7,18 +7,69 @@ const Team = lazy(() => import("../pages/Team"));
 const Subscription = lazy(() => import("../pages/Subscription"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
 const NotFound = lazy(() => import("../pages/NotFound"));
-import HomeWrapper from "../layout/user/HomeWrapper";
+
 import ErrorBoundary from "../pages/ErrorBoundary";
+import UserWrapper from "../layout/user/UserWrapper";
+import Signup from "../pages/Signup";
+import Login from "../pages/Login";
+import AdminWrapper from "../layout/admin/AdminWrapper";
+import Dashboard from "../pages/admin/Dashboard";
+import ServicesManage from "../pages/admin/ServicesManage";
+import AppointmentManage from "../pages/admin/AppointmentManage";
+import PlanManage from "../pages/admin/PlanManage";
+import UsersManage from "../pages/admin/UsersManage";
+import SystemSettings from "../pages/admin/SystemSettings";
 
 // fallback UI
 const Loader = () => (
-  <div className="h-screen flex items-center justify-center">Loading...</div>
+  <div className="h-screen flex items-center justify-center text-red-600">
+    Loading...
+  </div>
 );
 
 const Routes = createBrowserRouter([
   {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/admin",
+    element: <AdminWrapper />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path: "servicesmanage",
+        element: <ServicesManage />,
+      },
+      {
+        path: "appointmentmanage",
+        element: <AppointmentManage />,
+      },
+      {
+        path: "planmanage",
+        element: <PlanManage />,
+      },
+      {
+        path: "usersmanage",
+        element: <UsersManage />,
+      },
+      {
+        path: "systemsettings",
+        element: <SystemSettings />,
+      },
+    ],
+  },
+  {
     path: "/",
-    element: <HomeWrapper />,
+    element: <UserWrapper />,
     errorElement: <ErrorBoundary />,
     children: [
       {

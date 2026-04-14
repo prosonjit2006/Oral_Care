@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-const HomeWrapper = () => {
+const UserWrapper = () => {
   return (
     <>
       <Navbar />
@@ -14,4 +14,4 @@ const HomeWrapper = () => {
   );
 };
 
-export default HomeWrapper;
+export default UserWrapper;
