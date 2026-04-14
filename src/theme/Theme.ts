@@ -17,7 +17,9 @@ const Theme = createTheme({
     borderRadius: '7px'
   },
   components: {
-    MuiContainer: {},
+    MuiContainer: {
+      
+    },
   },
 });
 

@@ -5,3 +5,10 @@ export interface FormInput {
   type: string;
 }
 
+// sidebar navigation
+
+export interface SidebarNavigationInterface {
+    id: number
+    name: string
+    path: string
+}
