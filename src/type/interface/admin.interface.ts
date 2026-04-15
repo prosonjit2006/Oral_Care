@@ -10,8 +10,8 @@ export interface FormInput {
 // sidebar navigation
 
 export interface SidebarNavigationInterface {
-    id: number
-    name: string
-    path: string
-    icon: LucideIcon
+  id: number;
+  name: string;
+  path: string;
+  icon: LucideIcon;
 }

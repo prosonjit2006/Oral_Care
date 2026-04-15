@@ -4,7 +4,7 @@ const Theme = createTheme({
   palette: {
     background: {
       default: '#f9a825"',
-      paper: "#ffeb3b",
+      // paper: "#ffeb3b",
     },
   },
   typography: {

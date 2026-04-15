@@ -9,19 +9,22 @@ import Routes from "./routes/Routes";
 // import ContactUs from "./pages/ContactUs";
 import {CssBaseline, ThemeProvider} from "@mui/material"
 import Theme from "./theme/Theme";
+import { Toaster } from "sonner";
 
 const App = () => {
   return (
     <>
       <ThemeProvider theme={Theme}>
         <CssBaseline />
+        <Toaster position="top-right" richColors closeButton />
         <RouterProvider router={Routes} />
       </ThemeProvider>
+
+
       {/* <BrowserRouter>
         <Navbar />
         <Footer />
       </BrowserRouter> */}
-
       {/* <Home /> */}
       {/* <Service /> */}
       {/* <Team /> */}

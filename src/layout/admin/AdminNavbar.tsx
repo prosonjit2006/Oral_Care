@@ -10,7 +10,7 @@ import { Typography } from "@mui/material";
 
 function AdminNavbar() {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#25343F" }}>
+    <AppBar position="sticky" sx={{ backgroundColor: "#25343F" }}>
       <Container maxWidth="xl">
         <Toolbar
           disableGutters

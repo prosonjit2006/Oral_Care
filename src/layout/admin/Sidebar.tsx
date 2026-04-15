@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { NavLink, type NavLinkProps } from "react-router-dom";
 import { sidebarNavigation } from "../../services/json/admin.json";
 
@@ -17,7 +17,7 @@ const Sidebar = () => {
       sx={{
         width: "100%",
         height: "100vh",
-        // position: "fixed",
+        position: 'sticky',
         top: 0,
         left: 0,
         background: "linear-gradient(155deg, #1D546D, #5F9598)",
@@ -27,17 +27,34 @@ const Sidebar = () => {
         padding: 2,
       }}
     >
-      {/* Logo */}
       <Box
-        component="a"
-        // href="/"
-        onClick={() => (window.location.pathname = "/")}
-        sx={{ borderBottom: "1px solid gray", padding: 2, pb: 4 }}
+        sx={{
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "column",
+          borderBottom: "1px solid gray",
+          padding: 2,
+          pb: 3,
+        }}
       >
-        <img src="/logo.png" alt="logo img" />
+        {/* logo */}
+        <Box
+          component="a"
+          // href="/"
+          onClick={() => (window.location.pathname = "/")}
+          sx={{}}
+        >
+          <img src="/logo.png" alt="logo img" />
+        </Box>
+        <Typography
+          variant="subtitle1"
+          sx={{ color: "wheat", textAlign: "center", mt: "3px" }}
+        >
+          Admin Console
+        </Typography>
       </Box>
 
-      {/* Nav Items */}
+      {/* nav items */}
       <Box sx={{ mt: 1 }}>
         {sidebarNavigation.map((item) => {
           const Icon = item.icon;
