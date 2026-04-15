@@ -9,22 +9,30 @@ const AdminWrapper = () => {
       disableGutters
       maxWidth={false}
       sx={{
-        backgroundColor: "#bababa",
+        backgroundColor: "#25343F",
         display: " flex",
-        flexDirection: "column",
-        width: "100%",
+        flexDirection: "row",
+        // width: "100%",
+        // height: '100%'
       }}
     >
-      <AdminNavbar />
+      <Box sx={{ width: "15%" }}>
+        <Sidebar />
+      </Box>
+      <Box sx={{ width: "85%", display: "flex", flexDirection: "column",  }}>
+        <AdminNavbar />
+        <Outlet />
+      </Box>
 
+      {/* <AdminNavbar />
       <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-        <Box sx={{ width: "20%", }}>
+        <Box sx={{ width: "15%", }}>
           <Sidebar />
         </Box>
         <Box>
           <Outlet />
         </Box>
-      </Box>
+      </Box> */}
     </Container>
   );
 };

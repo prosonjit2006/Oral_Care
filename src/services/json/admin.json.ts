@@ -1,4 +1,15 @@
-import type { FormInput, SidebarNavigationInterface } from "../../type/interface/admin.interface";
+import {
+  ChartGantt,
+  ClipboardClock,
+  LayoutDashboard,
+  ServerCog,
+  Settings,
+  Users,
+} from "lucide-react";
+import type {
+  FormInput,
+  SidebarNavigationInterface,
+} from "../../type/interface/admin.interface";
 
 // signup data
 export const signupInputForm: FormInput[] = [
@@ -51,7 +62,6 @@ export const loginInputForm: FormInput[] = [
   },
 ];
 
-
 // admin sidebar
 
 export const sidebarNavigation: SidebarNavigationInterface[] = [
@@ -59,30 +69,36 @@ export const sidebarNavigation: SidebarNavigationInterface[] = [
     id: 1,
     name: "Dashboard",
     path: "/admin",
+    icon: LayoutDashboard,
   },
   {
     id: 2,
     name: "Services",
     path: "/admin/servicesmanage",
+    icon: ServerCog,
   },
   {
     id: 3,
     name: "Appointment",
     path: "/admin/appointmentmanage",
+    icon: ClipboardClock,
   },
   {
     id: 4,
     name: "Plan",
     path: "/admin/planmanage",
+    icon: ChartGantt,
   },
   {
     id: 5,
     name: "Users",
     path: "/admin/usersmanage",
+    icon: Users,
   },
   {
     id: 6,
     name: "Settings",
     path: "/admin/systemsettings",
+    icon: Settings,
   },
 ];

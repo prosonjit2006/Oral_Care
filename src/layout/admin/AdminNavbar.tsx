@@ -6,11 +6,11 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import { LogOutIcon } from "lucide-react";
-
+import { Typography } from "@mui/material";
 
 function AdminNavbar() {
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: "#25343F" }}>
       <Container maxWidth="xl">
         <Toolbar
           disableGutters
@@ -20,58 +20,34 @@ function AdminNavbar() {
             alignItems: "center",
           }}
         >
-          {/* logo  */}
-          <figure>
-            <a href="#">
-              <img src="/logo.png" alt="Logo" />
-            </a>
-          </figure>
-          {/* <Mouse />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography> */}
-
-          {/* min of the content */}
-          {/* <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box> */}
+          <Typography variant="h4">Dashboard</Typography>
 
           {/* icon and logout icon */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: "7px",
+              gap: "10px",
             }}
           >
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            <Tooltip title="Profile Details">
+              <IconButton
+                sx={{
+                  p: 0,
+                  color: "white",
+                  border: "1px solid #605B51",
+                  backgroundColor: "#213C51",
+                }}
+              >
+                <Avatar alt="Admin" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Logout">
-              <LogOutIcon color="gray" size={20} />
+              <LogOutIcon
+                // color="#6594B1"
+                size={23}
+                className=" text-[#6594B1] hover:text-[#E8E2D8] transition-all duration-300"
+              />
             </Tooltip>
           </Box>
         </Toolbar>

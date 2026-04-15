@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface FormInput {
   name: string;
   label: string;
@@ -11,4 +13,5 @@ export interface SidebarNavigationInterface {
     id: number
     name: string
     path: string
+    icon: LucideIcon
 }
