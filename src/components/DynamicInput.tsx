@@ -17,6 +17,7 @@ const DynamicInput = <T extends FieldValues>({
 
   return (
     <TextField
+    sx={{mt: 1}}
       label={
         required ? (
           <>

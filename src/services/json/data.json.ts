@@ -259,8 +259,8 @@ export const OurServiceData: OurServices[] = [
 // OurDentalService
 export const services = [
   {
-    id: "01",
-    title: "General Check-ups",
+    id: 1,
+    title: "General Checkups",
     img: new URL(
       "../../assets/images/landingPage/dentalServices/img1.png",
       import.meta.url,
@@ -269,17 +269,17 @@ export const services = [
       "Comprehensive dental exams, professional cleanings, and digital X-rays to maintain your optimal oral health and prevent future issues.",
   },
   {
-    id: "02",
-    title: "Cosmetic Dentistry",
+    id: 2,
+    title: "Teeth Whitening",
     img: new URL(
       "../../assets/images/landingPage/dentalServices/img2.png",
       import.meta.url,
     ).href,
     description:
-      "Enhance your smile with our advanced aesthetic treatments, including professional teeth whitening, porcelain veneers, and dental bonding.",
+      "Enhance your smile with our advanced aesthetic treatments, including teeth whitening, porcelain veneers, and dental bonding.",
   },
   {
-    id: "03",
+    id: 3,
     title: "Root Canal & Surgery",
     img: new URL(
       "../../assets/images/landingPage/dentalServices/img3.png",
@@ -289,8 +289,8 @@ export const services = [
       "Expert endodontic care and oral surgery procedures performed with precision and care to relieve pain and save damaged teeth.",
   },
   {
-    id: "04",
-    title: "Kids' Dental Care",
+    id: 4,
+    title: "Kids Dental Care",
     img: new URL(
       "../../assets/images/landingPage/dentalServices/img4.png",
       import.meta.url,
