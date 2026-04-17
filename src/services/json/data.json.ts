@@ -257,12 +257,47 @@ export const OurServiceData: OurServices[] = [
 ];
 
 // OurDentalService
-
 export const services = [
-  { id: "01", title: "General Check-ups" },
-  { id: "02", title: "Cosmetic Dentistry" },
-  { id: "03", title: "Root Canal & Surgery" },
-  { id: "04", title: "Kids' Dental Care" },
+  {
+    id: "01",
+    title: "General Check-ups",
+    img: new URL(
+      "../../assets/images/landingPage/dentalServices/img1.png",
+      import.meta.url,
+    ).href,
+    description:
+      "Comprehensive dental exams, professional cleanings, and digital X-rays to maintain your optimal oral health and prevent future issues.",
+  },
+  {
+    id: "02",
+    title: "Cosmetic Dentistry",
+    img: new URL(
+      "../../assets/images/landingPage/dentalServices/img2.png",
+      import.meta.url,
+    ).href,
+    description:
+      "Enhance your smile with our advanced aesthetic treatments, including professional teeth whitening, porcelain veneers, and dental bonding.",
+  },
+  {
+    id: "03",
+    title: "Root Canal & Surgery",
+    img: new URL(
+      "../../assets/images/landingPage/dentalServices/img3.png",
+      import.meta.url,
+    ).href,
+    description:
+      "Expert endodontic care and oral surgery procedures performed with precision and care to relieve pain and save damaged teeth.",
+  },
+  {
+    id: "04",
+    title: "Kids' Dental Care",
+    img: new URL(
+      "../../assets/images/landingPage/dentalServices/img4.png",
+      import.meta.url,
+    ).href,
+    description:
+      "Gentle, stress-free pediatric dentistry focused on building healthy lifelong habits and protecting your child's growing smile.",
+  },
 ];
 
 // special offer

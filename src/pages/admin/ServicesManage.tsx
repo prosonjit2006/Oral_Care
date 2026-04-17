@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -7,17 +7,25 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
   DialogActions,
+  Tooltip,
+  IconButton,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import newServicesSchema from "../../services/validation/newservice.validation";
+import { toast } from "sonner";
+import { serviceInputField } from "../../services/json/admin.json";
+import DynamicInput from "../../components/DynamicInput";
+import { services } from "../../services/json/data.json";
+import { Pencil, Trash2 } from "lucide-react";
 
 type NewServicesType = {
   servicename: string;
   description?: string;
-  imgurl?: string;
+  // imgurl?: string;
   uploadimg?: string;
 };
 
@@ -30,49 +38,23 @@ const ServicesManage = () => {
     formState: { errors },
   } = useForm<NewServicesType>({
     resolver: yupResolver(newServicesSchema),
+    defaultValues: {
+      servicename: "",
+      description: "",
+      uploadimg: "",
+    },
   });
 
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
-  const [services, setServices] = useState<NewServicesType[]>([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // Load data
-  useEffect(() => {
-    const stored = localStorage.getItem("services");
-    if (stored) setServices(JSON.parse(stored));
-  }, []);
-
-  // Convert file to strImg
-  const handleImageUpload = (file: File) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const strImg = reader.result as string;
-
-      setValue("uploadimg", strImg);
-      setPreview(strImg);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
   // Submit
   const onSubmit = (data: NewServicesType) => {
-    const finalImage = data.uploadimg || data.imgurl || "";
-
-    const newService = {
-      ...data,
-      uploadimg: finalImage,
-    };
-
-    const updated = [...services, newService];
-
-    setServices(updated);
-    localStorage.setItem("services", JSON.stringify(updated));
-
+    console.log("data", data);
+    toast.success("Service added successfully");
     reset();
     setPreview(null);
     handleClose();
@@ -100,26 +82,35 @@ const ServicesManage = () => {
         fullWidth
         maxWidth="xs"
       >
-        <DialogTitle>Add New Service</DialogTitle>
+        <DialogTitle sx={{}}>Add New Service</DialogTitle>
 
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          <TextField
-            label="Service Name"
-            {...register("servicename")}
-            error={!!errors.servicename}
-            helperText={errors.servicename?.message}
-          />
+          {serviceInputField.map((field) => (
+            <DynamicInput
+              name={field?.name}
+              label={field?.label}
+              placeholder={field?.placeholder}
+              type={field?.type}
+              rows={field?.rows}
+              required={field.required}
+              register={register}
+              errors={errors}
+            />
 
-          <TextField
-            label="Description"
-            multiline
-            rows={3}
-            {...register("description")}
-          />
-
-          <TextField label="Image URL" {...register("imgurl")} />
+            // <TextField
+            // sx={{mt: 1}}
+            //   key={field.name}
+            //   label={field.label}
+            //   placeholder={field.placeholder}
+            //   multiline
+            //   rows={field.rows}
+            //   {...register(field.name)}
+            //   error={!!errors?.[field.name]}
+            //   helperText={errors?.[field.name]?.message}
+            // />
+          ))}
 
           <Button variant="outlined" component="label">
             Upload Image
@@ -128,7 +119,8 @@ const ServicesManage = () => {
               hidden
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                if (file) handleImageUpload(file);
+                setValue("uploadimg", file);
+                setPreview(URL.createObjectURL(file));
               }}
             />
           </Button>
@@ -156,45 +148,55 @@ const ServicesManage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Services */}
       <Box
         sx={{
-          mt: 3,
-          display: "grid",
+          display: "flex",
+          flexDirection: "row",
           gap: 2,
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr)) ",
         }}
       >
-        {services.map((item, index) => {
-          const img = item.uploadimg || item.imgurl;
-
-          return (
-            <Box
-              key={index}
-              sx={{
-                backgroundColor: "#1e1e1e",
-                color: "#fff",
-                borderRadius: "5px",
-              }}
-            >
-              <Box
-                component="img"
-                src={img}
-                sx={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                  borderRadius: "5px 5px 0 0",
-                }}
+        {services.map((item) => (
+          <Box key={item.id} sx={{ width: "300px", position: "relative" }}>
+            <Box component="img" src={item?.img} sx={{ objectFit: "cover" }} />
+            <Typography variant="h5">{item.title}</Typography>
+            <Typography variant="body2">{item.description}</Typography>
+            <Box sx={{ mt: 2 }}>
+              <FormControlLabel
+                control={
+                  <Tooltip title="Toggle">
+                    <Switch
+                      // checked={isChecked}
+                      // onChange={handleToggle}
+                      color="primary" 
+                    />
+                  </Tooltip>
+                }
+                label="Toggle"
               />
-
-              <Box sx={{ p: "3px" }}>
-                <Typography>{item.servicename}</Typography>
-                <Typography variant="body2">{item.description}</Typography>
-              </Box>
             </Box>
-          );
-        })}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Tooltip title="Edit">
+                <IconButton
+                  color="primary"
+                  aria-label="edit"
+                  sx={{ height: 30, width: 30, bgcolor: "#bbdefb" }} // Adjust size as needed
+                >
+                  <Pencil size={16} />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Delete">
+                <IconButton
+                  color="error"
+                  aria-label="delete"
+                  sx={{ height: 30, width: 30, bgcolor: "#ffcdd2" }}
+                >
+                  <Trash2 size={16} />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Box>
+        ))}
       </Box>
     </Container>
   );

@@ -46,7 +46,6 @@ export const signupInputForm: FormInput[] = [
 ];
 
 // login data
-
 export const loginInputForm: FormInput[] = [
   {
     name: "email",
@@ -63,12 +62,11 @@ export const loginInputForm: FormInput[] = [
 ];
 
 // admin sidebar
-
 export const sidebarNavigation: SidebarNavigationInterface[] = [
   {
     id: 1,
     name: "Dashboard",
-    path: "/admin",
+    path: "/admin/dashboard",
     icon: LayoutDashboard,
   },
   {
@@ -100,5 +98,25 @@ export const sidebarNavigation: SidebarNavigationInterface[] = [
     name: "Settings",
     path: "/admin/systemsettings",
     icon: Settings,
+  },
+];
+
+// service inputfield
+export const serviceInputField = [
+  {
+    name: "servicename",
+    label: "Service Name",
+    placeholder: "Enter new service name",
+    type: "text",
+    required: true,
+    rows: 1,
+  },
+  {
+    name: "description",
+    label: "Add Description",
+    placeholder: "Add your service description here",
+    type: "textarea",
+    required: false,
+    rows: 3,
   },
 ];

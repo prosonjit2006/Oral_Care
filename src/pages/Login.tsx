@@ -7,8 +7,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { endpoint } from "../services/helper/endpoint";
 import Cookies from "js-cookie";
-import api from "../lib/Axiosinstance";
 import { useNavigate } from "react-router-dom";
+import api from "../lib/AxiosInstance";
 
 export type LoginDataType = {
   email: string;

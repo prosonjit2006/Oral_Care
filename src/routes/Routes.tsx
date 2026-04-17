@@ -44,7 +44,8 @@ const Routes = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       {
-        index: true,
+        // index: true,
+        path: "dashboard",
         element: <Dashboard />,
       },
       {

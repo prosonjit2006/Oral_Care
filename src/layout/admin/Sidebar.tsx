@@ -62,7 +62,7 @@ const Sidebar = () => {
             <NavLink
               key={item.id}
               to={item.path}
-              end={item.path === "/admin"}
+              end={item.path === "/admin/dashboard"}
               className={linkStyle}
             >
               <Box sx={{ display: "flex", alignItems: "center", gap: "7px" }}>
