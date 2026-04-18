@@ -85,7 +85,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="lg:hidden bg-white/95 backdrop-blur-md shadow-lg">
+        <div className="lg:hidden bg-black/35 backdrop-blur-md shadow-lg">
           <ul className="flex flex-col items-center gap-6 py-6">
             {navItems.map((item, i) => (
               <NavLink
