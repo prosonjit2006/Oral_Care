@@ -14,6 +14,12 @@ import {
   Switch,
   Stack,
   CircularProgress,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -139,7 +145,7 @@ const ServicesManage = () => {
   };
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ p: 2, }}>
+    <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
       {/* header */}
       <Box
         sx={{
@@ -232,106 +238,104 @@ const ServicesManage = () => {
       {isLoading ? (
         <CircularProgress size={25} />
       ) : (
-        <Box
-          sx={{
-            mt: 2,
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            // justifyContent: "space-between",
-            // flexWrap: "wrap",
-            gap: 2,
-            color: "white",
-          }}
-        >
-          {serviceList.map((item) => (
-            <Box
-              key={item.id}
-              sx={{
-                width: "300px",
-                height: "auto",
-                // height: "300px",
-              }}
-            >
-              <Box
-                sx={{
-                  pointerEvents: item.enabled ? "auto" : "none",
-                  opacity: item.enabled ? 1 : 0.5,
-                }}
-              >
-                <Box
-                  component="img"
-                  src={item.img}
-                  sx={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
-                    borderRadius: "15px",
-                  }}
-                />
-                <Typography variant="h5">{item.title}</Typography>
-                <Typography variant="body2">{item.description}</Typography>
-              </Box>
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 650, color: "#fff" }}
+            aria-label="simple table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>Service Image</TableCell>
 
-              <Stack
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  mt: 1,
-                }}
-              >
-                <Tooltip title={item.enabled ? "Disable" : "Enable"}>
-                  <FormControlLabel
-                    label={item.enabled ? "Enable" : "Disable"}
-                    control={
-                      <Switch
-                        checked={item.enabled}
-                        onChange={() => handelToggle(item.id)}
-                      />
-                    }
-                  />
-                </Tooltip>
-
-                <Box
+                <TableCell align="center">Service Name</TableCell>
+                <TableCell align="center">Service Description</TableCell>
+                <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {serviceList.map((row) => (
+                <TableRow
+                  key={row.id}
                   sx={{
-                    display: "flex",
-                    gap: 1,
-                    pointerEvents: item.enabled ? "auto" : "none",
-                    opacity: item.enabled ? 1 : 0.5,
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    pointerEvents: row.enabled ? "auto" : "none",
+                    opacity: row.enabled ? 1 : 0.5,
                   }}
                 >
-                  <Tooltip title="Edit">
-                    <IconButton
-                      onClick={() => handelEdit(item)}
-                      sx={{
-                        height: 35,
-                        width: 35,
-                        bgcolor: "#bbdefb",
-                        "&:hover": { bgcolor: "#e3f2fd" },
-                      }}
-                    >
-                      <Pencil size={16} className="text-blue-700" />
-                    </IconButton>
-                  </Tooltip>
+                  <TableCell align="center">
+                    <Box
+                      component="img"
+                      src={row.img}
+                      alt="img"
+                      sx={{ width: "120px", height: "120px" }}
+                    />
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.title}
+                  </TableCell>
+                  <TableCell align="center">{row.description}</TableCell>
 
-                  <Tooltip title="Delete">
-                    <IconButton
-                      onClick={() => handelDelete(item.id)}
+                  <TableCell
+                    align="center"
+                    sx={{
+                      pointerEvents: "visible",
+                      opacity: row.enabled ? 1 : 1,
+                      color: "white",
+                    }}
+                  >
+                    <Tooltip title={row.enabled ? "Disable" : "Enable"}>
+                      <FormControlLabel
+                        label={row.enabled ? "Enable" : "Disable"}
+                        control={
+                          <Switch
+                            checked={row.enabled}
+                            onChange={() => handelToggle(row.id)}
+                          />
+                        }
+                      />
+                    </Tooltip>
+                  </TableCell>
+
+                  <TableCell align="center" sx={{ marginLeft: "10px " }}>
+                    <Box
                       sx={{
-                        height: 35,
-                        width: 35,
-                        bgcolor: "#ffcdd2",
-                        "&:hover": { bgcolor: "#ffebee" },
+                        display: "flex",
+                        gap: 1,
+                        pointerEvents: row.enabled ? "auto" : "none",
+                        opacity: row.enabled ? 1 : 0.5,
                       }}
                     >
-                      <Trash2 size={16} className="text-red-700" />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </Stack>
-            </Box>
-          ))}
-        </Box>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => handelEdit(row)}
+                          sx={{
+                            bgcolor: "#bbdefb",
+                            "&:hover": { bgcolor: "#e3f2fd" },
+                          }}
+                        >
+                          <Pencil size={16} className="text-blue-700" />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={() => handelDelete(row.id)}
+                          sx={{
+                            bgcolor: "#ffcdd2",
+                            "&:hover": { bgcolor: "#ffebee" },
+                          }}
+                        >
+                          <Trash2 size={16} className="text-red-700" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </Container>
   );
@@ -339,299 +343,105 @@ const ServicesManage = () => {
 
 export default ServicesManage;
 
-// import { useState } from "react";
-// import {
-//   Box,
-//   Button,
-//   Container,
-//   Typography,
-//   Dialog,
-//   DialogTitle,
-//   DialogContent,
-//   DialogActions,
-//   Tooltip,
-//   IconButton,
-//   FormControlLabel,
-//   Switch,
-//   Stack,
-// } from "@mui/material";
-// import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import newServicesSchema from "../../services/validation/newservice.validation";
-// import { toast } from "sonner";
-// import { serviceInputField } from "../../services/json/admin.json";
-// import DynamicInput from "../../components/DynamicInput";
-// import { services } from "../../services/json/data.json";
-// import { Pencil, Trash2 } from "lucide-react";
-
-// type NewServicesType = {
-//   servicename: string;
-//   description?: string;
-//   // imgurl?: string;
-//   uploadimg?: string;
-// };
-
-// const ServicesManage = () => {
-//   const [serviceStatus, setServiceStatus] = useState<boolean>(false);
-//   const [serviceList, setServiceList] = useState(
-//     services.map((item) => ({
-//       ...item,
-//       enabled: true, // add status per item
-//     })),
-//   );
-//   const [editItem, setEditItem] = useState<any | null>(null);
-
-//   const {
-//     register,
-//     handleSubmit,
-//     setValue,
-//     reset,
-//     formState: { errors },
-//   } = useForm<NewServicesType>({
-//     resolver: yupResolver(newServicesSchema),
-//     defaultValues: {
-//       servicename: "",
-//       description: "",
-//       uploadimg: "",
-//     },
-//   });
-
-//   const [open, setOpen] = useState(false);
-//   const [preview, setPreview] = useState<string | null>(null);
-
-//   const handleOpen = () => setOpen(true);
-//   const handleClose = () => setOpen(false);
-
-//   // Submit
-//   const onSubmit = (data: NewServicesType) => {
-//     console.log("data", data);
-
-//     toast.success(
-//       preview ? "Services updated successfully" : "Service added successfully",
-//     );
-
-//     reset();
-//     setPreview(null);
-//     handleClose();
-//   };
-
-//   const handelToggle = (id: number) => {
-//     // setIsChecked(isChacked === true ? false : true);
-//     // setServiceStatus(serviceStatus === true ? false : true);
-
-//     setServiceList((prev) =>
-//       prev.map((item) =>
-//         item.id === id ? { ...item, enabled: !item.enabled } : item,
-//       ),
-//     );
-//   };
-
-//   const handelEdit = (item: any) => {
-//     setEditItem(item);
-
-//     // prefill form
-//     setValue("servicename", item.title);
-//     setValue("description", item.description);
-//     setValue("uploadimg", item.img);
-
-//     setPreview(item.img);
-//     handleOpen();
-//   };
-
-//   const handelDelete = (item) => {};
-
-//   return (
-//     <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
-//       {/* Header */}
-//       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-//         <Typography variant="h5" sx={{ color: "white" }}>
-//           All Service Lists
-//         </Typography>
-
-//         <Button variant="contained" onClick={handleOpen}>
-//           Add New Services
-//         </Button>
-//       </Box>
-
-//       {/* click dialog */}
-//       <Dialog
-//         component="form"
-//         onSubmit={handleSubmit(onSubmit)}
-//         open={open}
-//         onClose={handleClose}
-//         fullWidth
-//         maxWidth="xs"
-//       >
-//         <DialogTitle sx={{}}>Add New Service</DialogTitle>
-
-//         <DialogContent
-//           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+// ui card model
+//  <Box
+//           sx={{
+//             mt: 2,
+//             display: "grid",
+//             gridTemplateColumns: "repeat(4, 1fr)",
+//             // justifyContent: "space-between",
+//             // flexWrap: "wrap",
+//             gap: 2,
+//             color: "white",
+//           }}
 //         >
-//           {serviceInputField.map((field) => (
-//             <DynamicInput
-//               name={field?.name}
-//               label={field?.label}
-//               placeholder={field?.placeholder}
-//               type={field?.type}
-//               rows={field?.rows}
-//               required={field.required}
-//               register={register}
-//               errors={errors}
-//             />
-
-//             // <TextField
-//             // sx={{mt: 1}}
-//             //   key={field.name}
-//             //   label={field.label}
-//             //   placeholder={field.placeholder}
-//             //   multiline
-//             //   rows={field.rows}
-//             //   {...register(field.name)}
-//             //   error={!!errors?.[field.name]}
-//             //   helperText={errors?.[field.name]?.message}
-//             // />
-//           ))}
-
-//           <Button variant="outlined" component="label">
-//             {preview ? "Update Image" : "Upload Image"}
-//             <input
-//               type="file"
-//               hidden
-//               onChange={(e) => {
-//                 const file = e.target.files?.[0];
-//                 setValue("uploadimg", file);
-//                 setPreview(URL.createObjectURL(file));
-//               }}
-//             />
-//           </Button>
-
-//           {preview && (
+//           {serviceList.map((item) => (
 //             <Box
-//               component="img"
-//               src={preview}
+//               key={item.id}
 //               sx={{
-//                 width: 200,
-//                 height: 200,
-//                 objectFit: "cover",
-//                 mx: "auto",
-//                 borderRadius: 2,
-//               }}
-//             />
-//           )}
-//         </DialogContent>
-
-//         <DialogActions>
-//           <Button onClick={handleClose}>Cancel</Button>
-//           <Button type="submit" variant="contained">
-//             {preview ? "Update" : "Add"}
-//           </Button>
-//         </DialogActions>
-//       </Dialog>
-
-//       {/* display list of the available list */}
-//       <Box
-//         component="div"
-//         sx={{
-//           mt: 2,
-//           display: "flex",
-//           flexDirection: "row",
-//           justifyContent: "space-between",
-//           gap: 2,
-//           color: "white",
-//         }}
-//       >
-//         {serviceList.map((item) => (
-//           <Box
-//             key={item.id}
-//             sx={{
-//               width: "315px",
-//               position: "relative",
-//               // opacity: item.enabled ? 1 : 0.5,
-//               // transition: "0.3s",
-//             }}
-//           >
-//             {/* ui data box */}
-//             <Box
-//               sx={{
-//                 pointerEvents: item.enabled ? "disable" : "none",
-//                 opacity: item.enabled ? 1 : 0.5,
-//                 transition: "0.3s",
+//                 width: "300px",
+//                 height: "auto",
+//                 // height: "300px",
 //               }}
 //             >
-//               <Box
-//                 component="img"
-//                 src={item?.img}
-//                 sx={{ objectFit: "cover" }}
-//               />
-//               <Typography variant="h5">{item.title}</Typography>
-//               <Typography variant="body2">{item.description}</Typography>
-//             </Box>
-
-//             <Stack
-//               sx={{
-//                 mt: 1,
-//                 display: "flex",
-//                 flexDirection: "row",
-//                 justifyContent: "space-between",
-//                 alignItems: "center",
-//               }}
-//             >
-//               {/* togglar  */}
-//               <Box>
-//                 <FormControlLabel
-//                   label={item.enabled ? "Enable" : "Disable"}
-//                   control={
-//                     <Tooltip title={item.enabled ? "Disable" : "Enable"}>
-//                       <Switch
-//                         checked={item.enabled}
-//                         onChange={() =>
-//                           // setIsChecked(isChacked === true ? false : true)
-//                           handelToggle(item.id)
-//                         }
-//                         color="primary"
-//                       />
-//                     </Tooltip>
-//                   }
-//                 />
-//               </Box>
-
-//               {/* action buttons */}
 //               <Box
 //                 sx={{
-//                   display: "flex",
-//                   alignItems: "center",
-//                   gap: 1,
-//                   pointerEvents: item.enabled ? "disable" : "none",
+//                   pointerEvents: item.enabled ? "auto" : "none",
 //                   opacity: item.enabled ? 1 : 0.5,
-//                   transition: "0.3s",
 //                 }}
 //               >
-//                 <Tooltip title="Edit" onClick={() => handelEdit(item)}>
-//                   <IconButton
-//                     color="primary"
-//                     aria-label="edit"
-//                     sx={{ height: 35, width: 35, bgcolor: "#bbdefb" }}
-//                   >
-//                     <Pencil size={16} />
-//                   </IconButton>
-//                 </Tooltip>
-
-//                 <Tooltip title="Delete" onClick={() => handelDelete(item)}>
-//                   <IconButton
-//                     color="error"
-//                     aria-label="delete"
-//                     sx={{ height: 35, width: 35, bgcolor: "#ffcdd2" }}
-//                   >
-//                     <Trash2 size={16} />
-//                   </IconButton>
-//                 </Tooltip>
+//                 <Box
+//                   component="img"
+//                   src={item.img}
+//                   sx={{
+//                     width: "300px",
+//                     height: "300px",
+//                     objectFit: "cover",
+//                     borderRadius: "15px",
+//                   }}
+//                 />
+//                 <Typography variant="h5">{item.title}</Typography>
+//                 <Typography variant="body2">{item.description}</Typography>
 //               </Box>
-//             </Stack>
-//           </Box>
-//         ))}
-//       </Box>
-//     </Container>
-//   );
-// };
 
-// export default ServicesManage;
+//               <Stack
+//                 sx={{
+//                   display: "flex",
+//                   flexDirection: "row",
+//                   justifyContent: "space-between",
+//                   mt: 1,
+//                 }}
+//               >
+//                 <Tooltip title={item.enabled ? "Disable" : "Enable"}>
+//                   <FormControlLabel
+//                     label={item.enabled ? "Enable" : "Disable"}
+//                     control={
+//                       <Switch
+//                         checked={item.enabled}
+//                         onChange={() => handelToggle(item.id)}
+//                       />
+//                     }
+//                   />
+//                 </Tooltip>
+
+//                 {/* edit & delete */}
+//                 <Box
+//                   sx={{
+//                     display: "flex",
+//                     gap: 1,
+//                     pointerEvents: item.enabled ? "auto" : "none",
+//                     opacity: item.enabled ? 1 : 0.5,
+//                   }}
+//                 >
+//                   <Tooltip title="Edit">
+//                     <IconButton
+//                       onClick={() => handelEdit(item)}
+//                       sx={{
+//                         height: 35,
+//                         width: 35,
+//                         bgcolor: "#bbdefb",
+//                         "&:hover": { bgcolor: "#e3f2fd" },
+//                       }}
+//                     >
+//                       <Pencil size={16} className="text-blue-700" />
+//                     </IconButton>
+//                   </Tooltip>
+
+//                   <Tooltip title="Delete">
+//                     <IconButton
+//                       onClick={() => handelDelete(item.id)}
+//                       sx={{
+//                         height: 35,
+//                         width: 35,
+//                         bgcolor: "#ffcdd2",
+//                         "&:hover": { bgcolor: "#ffebee" },
+//                       }}
+//                     >
+//                       <Trash2 size={16} className="text-red-700" />
+//                     </IconButton>
+//                   </Tooltip>
+//                 </Box>
+//               </Stack>
+//             </Box>
+//           ))}
+//         </Box>

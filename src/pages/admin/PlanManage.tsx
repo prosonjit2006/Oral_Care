@@ -1,12 +1,15 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   IconButton,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -24,6 +27,7 @@ import { planInputField } from "../../services/json/planmanage.input";
 import { planSchema } from "../../services/validation/planmanage.validation";
 import { plans } from "../../services/json/data.json";
 import { Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 // input type
 type PlanInputType = {
@@ -42,6 +46,7 @@ const PlanManage = () => {
   );
   const [editItem, setEditItem] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -77,9 +82,10 @@ const PlanManage = () => {
     setOpen(false);
     setEditItem(null);
     reset(defaultValues);
+    setIsLoading(false);
   };
 
-  // handel edit 
+  // handel edit
   const handleEdit = (item: any) => {
     setEditItem(item);
     reset({
@@ -94,6 +100,8 @@ const PlanManage = () => {
   // handel delete
   const handleDelete = (id: string | number) => {
     setPlanList((prev) => prev.filter((item) => item.id !== id));
+
+    toast.success("Plan deleted successfully");
   };
 
   // handel edit
@@ -134,9 +142,22 @@ const PlanManage = () => {
       setPlanList((prev) => [...prev, newItem]);
     }
 
+    toast.success(
+      editItem ? "Plan updated successfully" : "New plan added successfully",
+    );
+
+    setIsLoading(true);
     handleClose();
     setEditItem(null);
     reset();
+  };
+
+  const handelToggle = (id: string) => {
+    setPlanList((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, enable: !item.enable } : item,
+      ),
+    );
   };
 
   return (
@@ -149,6 +170,7 @@ const PlanManage = () => {
           position: "sticky",
           top: 0,
           zIndex: 10,
+          mb: 2,
         }}
       >
         <Typography variant="h5" sx={{ color: "white" }}>
@@ -200,73 +222,105 @@ const PlanManage = () => {
       </Dialog>
 
       {/* plan ui render */}
-      <TableContainer>
-        <Table sx={{ minWidth: 650, color: "#fff" }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Plan Duration</TableCell>
-              <TableCell align="center">Prices</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">Features</TableCell>
-              <TableCell align="center">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {planList.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.title}
-                </TableCell>
-                <TableCell align="center">{row.price}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">
-                  {row.features.map((item) => (
-                    <Box key={item.id}>{item.label}</Box>
-                  ))}
-                </TableCell>
-
-                <TableCell align="center" sx={{ marginLeft: "10px " }}>
-                  <Box
+      {isLoading ? (
+        <CircularProgress size={25} />
+      ) : (
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 650, color: "#fff" }}
+            aria-label="simple table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>Plan Duration</TableCell>
+                <TableCell align="center">Prices</TableCell>
+                <TableCell align="center">Description</TableCell>
+                <TableCell align="center">Features</TableCell>
+                <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {planList.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    pointerEvents: row.enable ? "auto" : "none",
+                    opacity: row.enable ? 1 : 0.5,
+                  }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.title}
+                  </TableCell>
+                  <TableCell align="center">${row.price}</TableCell>
+                  <TableCell align="center">{row.description}</TableCell>
+                  <TableCell align="center">
+                    {row.features.map((item) => (
+                      <Box key={item.id}>{item.label}</Box>
+                    ))}
+                  </TableCell>
+                  <TableCell
+                    align="center"
                     sx={{
-                      display: "flex",
-                      gap: 1,
-                      // pointerEvents: item.enabled ? "auto" : "none",
-                      // opacity: item.enabled ? 1 : 0.5,
+                      pointerEvents: "visible",
+                      opacity: row.enable ? 1 : 1,
+                      color: "white",
                     }}
                   >
-                    <Tooltip title="Edit">
-                      <IconButton
-                        onClick={() => handleEdit(row)}
-                        sx={{
-                          bgcolor: "#bbdefb",
-                          "&:hover": { bgcolor: "#e3f2fd" },
-                        }}
-                      >
-                        <Pencil size={16} className="text-blue-700" />
-                      </IconButton>
+                    <Tooltip title={row.enable ? "Disable" : "Enable"}>
+                      <FormControlLabel
+                        label={row.enable ? "Enable" : "Disable"}
+                        control={
+                          <Switch
+                            checked={row.enable}
+                            onChange={() => handelToggle(row.id)}
+                          />
+                        }
+                      />
                     </Tooltip>
+                  </TableCell>
 
-                    <Tooltip title="Delete">
-                      <IconButton
-                        onClick={() => handleDelete(row.id)}
-                        sx={{
-                          bgcolor: "#ffcdd2",
-                          "&:hover": { bgcolor: "#ffebee" },
-                        }}
-                      >
-                        <Trash2 size={16} className="text-red-700" />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  <TableCell align="center" sx={{ marginLeft: "10px " }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 1,
+                        pointerEvents: row.enable ? "auto" : "none",
+                        opacity: row.enable ? 1 : 0.5,
+                      }}
+                    >
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => handleEdit(row)}
+                          sx={{
+                            bgcolor: "#bbdefb",
+                            "&:hover": { bgcolor: "#e3f2fd" },
+                          }}
+                        >
+                          <Pencil size={16} className="text-blue-700" />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={() => handleDelete(row.id)}
+                          sx={{
+                            bgcolor: "#ffcdd2",
+                            "&:hover": { bgcolor: "#ffebee" },
+                          }}
+                        >
+                          <Trash2 size={16} className="text-red-700" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Container>
   );
 };
