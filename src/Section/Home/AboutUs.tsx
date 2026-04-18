@@ -51,11 +51,11 @@ const AboutUs = () => {
 
             {/* Buttons */}
             <div className="flex flex-col  sm:flex-row justify-center items-center gap-4 mt-6 md:mt-8">
-              <button className="bg-blue-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-transparent hover:text-gray-700 hover:border hover:border-gray-400 transition duration-500 text-sm sm:text-base">
+              <button className="bg-blue-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-blue-800 transition duration-500 text-sm sm:text-base">
                 Book Appointment
               </button>
 
-              <button className="border border-gray-400 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-blue-700 hover:border-none hover:text-white transition duration-500 text-sm sm:text-base">
+              <button className="border border-gray-400 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-gray-300 transition duration-500 text-sm sm:text-base">
                 About Us
               </button>
             </div>

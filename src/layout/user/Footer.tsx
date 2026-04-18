@@ -5,9 +5,11 @@ import {
   navigationLinks,
   socialLinks,
 } from "../../services/json/data.json";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   const [language, setLanguage] = useState<"eng" | "hin">("eng");
+  // const navigate = useNavigate()
 
   return (
     <footer className="bg-[#030b2a] text-white pt-10 sm:pt-12 md:pt-16 lg:h-[550px] h-auto relative overflow-hidden">
@@ -37,27 +39,43 @@ const Footer = () => {
               NAVIGATION
             </h3>
 
-            <ul className="space-y-2 sm:space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {navigationLinks.map((item, index) => {
                 const Icon = item.icon;
 
                 return (
-                  <li
+                  <NavLink
+                    to={item.path}
                     key={index}
-                    className="flex items-center gap-3 text-gray-400 hover:text-white transition cursor-pointer text-sm sm:text-base"
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 transition cursor-pointer text-sm sm:text-base ${
+                        isActive
+                          ? "text-white font-semibold"
+                          : "text-gray-400 hover:text-white"
+                      }`
+                    }
                   >
-                    <div className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#CEEBFE]">
-                      <Icon
-                        size={14}
-                        className="sm:size-[16px] text-[#0C4FA7]"
-                      />
-                    </div>
-
-                    {item.name}
-                  </li>
+                    {({ isActive }) => (
+                      <>
+                        <div
+                          className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full ${
+                            isActive ? "bg-blue-500" : "bg-[#CEEBFE]"
+                          }`}
+                        >
+                          <Icon
+                            size={14}
+                            className={`sm:size-[16px] ${
+                              isActive ? "text-white" : "text-[#0C4FA7]"
+                            }`}
+                          />
+                        </div>
+                        {item.name}
+                      </>
+                    )}
+                  </NavLink>
                 );
               })}
-            </ul>
+            </div>
           </div>
 
           {/* contacts */}

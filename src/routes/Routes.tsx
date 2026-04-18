@@ -19,6 +19,7 @@ import AppointmentManage from "../pages/admin/AppointmentManage";
 import PlanManage from "../pages/admin/PlanManage";
 import UsersManage from "../pages/admin/UsersManage";
 import SystemSettings from "../pages/admin/SystemSettings";
+import ScrollToTop from "../components/ScrollToTop";
 
 // fallback UI
 const Loader = () => (
@@ -36,6 +37,7 @@ const Routes = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+
     errorElement: <ErrorBoundary />,
   },
   {
@@ -72,7 +74,12 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/",
-    element: <UserWrapper />,
+    element: (
+      <>
+        <UserWrapper />
+        <ScrollToTop />
+      </>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {

@@ -160,11 +160,11 @@ import {
 } from "lucide-react";
 
 export const navigationLinks = [
-  { name: "Home", icon: Home },
-  { name: "Services", icon: Bolt },
-  { name: "Subscriptions", icon: CreditCard },
-  { name: "Team", icon: Users },
-  { name: "Contact Us", icon: BookUser },
+  { name: "Home", path: "/", icon: Home },
+  { name: "Services", path: "/services", icon: Bolt },
+  { name: "Subscriptions", path: "/subscription", icon: CreditCard },
+  { name: "Team", path: "/team", icon: Users },
+  { name: "Contact Us", path: "/contactus", icon: BookUser },
 ];
 
 export const contactLinks = [
@@ -213,7 +213,7 @@ export const dentalServices: DentalService[] = [
     title: "Kids Dental Care",
     image: ds_img4,
   },
-  // repeted part the id's are different 
+  // repeted part the id's are different
   {
     id: 5,
     title: "General Checkups",
