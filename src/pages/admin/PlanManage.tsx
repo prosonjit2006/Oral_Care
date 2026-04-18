@@ -286,8 +286,6 @@ const PlanManage = () => {
                       sx={{
                         display: "flex",
                         gap: 1,
-                        pointerEvents: row.enable ? "auto" : "none",
-                        opacity: row.enable ? 1 : 0.5,
                       }}
                     >
                       <Tooltip title="Edit">

@@ -213,6 +213,27 @@ export const dentalServices: DentalService[] = [
     title: "Kids Dental Care",
     image: ds_img4,
   },
+  // repeted part the id's are different 
+  {
+    id: 5,
+    title: "General Checkups",
+    image: ds_img1,
+  },
+  {
+    id: 6,
+    title: "Teeth Whitening",
+    image: ds_img2,
+  },
+  {
+    id: 7,
+    title: "Root Canal & Surgery",
+    image: ds_img3,
+  },
+  {
+    id: 8,
+    title: "Kids Dental Care",
+    image: ds_img4,
+  },
 ];
 
 // our services part

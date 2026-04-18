@@ -154,6 +154,7 @@ const ServicesManage = () => {
           position: "sticky",
           top: 0,
           zIndex: 10,
+          mb: 2
         }}
       >
         <Typography variant="h5" sx={{ color: "white" }}>
@@ -302,8 +303,7 @@ const ServicesManage = () => {
                       sx={{
                         display: "flex",
                         gap: 1,
-                        pointerEvents: row.enabled ? "auto" : "none",
-                        opacity: row.enabled ? 1 : 0.5,
+                       
                       }}
                     >
                       <Tooltip title="Edit">
