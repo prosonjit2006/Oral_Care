@@ -13,6 +13,7 @@ import {
   FormControlLabel,
   Switch,
   Stack,
+  CircularProgress,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -30,16 +31,17 @@ type NewServicesType = {
 };
 
 const ServicesManage = () => {
+  const [editItem, setEditItem] = useState<any | null>(null);
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [serviceList, setServiceList] = useState(
     services.map((item) => ({
       ...item,
       enabled: true,
     })),
   );
-
-  const [editItem, setEditItem] = useState<any | null>(null);
-  const [open, setOpen] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
 
   const {
     register,
@@ -52,15 +54,16 @@ const ServicesManage = () => {
     defaultValues: {
       servicename: "",
       description: "",
+      // imgurl: '',
       uploadimg: "",
     },
   });
 
   const handleOpen = () => {
+    setOpen(true);
     setEditItem(null);
     reset();
     setPreview(null);
-    setOpen(true);
   };
 
   const handleClose = () => {
@@ -68,12 +71,13 @@ const ServicesManage = () => {
     setEditItem(null);
     reset();
     setPreview(null);
+    setIsLoading(false);
   };
 
   //  submit - add + edit
   const onSubmit = (data: NewServicesType) => {
+    // edit
     if (editItem) {
-      // edit
       const updated = serviceList.map((item) =>
         item.id === editItem.id
           ? {
@@ -87,8 +91,9 @@ const ServicesManage = () => {
 
       setServiceList(updated);
       toast.success("Service updated successfully");
-    } else {
-      // add
+    }
+    // add
+    else {
       const newService = {
         id: crypto.randomUUID(),
         title: data.servicename,
@@ -101,6 +106,7 @@ const ServicesManage = () => {
       toast.success("Service added successfully");
     }
 
+    setIsLoading(true);
     handleClose();
   };
 
@@ -133,9 +139,17 @@ const ServicesManage = () => {
   };
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
+    <Container disableGutters maxWidth={false} sx={{ p: 2, }}>
       {/* header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+        }}
+      >
         <Typography variant="h5" sx={{ color: "white" }}>
           All Service Lists
         </Typography>
@@ -215,69 +229,110 @@ const ServicesManage = () => {
       </Dialog>
 
       {/* cards ui part */}
-      <Box
-        sx={{
-          mt: 2,
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          color: "white",
-        }}
-      >
-        {serviceList.map((item) => (
-          <Box key={item.id} sx={{ width: "315px" }}>
+      {isLoading ? (
+        <CircularProgress size={25} />
+      ) : (
+        <Box
+          sx={{
+            mt: 2,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            // justifyContent: "space-between",
+            // flexWrap: "wrap",
+            gap: 2,
+            color: "white",
+          }}
+        >
+          {serviceList.map((item) => (
             <Box
+              key={item.id}
               sx={{
-                pointerEvents: item.enabled ? "auto" : "none",
-                opacity: item.enabled ? 1 : 0.5,
+                width: "300px",
+                height: "auto",
+                // height: "300px",
               }}
             >
-              <Box component="img" src={item.img} sx={{ width: "100%" }} />
-              <Typography variant="h5">{item.title}</Typography>
-              <Typography variant="body2">{item.description}</Typography>
-            </Box>
-
-            <Stack
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                mt: 1,
-              }}
-            >
-              <FormControlLabel
-                label={item.enabled ? "Disable" : "Enable"}
-                control={
-                  <Switch
-                    checked={item.enabled}
-                    onChange={() => handelToggle(item.id)}
-                  />
-                }
-              />
-
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <Tooltip title="Edit">
-                  <IconButton
-                    onClick={() => handelEdit(item)}
-                    sx={{ height: 35, width: 35, bgcolor: "#bbdefb" }}
-                  >
-                    <Pencil size={16} className="text-blue-700" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Delete">
-                  <IconButton
-                    onClick={() => handelDelete(item.id)}
-                    sx={{ height: 35, width: 35, bgcolor: "#ffcdd2" }}
-                  >
-                    <Trash2 size={16} className="text-red-700" />
-                  </IconButton>
-                </Tooltip>
+              <Box
+                sx={{
+                  pointerEvents: item.enabled ? "auto" : "none",
+                  opacity: item.enabled ? 1 : 0.5,
+                }}
+              >
+                <Box
+                  component="img"
+                  src={item.img}
+                  sx={{
+                    width: "300px",
+                    height: "300px",
+                    objectFit: "cover",
+                    borderRadius: "15px",
+                  }}
+                />
+                <Typography variant="h5">{item.title}</Typography>
+                <Typography variant="body2">{item.description}</Typography>
               </Box>
-            </Stack>
-          </Box>
-        ))}
-      </Box>
+
+              <Stack
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  mt: 1,
+                }}
+              >
+                <Tooltip title={item.enabled ? "Disable" : "Enable"}>
+                  <FormControlLabel
+                    label={item.enabled ? "Enable" : "Disable"}
+                    control={
+                      <Switch
+                        checked={item.enabled}
+                        onChange={() => handelToggle(item.id)}
+                      />
+                    }
+                  />
+                </Tooltip>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    pointerEvents: item.enabled ? "auto" : "none",
+                    opacity: item.enabled ? 1 : 0.5,
+                  }}
+                >
+                  <Tooltip title="Edit">
+                    <IconButton
+                      onClick={() => handelEdit(item)}
+                      sx={{
+                        height: 35,
+                        width: 35,
+                        bgcolor: "#bbdefb",
+                        "&:hover": { bgcolor: "#e3f2fd" },
+                      }}
+                    >
+                      <Pencil size={16} className="text-blue-700" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => handelDelete(item.id)}
+                      sx={{
+                        height: 35,
+                        width: 35,
+                        bgcolor: "#ffcdd2",
+                        "&:hover": { bgcolor: "#ffebee" },
+                      }}
+                    >
+                      <Trash2 size={16} className="text-red-700" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </Stack>
+            </Box>
+          ))}
+        </Box>
+      )}
     </Container>
   );
 };

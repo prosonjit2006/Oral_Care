@@ -410,7 +410,7 @@ export const plans: Plan[] = [
   {
     id: "quarterly",
     title: "Quarterly",
-    price: 129,
+    price: 99,
     durationLabel: "/qu",
     description: "Regular care for a brighter smile.",
     features: [
@@ -423,7 +423,7 @@ export const plans: Plan[] = [
   {
     id: "yearly",
     title: "Yearly",
-    price: 239,
+    price: 179,
     durationLabel: "/yr",
     description: "Comprehensive coverage & priority.",
     isRecommended: true,

@@ -15,3 +15,12 @@ export interface SidebarNavigationInterface {
   path: string;
   icon: LucideIcon;
 }
+
+export interface PlanInterface {
+  name: string;
+  label: string;
+  placeholder: string;
+  rows: number
+  type: string;
+  required: boolean;
+}
