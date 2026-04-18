@@ -7,10 +7,10 @@ import type {
 
 export type FieldType = "text" | "email" | "password" | "textarea";
 export type DynamicInputProps<T extends FieldValues> = {
-  name: Path<T>;
+  name: Path<T> ;
   label: string;
   placeholder: string | undefined;
-  type: FieldType | undefined;
+  type: FieldType | undefined | string;
   rows: number;
   required: boolean;
   register: UseFormRegister<T>;
