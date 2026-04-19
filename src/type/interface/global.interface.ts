@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import type { BillingType } from "../type/global.type";
 
 export interface AboutTeams {
+  id: number
   name: string;
   position: string;
   rating: number;

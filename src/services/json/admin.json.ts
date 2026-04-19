@@ -120,3 +120,72 @@ export const serviceInputField = [
     rows: 3,
   },
 ];
+
+// doctor avavilability
+export const doctorAvailability = [
+  {
+    doctorId: 1,
+    availability: [
+      {
+        date: "2026-04-20",
+        slots: ["10:00 AM", "11:30 AM", "02:00 PM"],
+      },
+      {
+        date: "2026-04-22",
+        slots: ["09:00 AM", "01:00 PM"],
+      },
+    ],
+  },
+  {
+    doctorId: 2,
+    availability: [
+      {
+        date: "2026-04-21",
+        slots: ["10:30 AM", "12:00 PM"],
+      },
+      {
+        date: "2026-04-23",
+        slots: ["03:00 PM", "05:00 PM"],
+      },
+    ],
+  },
+  {
+    doctorId: 3,
+    availability: [
+      {
+        date: "2026-04-20",
+        slots: ["08:00 AM", "11:00 AM"],
+      },
+      {
+        date: "2026-04-24",
+        slots: ["01:30 PM", "04:00 PM"],
+      },
+    ],
+  },
+  {
+    doctorId: 4,
+    availability: [
+      {
+        date: "2026-04-22",
+        slots: ["09:30 AM", "12:30 PM"],
+      },
+      {
+        date: "2026-04-25",
+        slots: ["02:00 PM", "06:00 PM"],
+      },
+    ],
+  },
+  {
+    doctorId: 5,
+    availability: [
+      {
+        date: "2026-04-21",
+        slots: ["10:00 AM", "01:00 PM"],
+      },
+      {
+        date: "2026-04-23",
+        slots: ["03:30 PM", "07:00 PM"],
+      },
+    ],
+  },
+];
