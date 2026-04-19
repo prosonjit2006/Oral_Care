@@ -20,6 +20,7 @@ import PlanManage from "../pages/admin/PlanManage";
 import UsersManage from "../pages/admin/UsersManage";
 import SystemSettings from "../pages/admin/SystemSettings";
 import ScrollToTop from "../components/ScrollToTop";
+import Booking from "../pages/Booking";
 
 // fallback UI
 const Loader = () => (
@@ -38,6 +39,11 @@ const Routes = createBrowserRouter([
     path: "/login",
     element: <Login />,
 
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/booking",
+    element: <Booking />,
     errorElement: <ErrorBoundary />,
   },
   {

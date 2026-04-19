@@ -93,7 +93,7 @@ const DentalServices = () => {
               }}
               pagination={{ clickable: true }}
               modules={[FreeMode, Pagination, Autoplay]}
-              className="mySwiper !pb-8" // padding for pagination dots
+              className="mySwiper !pb-8" 
             >
               {dentalServices.map((item) => (
                 <SwiperSlide key={item.id}>
