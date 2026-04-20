@@ -153,7 +153,7 @@ const ServicesManage = () => {
           position: "sticky",
           top: 0,
           zIndex: 10,
-          mb: 2
+          mb: 2,
         }}
       >
         <Typography variant="h5" sx={{ color: "white" }}>
@@ -268,7 +268,12 @@ const ServicesManage = () => {
                       component="img"
                       src={row.img}
                       alt="img"
-                      sx={{ width: "120px", height: "120px" }}
+                      sx={{
+                        width: "150px",
+                        height: "120px",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">
@@ -302,7 +307,6 @@ const ServicesManage = () => {
                       sx={{
                         display: "flex",
                         gap: 1,
-                       
                       }}
                     >
                       <Tooltip title="Edit">
@@ -311,6 +315,8 @@ const ServicesManage = () => {
                           sx={{
                             bgcolor: "#bbdefb",
                             "&:hover": { bgcolor: "#e3f2fd" },
+                            pointerEvents: "visible",
+                            opacity: 1,
                           }}
                         >
                           <Pencil size={16} className="text-blue-700" />
@@ -323,6 +329,8 @@ const ServicesManage = () => {
                           sx={{
                             bgcolor: "#ffcdd2",
                             "&:hover": { bgcolor: "#ffebee" },
+                            pointerEvents: "visible",
+                            opacity: 1,
                           }}
                         >
                           <Trash2 size={16} className="text-red-700" />

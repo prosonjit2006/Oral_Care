@@ -4,6 +4,8 @@ import {
   Container,
   FormControl,
   FormHelperText,
+  FormLabel,
+  Stack,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -16,15 +18,16 @@ import { Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { doctorAvailability } from "../services/json/admin.json";
-import { bookingFormInput } from "../services/json/bookinfform.input";
 import DynamicInput from "../components/DynamicInput";
 import { bookingFormSchema } from "../services/validation/booking.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { bookingFormInput } from "../services/json/bookinfForm.input";
+import { toast } from "sonner";
 
 type FormValues = {
   service: string;
-  doctor: object;
-  datetime: object;
+  doctor: { id: number; name: string; position: string } | null;
+  datetime: object | null;
   name: string;
   email: string;
   phone: string;
@@ -42,8 +45,8 @@ const Booking = () => {
     resolver: yupResolver(bookingFormSchema),
     defaultValues: {
       service: "",
-      doctor: {},
-      datetime: {},
+      doctor: null,
+      datetime: null,
       name: "",
       email: "",
       phone: "",
@@ -53,6 +56,7 @@ const Booking = () => {
 
   const onSubmit = (data: FormValues) => {
     console.log("Full Form Data:", data);
+    toast.success("Appointment booked successfully");
     reset();
   };
 
@@ -167,13 +171,10 @@ const Booking = () => {
                             overflow: "hidden",
                             cursor: "pointer",
                             width: "100%",
-
                             border: isSelected
                               ? "2px solid #1976d2"
                               : "1px solid #ddd",
-
                             transition: "all 0.3s ease",
-
                             "&:hover .img": {
                               transform: "scale(1.1)",
                             },
@@ -250,7 +251,7 @@ const Booking = () => {
                             variant={isSelected ? "contained" : "outlined"}
                             onClick={(e) => {
                               e.stopPropagation();
-                              field.onChange(item.id);
+                              field.onChange(item);
                             }}
                             sx={{
                               position: "absolute",
@@ -286,6 +287,7 @@ const Booking = () => {
         <Controller
           name="datetime"
           control={control}
+          rules={{ required: "Doctor selection is required" }}
           render={({ field }) => (
             <FormControl error={!!errors.datetime} fullWidth>
               <Box sx={{ width: "100%" }}>
@@ -335,7 +337,7 @@ const Booking = () => {
                           {doctor.position}
                         </Typography>
 
-                        {/* SLOT 1 */}
+                        {/* slot 1 */}
                         {doctor.availability[0] && (
                           <Box sx={{ mt: 1 }}>
                             <Typography variant="body2">
@@ -365,7 +367,7 @@ const Booking = () => {
                           </Box>
                         )}
 
-                        {/* SLOT 2 */}
+                        {/* slot 2 */}
                         {doctor.availability[1] && (
                           <Box sx={{ mt: 1 }}>
                             <Typography variant="body2">
@@ -401,14 +403,17 @@ const Booking = () => {
               </Box>
 
               {/* heper text */}
-              <FormHelperText sx={{ color: "red" }}>
+              <FormHelperText>
                 {errors.datetime?.message as string}
               </FormHelperText>
             </FormControl>
           )}
         />
 
-        {/* personal details */}
+        {/*  personal details */}
+        {/* <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
+          Personal Details
+        </Typography> */}
 
         <Box
           sx={{
@@ -433,7 +438,7 @@ const Booking = () => {
               textAlign: "center",
             }}
           >
-            Book Appointment
+            Personal Details
           </Typography>
 
           {/* Inputs */}

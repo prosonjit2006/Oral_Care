@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import type { NavLinkProps } from "react-router-dom";
 
 const Navbar = () => {
@@ -14,6 +14,7 @@ const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -64,7 +65,7 @@ const Navbar = () => {
         {/* Right Section */}
         <div className="flex items-center gap-3">
           {/* Desktop Button */}
-          <button className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700">
+          <button onClick={()=> navigate('/booking')} className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700">
             Get Appointment
           </button>
 

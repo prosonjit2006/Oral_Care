@@ -48,7 +48,7 @@ export interface Plan {
   id: BillingType;
   title: string;
   price: number;
-  durationLabel: string; // "/mo"
+  durationLabel: string; 
   description: string;
   features: PlanFeature[];
   isRecommended?: boolean;

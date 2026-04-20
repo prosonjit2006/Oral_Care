@@ -294,6 +294,8 @@ const PlanManage = () => {
                           sx={{
                             bgcolor: "#bbdefb",
                             "&:hover": { bgcolor: "#e3f2fd" },
+                            pointerEvents: "visible",
+                            opacity: 1,
                           }}
                         >
                           <Pencil size={16} className="text-blue-700" />
@@ -306,6 +308,8 @@ const PlanManage = () => {
                           sx={{
                             bgcolor: "#ffcdd2",
                             "&:hover": { bgcolor: "#ffebee" },
+                            pointerEvents: "visible",
+                            opacity: 1,
                           }}
                         >
                           <Trash2 size={16} className="text-red-700" />
