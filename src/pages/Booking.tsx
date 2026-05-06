@@ -4,8 +4,6 @@ import {
   Container,
   FormControl,
   FormHelperText,
-  FormLabel,
-  Stack,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -19,20 +17,24 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { doctorAvailability } from "../services/json/admin.json";
 import DynamicInput from "../components/DynamicInput";
-import { bookingFormSchema } from "../services/validation/booking.validation";
+// import { bookingFormSchema } from "../services/validation/booking.validation";
+import {
+  bookingFormSchema,
+  type FormValues,
+} from "../services/validation/booking.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { bookingFormInput } from "../services/json/bookinfForm.input";
 import { toast } from "sonner";
 
-type FormValues = {
-  service: string;
-  doctor: { id: number; name: string; position: string } | null;
-  datetime: object | null;
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-};
+// type FormValues = {
+//   service: string;
+//   doctor: { id: number; name: string; position: string } | null;
+//   datetime: object | null;
+//   name: string;
+//   email: string;
+//   phone: string;
+//   message: string;
+// };
 
 const Booking = () => {
   const {
@@ -45,8 +47,8 @@ const Booking = () => {
     resolver: yupResolver(bookingFormSchema),
     defaultValues: {
       service: "",
-      doctor: null,
-      datetime: null,
+      doctor: {},
+      datetime: {},
       name: "",
       email: "",
       phone: "",
@@ -445,7 +447,7 @@ const Booking = () => {
           {bookingFormInput.map((field) => (
             <DynamicInput
               key={field.name}
-              name={field.name}
+              name={field.name as keyof FormValues}
               label={field.label}
               placeholder={field.placeholder}
               type={field.type}

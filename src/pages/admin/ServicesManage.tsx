@@ -22,17 +22,29 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import newServicesSchema from "../../services/validation/newservice.validation";
+// import newServicesSchema from "../../services/validation/newservice.validation";
+import newServicesSchema, {
+  type NewServicesType,
+} from "../../services/validation/newservice.validation";
 import { toast } from "sonner";
 import { serviceInputField } from "../../services/json/admin.json";
 import DynamicInput from "../../components/DynamicInput";
 import { services } from "../../services/json/data.json";
 import { Pencil, Trash2 } from "lucide-react";
 
-type NewServicesType = {
-  servicename: string;
-  description?: string;
-  uploadimg?: string;
+// type NewServicesType = {
+//   servicename: string;
+//   description?: string;
+//   uploadimg?: string;
+// };
+
+// Add at the top of ServicesManage.tsx
+type ServiceItem = {
+  id: number | string;
+  title: string;
+  description: string;
+  img: string;
+  enabled: boolean;
 };
 
 const ServicesManage = () => {
@@ -41,7 +53,7 @@ const ServicesManage = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [serviceList, setServiceList] = useState(
+  const [serviceList, setServiceList] = useState<ServiceItem[]>(
     services.map((item) => ({
       ...item,
       enabled: true,
@@ -81,32 +93,25 @@ const ServicesManage = () => {
 
   //  submit - add + edit
   const onSubmit = (data: NewServicesType) => {
-    // edit
+    const img = String(data.uploadimg || preview || ""); // ✅ force string
+    const description = data.description ?? "";
+
     if (editItem) {
-      const updated = serviceList.map((item) =>
+      const updated: ServiceItem[] = serviceList.map((item) =>
         item.id === editItem.id
-          ? {
-              ...item,
-              title: data.servicename,
-              description: data.description,
-              img: data.uploadimg || preview,
-            }
+          ? { ...item, title: data.servicename, description, img }
           : item,
       );
-
-      setServiceList(updated);
+      setServiceList(updated); // ✅ typed as ServiceItem[]
       toast.success("Service updated successfully");
-    }
-    // add
-    else {
-      const newService = {
+    } else {
+      const newService: ServiceItem = {
         id: crypto.randomUUID(),
         title: data.servicename,
-        description: data.description,
-        img: data.uploadimg || preview,
+        description,
+        img,
         enabled: true,
       };
-
       setServiceList((prev) => [...prev, newService]);
       toast.success("Service added successfully");
     }
@@ -115,8 +120,62 @@ const ServicesManage = () => {
     handleClose();
   };
 
+  // const onSubmit = (data: NewServicesType) => {
+  //   // edit
+  //   if (editItem) {
+  //     const updated = serviceList.map((item) =>
+  //       item.id === editItem.id
+  //         ? {
+  //             ...item,
+  //             title: data.servicename,
+  //             description: data.description,
+  //             img: data.uploadimg || preview,
+  //           }
+  //         : item,
+  //     );
+
+  //     setServiceList(updated);
+  //     toast.success("Service updated successfully");
+  //   }
+  //   // add
+  //   else {
+  //     const newService = {
+  //       id: crypto.randomUUID(),
+  //       title: data.servicename,
+  //       description: data.description,
+  //       img: data.uploadimg || preview,
+  //       enabled: true,
+  //     };
+
+  //     setServiceList((prev) => [...prev, newService]);
+  //     toast.success("Service added successfully");
+  //   }
+
+  //   setIsLoading(true);
+  //   handleClose();
+  // };
+
   // toggle
-  const handelToggle = (id: number) => {
+
+  // const handelToggle = (id: number) => {
+  //   setServiceList((prev) =>
+  //     prev.map((item) =>
+  //       item.id === id ? { ...item, enabled: !item.enabled } : item,
+  //     ),
+  //   );
+  // };
+  // // delete
+  // const handelDelete = (id: number) => {
+  //   const filtered = serviceList.filter((item) => item.id !== id);
+  //   setServiceList(filtered);
+  //   toast.success("Service deleted successfully");
+  // };
+
+  // edit
+
+  //  Change parameter type from number to string | number
+
+  const handelToggle = (id: string | number) => {
     setServiceList((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, enabled: !item.enabled } : item,
@@ -124,7 +183,12 @@ const ServicesManage = () => {
     );
   };
 
-  // edit
+  const handelDelete = (id: string | number) => {
+    const filtered = serviceList.filter((item) => item.id !== id);
+    setServiceList(filtered);
+    toast.success("Service deleted successfully");
+  };
+
   const handelEdit = (item: any) => {
     setEditItem(item);
 
@@ -134,13 +198,6 @@ const ServicesManage = () => {
 
     setPreview(item.img);
     setOpen(true);
-  };
-
-  // delete
-  const handelDelete = (id: number) => {
-    const filtered = serviceList.filter((item) => item.id !== id);
-    setServiceList(filtered);
-    toast.success("Service deleted successfully");
   };
 
   return (
@@ -184,7 +241,7 @@ const ServicesManage = () => {
           {serviceInputField.map((field) => (
             <DynamicInput
               key={field.name}
-              name={field.name}
+              name={field.name as keyof NewServicesType}
               label={field.label}
               placeholder={field.placeholder}
               type={field.type}
@@ -349,106 +406,3 @@ const ServicesManage = () => {
 };
 
 export default ServicesManage;
-
-// ui card model
-//  <Box
-//           sx={{
-//             mt: 2,
-//             display: "grid",
-//             gridTemplateColumns: "repeat(4, 1fr)",
-//             // justifyContent: "space-between",
-//             // flexWrap: "wrap",
-//             gap: 2,
-//             color: "white",
-//           }}
-//         >
-//           {serviceList.map((item) => (
-//             <Box
-//               key={item.id}
-//               sx={{
-//                 width: "300px",
-//                 height: "auto",
-//                 // height: "300px",
-//               }}
-//             >
-//               <Box
-//                 sx={{
-//                   pointerEvents: item.enabled ? "auto" : "none",
-//                   opacity: item.enabled ? 1 : 0.5,
-//                 }}
-//               >
-//                 <Box
-//                   component="img"
-//                   src={item.img}
-//                   sx={{
-//                     width: "300px",
-//                     height: "300px",
-//                     objectFit: "cover",
-//                     borderRadius: "15px",
-//                   }}
-//                 />
-//                 <Typography variant="h5">{item.title}</Typography>
-//                 <Typography variant="body2">{item.description}</Typography>
-//               </Box>
-
-//               <Stack
-//                 sx={{
-//                   display: "flex",
-//                   flexDirection: "row",
-//                   justifyContent: "space-between",
-//                   mt: 1,
-//                 }}
-//               >
-//                 <Tooltip title={item.enabled ? "Disable" : "Enable"}>
-//                   <FormControlLabel
-//                     label={item.enabled ? "Enable" : "Disable"}
-//                     control={
-//                       <Switch
-//                         checked={item.enabled}
-//                         onChange={() => handelToggle(item.id)}
-//                       />
-//                     }
-//                   />
-//                 </Tooltip>
-
-//                 {/* edit & delete */}
-//                 <Box
-//                   sx={{
-//                     display: "flex",
-//                     gap: 1,
-//                     pointerEvents: item.enabled ? "auto" : "none",
-//                     opacity: item.enabled ? 1 : 0.5,
-//                   }}
-//                 >
-//                   <Tooltip title="Edit">
-//                     <IconButton
-//                       onClick={() => handelEdit(item)}
-//                       sx={{
-//                         height: 35,
-//                         width: 35,
-//                         bgcolor: "#bbdefb",
-//                         "&:hover": { bgcolor: "#e3f2fd" },
-//                       }}
-//                     >
-//                       <Pencil size={16} className="text-blue-700" />
-//                     </IconButton>
-//                   </Tooltip>
-
-//                   <Tooltip title="Delete">
-//                     <IconButton
-//                       onClick={() => handelDelete(item.id)}
-//                       sx={{
-//                         height: 35,
-//                         width: 35,
-//                         bgcolor: "#ffcdd2",
-//                         "&:hover": { bgcolor: "#ffebee" },
-//                       }}
-//                     >
-//                       <Trash2 size={16} className="text-red-700" />
-//                     </IconButton>
-//                   </Tooltip>
-//                 </Box>
-//               </Stack>
-//             </Box>
-//           ))}
-//         </Box>

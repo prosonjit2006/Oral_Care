@@ -30,7 +30,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 // input type
-type PlanInputType = {
+export type PlanInputType = {
   name: string;
   price: number;
   description: string;
@@ -105,9 +105,9 @@ const PlanManage = () => {
   };
 
   // handel edit
+  // handel edit
   const onSubmit = (data: PlanInputType) => {
     if (editItem) {
-      // update
       setPlanList((prev) =>
         prev.map((item) =>
           item.id === editItem.id
@@ -117,26 +117,26 @@ const PlanManage = () => {
                 price: data.price,
                 description: data.description,
                 features: data.features.split(",").map((f, index) => ({
-                  id: String(index),
+                  id: String(index) as any, // cast to PlanFeature id type if needed
                   label: f.trim(),
-                })),
+                })) as any,
               }
             : item,
         ),
       );
-    }
-    // add
-    else {
+    } else {
       const newItem = {
-        id: crypto.randomUUID(),
+        id: crypto.randomUUID() as any, // cast to BillingType
         title: data.name,
         price: data.price,
         description: data.description,
+        durationLabel: data.name, 
         features: data.features.split(",").map((f, index) => ({
-          id: String(index),
+          id: String(index) as any, // cast to PlanFeature id shape
           label: f.trim(),
-        })),
+        })) as any,
         enable: true,
+        isRecommended: false,
       };
 
       setPlanList((prev) => [...prev, newItem]);
@@ -151,6 +151,52 @@ const PlanManage = () => {
     setEditItem(null);
     reset();
   };
+  // const onSubmit = (data: PlanInputType) => {
+  //   if (editItem) {
+  //     // update
+  //     setPlanList((prev) =>
+  //       prev.map((item) =>
+  //         item.id === editItem.id
+  //           ? {
+  //               ...item,
+  //               title: data.name,
+  //               price: data.price,
+  //               description: data.description,
+  //               features: data.features.split(",").map((f, index) => ({
+  //                 id: String(index),
+  //                 label: f.trim(),
+  //               })),
+  //             }
+  //           : item,
+  //       ),
+  //     );
+  //   }
+  //   // add
+  //   else {
+  //     const newItem = {
+  //       id: crypto.randomUUID(),
+  //       title: data.name,
+  //       price: data.price,
+  //       description: data.description,
+  //       features: data.features.split(",").map((f, index) => ({
+  //         id: String(index),
+  //         label: f.trim(),
+  //       })),
+  //       enable: true,
+  //     };
+
+  //     setPlanList((prev) => [...prev, newItem]);
+  //   }
+
+  //   toast.success(
+  //     editItem ? "Plan updated successfully" : "New plan added successfully",
+  //   );
+
+  //   setIsLoading(true);
+  //   handleClose();
+  //   setEditItem(null);
+  //   reset();
+  // };
 
   const handelToggle = (id: string) => {
     setPlanList((prev) =>
@@ -201,7 +247,7 @@ const PlanManage = () => {
           {planInputField.map((field) => (
             <DynamicInput
               key={field.name}
-              name={field.name}
+              name={field.name as keyof PlanInputType}
               label={field.label}
               placeholder={field.placeholder}
               type={field.type}
@@ -325,6 +371,6 @@ const PlanManage = () => {
       )}
     </Container>
   );
-};
+};;
 
 export default PlanManage;

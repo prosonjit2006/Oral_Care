@@ -6,6 +6,7 @@ import type {
 } from "react-hook-form";
 
 export type FieldType = "text" | "email" | "password" | "textarea";
+
 export type DynamicInputProps<T extends FieldValues> = {
   name: Path<T> ;
   label: string;
