@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 const Banner = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative w-full h-screen overflow-hidden">
       {/* Background Image */}
@@ -22,7 +26,10 @@ const Banner = () => {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <button className="bg-blue-600 px-4 py-2 rounded-md text-sm sm:text-base hover:bg-blue-700 transition">
+              <button
+                onClick={() => navigate("/booking")}
+                className="bg-blue-600 px-4 py-2 rounded-md text-sm sm:text-base hover:bg-blue-700 transition"
+              >
                 Book Appointment
               </button>
 

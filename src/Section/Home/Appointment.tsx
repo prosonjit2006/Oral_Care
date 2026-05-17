@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import img1 from "../../assets/images/landingPage/appointment/img1.png";
 import img2 from "../../assets/images/landingPage/appointment/img2.png";
 import { HeartPulse, Smile } from "lucide-react";
 
 const Appointment = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="bg-gradient-to-tr from-[#CEEBFE] to-[#EDD6FF]   overflow-hidden h-fit">
       <div className="container grid grid-cols-1 lg:grid-cols-3 items-center gap-10 px-4 h-fit">
@@ -26,7 +29,10 @@ const Appointment = () => {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
-            <button className="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition">
+            <button
+              onClick={() => navigate("/booking")}
+              className="bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition"
+            >
               Book Appointment
             </button>
 

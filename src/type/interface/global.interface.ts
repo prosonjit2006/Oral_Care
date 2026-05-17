@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import type { BillingType } from "../type/global.type";
 
 export interface AboutTeams {
-  id: number
+  id: number;
   name: string;
   position: string;
   rating: number;
@@ -37,8 +37,6 @@ export interface OurServices {
   height?: string;
 }
 
-
-
 export interface PlanFeature {
   id: string;
   label: string;
@@ -48,7 +46,7 @@ export interface Plan {
   id: BillingType;
   title: string;
   price: number;
-  durationLabel: string; // "/mo"
+  durationLabel: string;
   description: string;
   features: PlanFeature[];
   isRecommended?: boolean;

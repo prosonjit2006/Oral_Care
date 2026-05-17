@@ -1,7 +1,10 @@
 import imgFront from "../../assets/images/landingPage/aboutUs/img2.png";
 import imgBack from "../../assets/images/landingPage/aboutUs/img1.png";
+import { useNavigate } from "react-router-dom";
 
 const AboutUs = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="bg-[#F0F8FF] py-14 pb-32 md:pb-0 sm:py-16 md:py-16 lg:py-20">
       <div className="container px-4 sm:px-6">
@@ -51,7 +54,10 @@ const AboutUs = () => {
 
             {/* Buttons */}
             <div className="flex flex-col  sm:flex-row justify-center items-center gap-4 mt-6 md:mt-8">
-              <button className="bg-blue-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-blue-800 transition duration-500 text-sm sm:text-base">
+              <button
+                onClick={() => navigate("/booking")}
+                className="bg-blue-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-blue-800 transition duration-500 text-sm sm:text-base"
+              >
                 Book Appointment
               </button>
 
