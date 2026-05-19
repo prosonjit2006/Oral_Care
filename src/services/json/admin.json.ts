@@ -25,12 +25,12 @@ export const signupInputForm: FormInput[] = [
     placeholder: "Enter Your Email Address",
     type: "text",
   },
-  {
-    name: "phone",
-    label: "Phone",
-    placeholder: "Enter Your Phone Number",
-    type: "text",
-  },
+  // {
+  //   name: "phone",
+  //   label: "Phone",
+  //   placeholder: "Enter Your Phone Number",
+  //   type: "text",
+  // },
   {
     name: "password",
     label: "Password",

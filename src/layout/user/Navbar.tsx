@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import type { NavLinkProps } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
+import { logout } from "../../store/slices/auth.slice";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const { isAuthenticate, user, role } = useAppSelector((state) => state.auth);
+  console.log("navbar responee", isAuthenticate, user, role);
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
@@ -14,7 +19,7 @@ const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -65,7 +70,35 @@ const Navbar = () => {
         {/* Right Section */}
         <div className="flex items-center gap-3">
           {/* Desktop Button */}
-          <button onClick={()=> navigate('/booking')} className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700">
+          {isAuthenticate ? (
+            <>
+              {role=== 'admin' && (
+              <button
+                onClick={() => navigate("/admin/dashboard")}
+                className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+              >
+                Admin Dashboard
+              </button>
+              )}
+              <button
+                onClick={() => dispatch(logout())}
+                className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+            >
+              Login
+            </button>
+          )}
+          <button
+            onClick={() => navigate("/booking")}
+            className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+          >
             Get Appointment
           </button>
 

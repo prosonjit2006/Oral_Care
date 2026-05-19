@@ -1,31 +1,33 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { loginInputForm } from "../services/json/admin.json";
 import loginSchema from "../services/validation/login.validation";
-import { useState } from "react";
 import { toast } from "sonner";
-import { endpoint } from "../services/helper/endpoint";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import api from "../lib/AxiosInstance";
+import { useAppDispatch, useAppSelector } from "../hooks/useredux";
+import { LoginUser } from "../store/slices/auth.slice";
+import type { LoginPayload } from "../type/interface/auth.interface";
 
-export type LoginDataType = {
-  email: string;
-  password: string;
-};
 
 const Login = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const { isLoading, isError } = useAppSelector((state) => state.auth);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<LoginDataType>({
+  } = useForm<LoginPayload>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -33,41 +35,24 @@ const Login = () => {
     },
   });
 
-  const onSubmit = async (data: LoginDataType) => {
-    setIsLoading(true);
+  const onSubmit = async (data: LoginPayload) => {
     try {
-      const response = await api.post(`${endpoint.auth.login}`, data);
-      //  console.log(data);
-      console.log("response login---", response);
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        Cookies.set("token", response.data.accessToken, {
-          expires: 15 * 60 * 1000,
-        });
-        Cookies.set("role", response.data.user.role, {
-          expires: 15 * 60 * 1000,
-        });
-        Cookies.set("userDetails", JSON.stringify(response.data.user), {
-          expires: 15 * 60 * 1000,
-        });
-        // localStorage.setItem("token", response.data.accessToken);
-        // localStorage.setItem("role", response.data.user.role);
-        // localStorage.setItem("userDetails", JSON.stringify(response.data.user));
-        if (response.data.user.role === "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/");
+      const response = await dispatch(LoginUser(data)).unwrap();
+      console.log("res in login page", response);
+      if (response.success) {
+        toast.success(response.message);
+        if(response.user.role=== "admin"){
+          navigate("/admin/dashboard");
+        }else{
+          navigate('/')
         }
-
-        reset();
-        setIsError(null);
+        reset()
+      } else {
+        toast.error(response.message);
       }
     } catch (error: any) {
-      console.log(error.response);
-      setIsError(error.response.data.message);
-      toast.error(error.response.data.message);
-    } finally {
-      setIsLoading(false);
+      console.log("err", error);
+      toast.error(error);
     }
   };
 
@@ -78,16 +63,35 @@ const Login = () => {
 
   return (
     <Container
-      // maxWidth={"100vh"}
       maxWidth={false}
-      sx={{ background: "linear-gradient(155deg, #CEEBFE, #EDD6FF)" }}
+      disableGutters
+      sx={{
+        minHeight: "100vh",
+        background:
+          "linear-gradient(135deg, #d7efff 0%, #f3ddff 50%, #ffffff 100%)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: {
+          xs: "20px",
+          sm: "30px",
+        },
+      }}
     >
-      <Box
+      <Paper
+        elevation={8}
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
+          width: "100%",
+          maxWidth: "450px",
+          padding: {
+            xs: "25px 20px",
+            sm: "40px 35px",
+          },
+          borderRadius: "24px",
+          backdropFilter: "blur(10px)",
+          background: "rgba(255,255,255,0.85)",
+          border: "1px solid rgba(255,255,255,0.4)",
+          boxShadow: "0px 10px 40px rgba(0,0,0,0.08)",
         }}
       >
         <Box
@@ -96,41 +100,143 @@ const Login = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            padding: "15px",
-            border: "1px dotted gray",
-            borderRadius: "10px",
-            gap: "9px",
+            gap: "18px",
           }}
         >
-          <Typography variant="h4" sx={{ textAlign: "center" }}>
-            Login
-          </Typography>
+          {/* Heading Section */}
+          <Box sx={{ textAlign: "center", mb: 1 }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                color: "#1e293b",
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.4rem",
+                },
+              }}
+            >
+              Welcome Back
+            </Typography>
 
+            <Typography
+              sx={{
+                color: "#64748b",
+                mt: 1,
+                fontSize: "0.95rem",
+              }}
+            >
+              Login to continue your journey
+            </Typography>
+          </Box>
+
+          {/* Dynamic Input Fields */}
           {loginInputForm.map((field) => {
             const name = field.name as keyof LoginDataType;
+
             return (
               <TextField
                 key={field?.name}
-                id="outlined-basic"
                 variant="outlined"
                 type={field?.type}
                 label={field?.label}
                 placeholder={field?.placeholder}
+                fullWidth
                 {...register(name)}
                 error={!!errors[name]}
                 helperText={errors[name]?.message}
-              ></TextField>
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "14px",
+                    backgroundColor: "#ffffff",
+                    transition: "0.3s ease",
+
+                    "& fieldset": {
+                      borderColor: "#dbe4f0",
+                    },
+
+                    "&:hover fieldset": {
+                      borderColor: "#7c3aed",
+                    },
+
+                    "&.Mui-focused fieldset": {
+                      borderWidth: "2px",
+                      borderColor: "#7c3aed",
+                    },
+                  },
+
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#7c3aed",
+                  },
+                }}
+              />
             );
           })}
 
+          {/* Error Message */}
           {isError && (
-            <Typography sx={{ color: "red", mb: 2 }}>{isError}</Typography>
+            <Typography
+              sx={{
+                color: "#ef4444",
+                fontSize: "0.9rem",
+                textAlign: "center",
+                fontWeight: 500,
+              }}
+            >
+              {isError}
+            </Typography>
           )}
-          <Button type="submit" variant="contained" disabled={isLoading}>
-            {isLoading ? "loading..." : "Login"}
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={isLoading}
+            sx={{
+              mt: 1,
+              height: "52px",
+              borderRadius: "14px",
+              textTransform: "none",
+              fontSize: "1rem",
+              fontWeight: 600,
+              background: "linear-gradient(135deg, #7c3aed, #2563eb)",
+              boxShadow: "0px 8px 20px rgba(124,58,237,0.35)",
+              transition: "0.3s ease",
+
+              "&:hover": {
+                background: "linear-gradient(135deg, #6d28d9, #1d4ed8)",
+                transform: "translateY(-2px)",
+                boxShadow: "0px 12px 25px rgba(124,58,237,0.4)",
+              },
+
+              "&:disabled": {
+                background: "#94a3b8",
+                color: "#fff",
+              },
+            }}
+          >
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
+
+          {/* Footer Text */}
+          <Typography
+            sx={{
+              textAlign: "center",
+              color: "#64748b",
+              fontSize: "15px",
+              mt: 1,
+            }}
+          >
+            Don't have an account ?{" "}
+            <span
+              className="cursor-pointer hover:text-black hover:underline transition-all duration-300"
+              onClick={() => navigate("/signup")}
+            >
+              Signup
+            </span>
+          </Typography>
         </Box>
-      </Box>
+      </Paper>
     </Container>
   );
 };
