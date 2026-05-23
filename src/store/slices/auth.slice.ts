@@ -3,7 +3,6 @@ import type {
   Authstate,
   LoginPayload,
   SignupPayload,
-  User,
 } from "../../type/interface/auth.interface";
 import { loginUserfns, registerUserfns } from "../../api/auth.function";
 import Cookies from "js-cookie";

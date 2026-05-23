@@ -21,7 +21,10 @@ const AdminWrapper = () => {
       </Box>
       <Box sx={{ width: "85%", display: "flex", flexDirection: "column",  }}>
         <AdminNavbar />
+        <Box sx={{p: 2}}> 
+
         <Outlet />
+        </Box>
       </Box>
 
       {/* <AdminNavbar />
