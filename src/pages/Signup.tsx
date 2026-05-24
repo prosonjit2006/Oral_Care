@@ -1,13 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { useForm, type Path } from "react-hook-form";
 import signupSchema from "../services/validation/signup.validation";
 import { signupInputForm } from "../services/json/admin.json";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import type { SignupPayload } from "../type/interface/auth.interface";
 import { RegisterUser, setImagePreview } from "../store/slices/auth.slice";
 import { toast } from "sonner";
-
+import DynamicInput from "../components/DynamicInput";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -38,7 +31,7 @@ const Signup = () => {
       password: "",
       confirmpassword: "",
       image: null,
-      role: "user"
+      role: "user",
     },
   });
 
@@ -46,25 +39,20 @@ const Signup = () => {
     try {
       const response = await dispatch(RegisterUser(data)).unwrap();
       console.log("res in signup page", response);
-      if(response.success){
+      if (response.success) {
         toast.success(response.message);
-        if(response.user){
+        if (response.user) {
           navigate("/login");
           reset();
         }
-      }else{
-        toast.error(response.message)
+      } else {
+        toast.error(response.message);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.log("err", error);
-      toast.error(error)
+      toast.error(error);
     }
   };
-
-  // const onSubmit = (data: SignupDataType) => {
-  //   console.log("data", data);
-  //   reset();
-  // };
 
   return (
     <Container
@@ -135,23 +123,18 @@ const Signup = () => {
           </Box>
 
           {/* Dynamic Input Fields */}
-          {signupInputForm.map((field) => {
-            const name = field.name as keyof SignupPayload;
-
-            return (
-              <TextField
-                key={field?.name}
-                variant="outlined"
-                type={field?.type}
-                label={field?.label}
-                placeholder={field?.placeholder}
-                fullWidth
-                {...register(name)}
-                error={!!errors[name]}
-                helperText={errors[name]?.message}
-              />
-            );
-          })}
+          {signupInputForm.map((field) => (
+            <DynamicInput
+              key={field.name}
+              name={field.name as Path<SignupPayload>}
+              label={field.label}
+              placeholder={field.placeholder}
+              type={field.type}
+              required={field.required}
+              register={register}
+              errors={errors}
+            />
+          ))}
 
           {/* upload img btn */}
           <Button

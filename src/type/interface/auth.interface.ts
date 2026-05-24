@@ -5,7 +5,7 @@ export interface LoginPayload {
 
 export interface SignupPayload extends LoginPayload {
   name: string;
-  confirmpassword?:string; 
+  confirmpassword:string; 
   role?: string;
   image?: File | null;
 }

@@ -1,13 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { useForm, type Path } from "react-hook-form";
 import { loginInputForm } from "../services/json/admin.json";
 import loginSchema from "../services/validation/login.validation";
 import { toast } from "sonner";
@@ -15,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import { LoginUser } from "../store/slices/auth.slice";
 import type { LoginPayload } from "../type/interface/auth.interface";
-
+import DynamicInput from "../components/DynamicInput";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,12 +34,12 @@ const Login = () => {
       console.log("res in login page", response);
       if (response.success) {
         toast.success(response.message);
-        if(response.user.role=== "admin"){
+        if (response.user.role === "admin") {
           navigate("/admin/dashboard");
-        }else{
-          navigate('/')
+        } else {
+          navigate("/");
         }
-        reset()
+        reset();
       } else {
         toast.error(response.message);
       }
@@ -131,47 +124,44 @@ const Login = () => {
           </Box>
 
           {/* Dynamic Input Fields */}
-          {loginInputForm.map((field) => {
-            const name = field.name as keyof LoginDataType;
+          {loginInputForm.map((field) => (
+            <DynamicInput<LoginPayload>
+              key={field.name}
+              name={field.name as Path<LoginPayload>}
+              label={field.label}
+              placeholder={field.placeholder}
+              type={field.type}
+              required={field.required}
+             register={register}
+              errors={errors}
+              sx={{
+                mt: 1,
 
-            return (
-              <TextField
-                key={field?.name}
-                variant="outlined"
-                type={field?.type}
-                label={field?.label}
-                placeholder={field?.placeholder}
-                fullWidth
-                {...register(name)}
-                error={!!errors[name]}
-                helperText={errors[name]?.message}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "14px",
-                    backgroundColor: "#ffffff",
-                    transition: "0.3s ease",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "14px",
+                  backgroundColor: "#ffffff",
+                  transition: "0.3s ease",
 
-                    "& fieldset": {
-                      borderColor: "#dbe4f0",
-                    },
-
-                    "&:hover fieldset": {
-                      borderColor: "#7c3aed",
-                    },
-
-                    "&.Mui-focused fieldset": {
-                      borderWidth: "2px",
-                      borderColor: "#7c3aed",
-                    },
+                  "& fieldset": {
+                    borderColor: "#dbe4f0",
                   },
 
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "#7c3aed",
+                  "&:hover fieldset": {
+                    borderColor: "#7c3aed",
                   },
-                }}
-              />
-            );
-          })}
+
+                  "&.Mui-focused fieldset": {
+                    borderWidth: "2px",
+                    borderColor: "#7c3aed",
+                  },
+                },
+
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#7c3aed",
+                },
+              }}
+            />
+          ))}
 
           {/* Error Message */}
           {isError && (

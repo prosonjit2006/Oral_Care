@@ -1,36 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type {
-  Service,
-  ServicePayload,
-  ServiceState,
-} from "../../type/interface/service.interface";
 import {
-  addServiceFns,
-  deleteServiceFns,
-  editServiceFns,
-  fetchServiceListFns,
-  publishServiceFns,
-  unpublishServiceFns,
-} from "../../api/service.function";
+  addPlanFns,
+  deletePlanFns,
+  editPlanFns,
+  fetchPlanListFns,
+  publishPlanFns,
+  unpublishPlanFns,
+} from "../../api/plan.function";
+import type {
+  Plan,
+  PlanPayload,
+  PlanState,
+} from "../../type/interface/plan.interface";
 import { toast } from "sonner";
 
-const initialState: ServiceState = {
+const initialState: PlanState = {
   isLoading: false,
   isError: null,
-  services: [],
-  imagePreview: null,
+  plans: [],
 
   dialog: {
     open: false,
-    selectedService: null,
+    selectedPlan: null,
   },
 };
 
-export const fetchServiceList = createAsyncThunk(
-  "admin/servicelist",
+export const fetchPlanList = createAsyncThunk(
+  "admin/planlist",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await fetchServiceListFns();
+      const res = await fetchPlanListFns();
       // console.log("fetched data", res);
       return res;
     } catch {
@@ -43,11 +42,11 @@ export const fetchServiceList = createAsyncThunk(
   },
 );
 
-export const addNewService = createAsyncThunk(
-  "admin/addnewservice",
-  async (data: ServicePayload, { rejectWithValue }) => {
+export const addNewPlan = createAsyncThunk(
+  "admin/addNewplan",
+  async (data: PlanPayload, { rejectWithValue }) => {
     try {
-      const res = await addServiceFns(data);
+      const res = await addPlanFns(data);
       return res;
     } catch {
       const err = {
@@ -59,15 +58,15 @@ export const addNewService = createAsyncThunk(
   },
 );
 
-export const editService = createAsyncThunk(
-  "admin/editservice",
+export const editPlan = createAsyncThunk(
+  "admin/editplan",
   async (
-    { id, data }: { id: string; data: ServicePayload },
+    { id, data }: { id: string; data: PlanPayload },
     { rejectWithValue },
   ) => {
     try {
-      const res = await editServiceFns({ id, data });
-      // console.log("res from edit slice", res);
+      const res = await editPlanFns({ id, data });
+      //   console.log("res from edit slice", res);
       return res;
     } catch {
       const err = {
@@ -79,7 +78,7 @@ export const editService = createAsyncThunk(
   },
 );
 
-export const changeStatus = createAsyncThunk(
+export const changeplanStatus = createAsyncThunk(
   "admin/statuschange",
   async (
     { id, status }: { id: string; status: boolean },
@@ -87,8 +86,8 @@ export const changeStatus = createAsyncThunk(
   ) => {
     try {
       const res = status
-        ? await unpublishServiceFns(id)
-        : await publishServiceFns(id);
+        ? await unpublishPlanFns(id)
+        : await publishPlanFns(id);
       return res;
     } catch {
       const err = {
@@ -100,12 +99,12 @@ export const changeStatus = createAsyncThunk(
   },
 );
 
-export const deleteService = createAsyncThunk(
-  "admin/deleteservice",
+export const deletePlan = createAsyncThunk(
+  "admin/deletePlan",
   async (id: string, { rejectWithValue }) => {
     try {
-      const res = await deleteServiceFns(id);
-      console.log("res in slice sevice delete", res);
+      const res = await deletePlanFns(id);
+      //   console.log("res in slice sevice delete", res);
       toast.success("Service deleted successfully");
       return res;
     } catch {
@@ -118,78 +117,72 @@ export const deleteService = createAsyncThunk(
   },
 );
 
-const serviceSlice = createSlice({
+const planSlice = createSlice({
   name: "service",
   initialState,
   reducers: {
-    setServiceDialogOpen: (state) => {
+    setPlanDialogOpen: (state) => {
       state.dialog.open = true;
-      state.dialog.selectedService = null;
+      state.dialog.selectedPlan = null;
     },
-    setServiceDialogClose: (state) => {
+    setPlanDialogClose: (state) => {
       state.dialog.open = false;
-      state.dialog.selectedService = null;
+      state.dialog.selectedPlan = null;
     },
-    setEditServiceDialogOpen: (state, action) => {
+    setEditPlanDialogOpen: (state, action) => {
       state.dialog.open = true;
-      state.dialog.selectedService = action.payload;
-
-      console.log("img res from setedit part in slice", action.payload.image);
-      state.imagePreview = action.payload.image;
+      state.dialog.selectedPlan = action.payload;
     },
-    setSelectedService: (state, action) => {
-      state.dialog.selectedService = action.payload;
-    },
-    setServiceImagePreview: (state, action) => {
-      state.imagePreview = action.payload;
+    setselectedPlan: (state, action) => {
+      state.dialog.selectedPlan = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
       // for fetching serviceList
-      .addCase(fetchServiceList.pending, (state) => {
+      .addCase(fetchPlanList.pending, (state) => {
         state.isLoading = true;
         state.isError = null;
       })
-      .addCase(fetchServiceList.fulfilled, (state, action) => {
+      .addCase(fetchPlanList.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
-        state.services = action.payload as unknown as Service[];
+        state.plans = action.payload as unknown as Plan[];
       })
-      .addCase(fetchServiceList.rejected, (state, action) => {
+      .addCase(fetchPlanList.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload as string;
       })
 
       // for adding new service
-      // .addCase(addNewService.pending, (state) => {
+      // .addCase(addNewPlan.pending, (state) => {
       //   state.isLoading = true;
       //   state.isError = null;
       // })
-      .addCase(addNewService.fulfilled, (state, action) => {
+      .addCase(addNewPlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
-        state.services.unshift(action.payload as unknown as Service);
+        state.plans.unshift(action.payload as unknown as Plan);
       })
-      .addCase(addNewService.rejected, (state, action) => {
+      .addCase(addNewPlan.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload as string;
       })
 
       // for editing service
-      // .addCase(editService.pending, (state) => {
+      // .addCase(addPlan.pending, (state) => {
       //   state.isLoading = true;
       //   state.isError = null;
       // })
-      .addCase(editService.fulfilled, (state, action) => {
+      .addCase(editPlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
 
-        state.services = state.services.map((item) =>
+        state.plans = state.plans.map((item) =>
           item.$id === action.payload.$id ? action.payload : item,
-        ) as Service[];
+        ) as Plan[];
       })
-      .addCase(editService.rejected, (state, action) => {
+      .addCase(editPlan.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload as string;
       })
@@ -199,32 +192,32 @@ const serviceSlice = createSlice({
       //   state.isLoading = true;
       //   state.isError = null;
       // })
-      .addCase(changeStatus.fulfilled, (state, action) => {
+      .addCase(changeplanStatus.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
 
-        state.services = state.services.map((item) =>
+        state.plans = state.plans.map((item) =>
           item.$id === action.payload.$id ? action.payload : item,
-        ) as Service[];
+        ) as Plan[];
       })
-      .addCase(changeStatus.rejected, (state, action) => {
+      .addCase(changeplanStatus.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload as string;
       })
 
       // for deleting service
-      // .addCase(deleteService.pending, (state) => {
+      // .addCase(deletePlan.pending, (state) => {
       //   state.isLoading = true;
       //   state.isError = null;
       // })
-      .addCase(deleteService.fulfilled, (state, action) => {
+      .addCase(deletePlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
-        state.services = state.services.filter(
+        state.plans = state.plans.filter(
           (item) => item.$id !== action.meta.arg,
         );
       })
-      .addCase(deleteService.rejected, (state, action) => {
+      .addCase(deletePlan.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload as string;
       });
@@ -232,10 +225,9 @@ const serviceSlice = createSlice({
 });
 
 export const {
-  setServiceDialogOpen,
-  setServiceDialogClose,
-  setEditServiceDialogOpen,
-  setSelectedService,
-  setServiceImagePreview,
-} = serviceSlice.actions;
-export default serviceSlice.reducer;
+  setPlanDialogOpen,
+  setPlanDialogClose,
+  setEditPlanDialogOpen,
+  setselectedPlan,
+} = planSlice.actions;
+export default planSlice.reducer;

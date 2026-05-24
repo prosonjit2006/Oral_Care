@@ -1,23 +1,22 @@
-import type { FieldValues } from "react-hook-form";
-import type { DynamicInputProps } from "../type/type/component.type";
 import { TextField } from "@mui/material";
+import type { DynamicInputProps } from "../type/type/component.type";
+import type { FieldValues } from "react-hook-form";
 
 const DynamicInput = <T extends FieldValues>({
   name,
   label,
-  placeholder = undefined,
+  placeholder,
   type = "text",
   rows,
   required = false,
   register,
   errors,
 }: DynamicInputProps<T>) => {
-  const error = errors[name];
-  const errorMessage = error?.message as string | undefined;
+  const errorMessage = errors[name]?.message as string | undefined;
 
   return (
     <TextField
-    sx={{mt: 1}}
+      sx={{ mt: 1 }}
       label={
         required ? (
           <>

@@ -20,190 +20,69 @@ import {
   Typography,
 } from "@mui/material";
 import DynamicInput from "../../components/DynamicInput";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Path } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { planInputField } from "../../services/json/planmanage.input";
 import { planSchema } from "../../services/validation/planmanage.validation";
-import { plans } from "../../services/json/data.json";
 import { Pencil, Trash2 } from "lucide-react";
-import { toast } from "sonner";
-
-// input type
-export type PlanInputType = {
-  name: string;
-  price: number;
-  description: string;
-  features: string;
-};
+import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
+import {
+  addNewPlan,
+  changeplanStatus,
+  deletePlan,
+  fetchPlanList,
+  setEditPlanDialogOpen,
+  setPlanDialogClose,
+  setPlanDialogOpen,
+} from "../../store/slices/plan.slice";
+import type { PlanPayload } from "../../type/interface/plan.interface";
+import { useEffect } from "react";
 
 const PlanManage = () => {
-  const [planList, setPlanList] = useState(
-    plans.map((item) => ({
-      ...item,
-      enable: true,
-    })),
+  const { isLoading, isError, plans, dialog } = useAppSelector(
+    (state) => state.plan,
   );
-  const [editItem, setEditItem] = useState<any | null>(null);
-  const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<PlanInputType>({
+  } = useForm<PlanPayload>({
     resolver: yupResolver(planSchema),
     defaultValues: {
-      name: "",
+      planname: "",
       price: undefined,
       description: "",
-      features: "",
+      feature: [],
     },
   });
 
-  // default value reset
-  const defaultValues = {
-    name: "",
-    price: undefined,
-    description: "",
-    features: "",
-  };
+  useEffect(() => {
+    dispatch(fetchPlanList());
+  }, [dispatch]);
 
-  // handel open
-  const handleOpen = () => {
-    setOpen(true);
-    setEditItem(null);
-    reset(defaultValues);
-  };
-  // handel close
-  const handleClose = () => {
-    setOpen(false);
-    setEditItem(null);
-    reset(defaultValues);
-    setIsLoading(false);
-  };
-
-  // handel edit
-  const handleEdit = (item: any) => {
-    setEditItem(item);
-    reset({
-      name: item.title,
-      price: item.price,
-      description: item.description,
-      features: item.features.map((f: any) => f.label).join(", "),
-    });
-    setOpen(true);
-  };
-
-  // handel delete
-  const handleDelete = (id: string | number) => {
-    setPlanList((prev) => prev.filter((item) => item.id !== id));
-
-    toast.success("Plan deleted successfully");
-  };
-
-  // handel edit
-  // handel edit
-  const onSubmit = (data: PlanInputType) => {
-    if (editItem) {
-      setPlanList((prev) =>
-        prev.map((item) =>
-          item.id === editItem.id
-            ? {
-                ...item,
-                title: data.name,
-                price: data.price,
-                description: data.description,
-                features: data.features.split(",").map((f, index) => ({
-                  id: String(index) as any, // cast to PlanFeature id type if needed
-                  label: f.trim(),
-                })) as any,
-              }
-            : item,
-        ),
-      );
+  useEffect(() => {
+    if (dialog.selectedPlan) {
+      reset({
+        planname: dialog.selectedPlan.planname,
+        description: dialog.selectedPlan.description,
+        price: dialog.selectedPlan.price,
+        feature: dialog.selectedPlan.feature,
+      });
     } else {
-      const newItem = {
-        id: crypto.randomUUID() as any, // cast to BillingType
-        title: data.name,
-        price: data.price,
-        description: data.description,
-        durationLabel: data.name, 
-        features: data.features.split(",").map((f, index) => ({
-          id: String(index) as any, // cast to PlanFeature id shape
-          label: f.trim(),
-        })) as any,
-        enable: true,
-        isRecommended: false,
-      };
-
-      setPlanList((prev) => [...prev, newItem]);
+      reset({});
     }
+  }, [dialog.selectedPlan, reset]);
 
-    toast.success(
-      editItem ? "Plan updated successfully" : "New plan added successfully",
-    );
-
-    setIsLoading(true);
-    handleClose();
-    setEditItem(null);
-    reset();
-  };
-  // const onSubmit = (data: PlanInputType) => {
-  //   if (editItem) {
-  //     // update
-  //     setPlanList((prev) =>
-  //       prev.map((item) =>
-  //         item.id === editItem.id
-  //           ? {
-  //               ...item,
-  //               title: data.name,
-  //               price: data.price,
-  //               description: data.description,
-  //               features: data.features.split(",").map((f, index) => ({
-  //                 id: String(index),
-  //                 label: f.trim(),
-  //               })),
-  //             }
-  //           : item,
-  //       ),
-  //     );
-  //   }
-  //   // add
-  //   else {
-  //     const newItem = {
-  //       id: crypto.randomUUID(),
-  //       title: data.name,
-  //       price: data.price,
-  //       description: data.description,
-  //       features: data.features.split(",").map((f, index) => ({
-  //         id: String(index),
-  //         label: f.trim(),
-  //       })),
-  //       enable: true,
-  //     };
-
-  //     setPlanList((prev) => [...prev, newItem]);
-  //   }
-
-  //   toast.success(
-  //     editItem ? "Plan updated successfully" : "New plan added successfully",
-  //   );
-
-  //   setIsLoading(true);
-  //   handleClose();
-  //   setEditItem(null);
-  //   reset();
-  // };
-
-  const handelToggle = (id: string) => {
-    setPlanList((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, enable: !item.enable } : item,
-      ),
-    );
+  const onSubmit = async (data: PlanPayload) => {
+    if (dialog.selectedPlan) {
+      console.log("edit is building");
+    } else {
+      dispatch(addNewPlan(data));
+    }
   };
 
   return (
@@ -223,7 +102,7 @@ const PlanManage = () => {
           All Plan Lists
         </Typography>
 
-        <Button variant="contained" onClick={handleOpen}>
+        <Button variant="contained" onClick={() => setPlanDialogOpen()}>
           Add New Plans
         </Button>
       </Box>
@@ -232,13 +111,13 @@ const PlanManage = () => {
       <Dialog
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        open={open}
+        open={dialog.open}
         // onClose={handleClose}
         fullWidth
         maxWidth="xs"
       >
         <DialogTitle>
-          {editItem ? "Edit Service" : "Add New Service"}
+          {dialog.selectedPlan ? "Edit Service" : "Add New Service"}
         </DialogTitle>
 
         <DialogContent
@@ -247,7 +126,7 @@ const PlanManage = () => {
           {planInputField.map((field) => (
             <DynamicInput
               key={field.name}
-              name={field.name as keyof PlanInputType}
+              name={field.name as Path<PlanPayload>}
               label={field.label}
               placeholder={field.placeholder}
               type={field.type}
@@ -260,9 +139,9 @@ const PlanManage = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={() => dispatch(setPlanDialogClose())}>Cancel</Button>
           <Button type="submit" variant="contained">
-            {editItem ? "Update" : "Add"}
+            {dialog.selectedPlan ? "Update" : "Add"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -271,106 +150,123 @@ const PlanManage = () => {
       {isLoading ? (
         <CircularProgress size={25} />
       ) : (
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 650, color: "#fff" }}
-            aria-label="simple table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>Plan Duration</TableCell>
-                <TableCell align="center">Prices</TableCell>
-                <TableCell align="center">Description</TableCell>
-                <TableCell align="center">Features</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {planList.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    pointerEvents: row.enable ? "auto" : "none",
-                    opacity: row.enable ? 1 : 0.5,
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.title}
-                  </TableCell>
-                  <TableCell align="center">${row.price}</TableCell>
-                  <TableCell align="center">{row.description}</TableCell>
-                  <TableCell align="center">
-                    {row.features.map((item) => (
-                      <Box key={item.id}>{item.label}</Box>
-                    ))}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      pointerEvents: "visible",
-                      opacity: row.enable ? 1 : 1,
-                      color: "white",
-                    }}
-                  >
-                    <Tooltip title={row.enable ? "Disable" : "Enable"}>
-                      <FormControlLabel
-                        label={row.enable ? "Enable" : "Disable"}
-                        control={
-                          <Switch
-                            checked={row.enable}
-                            onChange={() => handelToggle(row.id)}
-                          />
-                        }
-                      />
-                    </Tooltip>
-                  </TableCell>
-
-                  <TableCell align="center" sx={{ marginLeft: "10px " }}>
-                    <Box
+        <>
+          {/* is error part  */}
+          {isError ? (
+            <Typography>{isError}</Typography>
+          ) : (
+            // actual ui table
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 650, color: "#fff" }}
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Plan Duration</TableCell>
+                    <TableCell align="center">Prices</TableCell>
+                    <TableCell align="center">Description</TableCell>
+                    <TableCell align="center">Features</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {plans.map((row) => (
+                    <TableRow
+                      key={row.$id}
                       sx={{
-                        display: "flex",
-                        gap: 1,
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        // pointerEvents: row.status ? "auto" : "none",
+                        opacity: row.status ? 1 : 0.5,
                       }}
                     >
-                      <Tooltip title="Edit">
-                        <IconButton
-                          onClick={() => handleEdit(row)}
-                          sx={{
-                            bgcolor: "#bbdefb",
-                            "&:hover": { bgcolor: "#e3f2fd" },
-                            pointerEvents: "visible",
-                            opacity: 1,
-                          }}
-                        >
-                          <Pencil size={16} className="text-blue-700" />
-                        </IconButton>
-                      </Tooltip>
+                      <TableCell component="th" scope="row">
+                        {row.planname}
+                      </TableCell>
+                      <TableCell align="center">${row.price}</TableCell>
+                      <TableCell align="center">{row.description}</TableCell>
+                      <TableCell align="center">
+                        {row.feature.map((item) => (
+                          <Box key={item.id}>{item.label}</Box>
+                        ))}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          pointerEvents: "visible",
+                          opacity: row.status ? 1 : 1,
+                          color: "white",
+                        }}
+                      >
+                        <Tooltip title={row.status ? "Disable" : "Enable"}>
+                          <FormControlLabel
+                            label={row.status ? "Enable" : "Disable"}
+                            control={
+                              <Switch
+                                checked={row.status}
+                                onChange={() =>
+                                  dispatch(
+                                    changeplanStatus({
+                                      id: row.$id,
+                                      status: row.status,
+                                    }),
+                                  )
+                                }
+                              />
+                            }
+                          />
+                        </Tooltip>
+                      </TableCell>
 
-                      <Tooltip title="Delete">
-                        <IconButton
-                          onClick={() => handleDelete(row.id)}
+                      <TableCell align="center" sx={{ marginLeft: "10px " }}>
+                        <Box
                           sx={{
-                            bgcolor: "#ffcdd2",
-                            "&:hover": { bgcolor: "#ffebee" },
-                            pointerEvents: "visible",
-                            opacity: 1,
+                            display: "flex",
+                            gap: 1,
                           }}
                         >
-                          <Trash2 size={16} className="text-red-700" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() =>
+                                dispatch(setEditPlanDialogOpen(row))
+                              }
+                              sx={{
+                                bgcolor: "#bbdefb",
+                                "&:hover": { bgcolor: "#e3f2fd" },
+                                pointerEvents: "visible",
+                                opacity: 1,
+                              }}
+                            >
+                              <Pencil size={16} className="text-blue-700" />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Delete">
+                            <IconButton
+                              onClick={() => dispatch(deletePlan(row.$id))}
+                              sx={{
+                                bgcolor: "#ffcdd2",
+                                "&:hover": { bgcolor: "#ffebee" },
+                                pointerEvents: "visible",
+                                opacity: 1,
+                              }}
+                            >
+                              <Trash2 size={16} className="text-red-700" />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </>
       )}
     </Container>
   );
-};;
+};
 
 export default PlanManage;

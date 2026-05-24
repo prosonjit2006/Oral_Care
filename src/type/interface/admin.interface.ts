@@ -4,6 +4,7 @@ export interface FormInput {
   name: string;
   label: string;
   placeholder: string;
+  required: boolean;
   type: string;
 }
 
@@ -20,7 +21,7 @@ export interface PlanInterface {
   name: string;
   label: string;
   placeholder: string;
-  rows: number
+  rows: number;
   type: string;
   required: boolean;
 }

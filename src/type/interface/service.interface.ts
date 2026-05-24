@@ -3,7 +3,7 @@ export interface Service {
   servicename: string;
   description: string;
   status: boolean;
-  image?: string;
+  image: string;
 }
 
 export interface ServiceState {
@@ -19,9 +19,8 @@ export interface ServiceState {
 }
 
 export interface ServicePayload {
-  // $id?: string 
   servicename: string;
   description: string;
-  status: boolean;
-  image?: string;
+  status: boolean ;
+  image: string;
 }

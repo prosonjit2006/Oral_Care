@@ -19,7 +19,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, type Path } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { serviceInputField } from "../../services/json/admin.json";
@@ -76,21 +76,6 @@ const ServicesManage = () => {
     dispatch(fetchServiceList());
   }, [dispatch]);
 
-  /*
-  
-  useEffect(() => {
-    if (dialog.isSelectedNews) {
-      reset({
-        title: dialog.isSelectedNews.title,
-        content: dialog.isSelectedNews.content,
-        // category: dialog.isSelectedNews.category,
-      });
-    } else {
-      reset({});
-    }
-  }, [dialog.isSelectedNews, reset]);
-  */
-
   useEffect(() => {
     if (dialog.selectedService) {
       reset({
@@ -123,8 +108,6 @@ const ServicesManage = () => {
   // const handelDelete = async (id: string) => {
   //   dispatch(deleteService(id));
   // };
-
-  
 
   return (
     <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
@@ -170,7 +153,7 @@ const ServicesManage = () => {
           {serviceInputField.map((field) => (
             <DynamicInput
               key={field.name}
-              name={field.name}
+              name={field.name as Path<ServicePayload>}
               label={field.label}
               placeholder={field.placeholder}
               type={field.type}
@@ -223,124 +206,132 @@ const ServicesManage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* cards ui part */}
+      {/* table ui part */}
       {isLoading ? (
         <CircularProgress size={25} />
       ) : (
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 650, color: "#fff" }}
-            aria-label="simple table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>Service Image</TableCell>
+        <>
+          {/* is error part  */}
+          {isError ? (
+            <Typography>{isError}</Typography>
+          ) : (
+            // actual table part
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 650, color: "#fff" }}
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Service Image</TableCell>
 
-                <TableCell align="center">Service Name</TableCell>
-                <TableCell align="center">Service Description</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {services?.map((row) => (
-                <TableRow
-                  key={row.$id}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    // pointerEvents: row.status ? "auto" : "none",
-                    opacity: row.status ? 1 : 0.5,
-                  }}
-                >
-                  <TableCell align="center">
-                    <Box
-                      component="img"
-                      src={row.image}
-                      alt="img"
+                    <TableCell align="center">Service Name</TableCell>
+                    <TableCell align="center">Service Description</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {services?.map((row) => (
+                    <TableRow
+                      key={row.$id}
                       sx={{
-                        width: "150px",
-                        height: "120px",
-                        objectFit: "cover",
-                        borderRadius: "10px",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {row.servicename}
-                  </TableCell>
-                  <TableCell align="center">{row.description}</TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      pointerEvents: "visible",
-                      opacity: row.status ? 1 : 1,
-                      color: "white",
-                    }}
-                  >
-                    <Tooltip title={row.status ? "Disable" : "Enable"}>
-                      <FormControlLabel
-                        label={row.status ? "Enable" : "Disable"}
-                        control={
-                          <Switch
-                            checked={row.status}
-                            onChange={() =>
-                              dispatch(
-                                changeStatus({
-                                  id: row.$id,
-                                  status: row.status,
-                                }),
-                              )
-                            }
-                          />
-                        }
-                      />
-                    </Tooltip>
-                  </TableCell>
-
-                  <TableCell align="center" sx={{ marginLeft: "10px " }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        // pointerEvents: row.status ? "auto" : "none",
+                        opacity: row.status ? 1 : 0.5,
                       }}
                     >
-                      <Tooltip title="Edit">
-                        <IconButton
-                          onClick={() =>
-                            dispatch(setEditServiceDialogOpen(row))
-                          }
+                      <TableCell align="center">
+                        <Box
+                          component="img"
+                          src={row.image}
+                          alt="img"
                           sx={{
-                            bgcolor: "#bbdefb",
-                            "&:hover": { bgcolor: "#e3f2fd" },
-                            pointerEvents: "visible",
-                            opacity: 1,
+                            width: "150px",
+                            height: "120px",
+                            objectFit: "cover",
+                            borderRadius: "10px",
                           }}
-                        >
-                          <Pencil size={16} className="text-blue-700" />
-                        </IconButton>
-                      </Tooltip>
+                        />
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.servicename}
+                      </TableCell>
+                      <TableCell align="center">{row.description}</TableCell>
 
-                      <Tooltip title="Delete">
-                        <IconButton
-                          onClick={() => dispatch(deleteService(row.$id))}
+                      <TableCell
+                        align="center"
+                        sx={{
+                          pointerEvents: "visible",
+                          opacity: row.status ? 1 : 1,
+                          color: "white",
+                        }}
+                      >
+                        <Tooltip title={row.status ? "Disable" : "Enable"}>
+                          <FormControlLabel
+                            label={row.status ? "Enable" : "Disable"}
+                            control={
+                              <Switch
+                                checked={row.status}
+                                onChange={() =>
+                                  dispatch(
+                                    changeStatus({
+                                      id: row.$id,
+                                      status: row.status,
+                                    }),
+                                  )
+                                }
+                              />
+                            }
+                          />
+                        </Tooltip>
+                      </TableCell>
+
+                      <TableCell align="center" sx={{ marginLeft: "10px " }}>
+                        <Box
                           sx={{
-                            bgcolor: "#ffcdd2",
-                            "&:hover": { bgcolor: "#ffebee" },
-                            pointerEvents: "visible",
-                            opacity: 1,
+                            display: "flex",
+                            gap: 1,
                           }}
                         >
-                          <Trash2 size={16} className="text-red-700" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                          <Tooltip title="Edit">
+                            <IconButton
+                              onClick={() =>
+                                dispatch(setEditServiceDialogOpen(row))
+                              }
+                              sx={{
+                                bgcolor: "#bbdefb",
+                                "&:hover": { bgcolor: "#e3f2fd" },
+                                pointerEvents: "visible",
+                                opacity: 1,
+                              }}
+                            >
+                              <Pencil size={16} className="text-blue-700" />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Delete">
+                            <IconButton
+                              onClick={() => dispatch(deleteService(row.$id))}
+                              sx={{
+                                bgcolor: "#ffcdd2",
+                                "&:hover": { bgcolor: "#ffebee" },
+                                pointerEvents: "visible",
+                                opacity: 1,
+                              }}
+                            >
+                              <Trash2 size={16} className="text-red-700" />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </>
       )}
     </Container>
   );

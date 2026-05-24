@@ -17,12 +17,14 @@ export const signupInputForm: FormInput[] = [
     name: "name",
     label: "Name",
     placeholder: "Enter Your Name",
+    required: true,
     type: "text",
   },
   {
     name: "email",
     label: "Email",
     placeholder: "Enter Your Email Address",
+    required: true,
     type: "text",
   },
   // {
@@ -35,12 +37,14 @@ export const signupInputForm: FormInput[] = [
     name: "password",
     label: "Password",
     placeholder: "Enter Password",
+    required: true,
     type: "password",
   },
   {
     name: "confirmpassword",
     label: "Confirm Password",
     placeholder: "Enter Confirm Password",
+    required: true,
     type: "password",
   },
 ];
@@ -51,12 +55,14 @@ export const loginInputForm: FormInput[] = [
     name: "email",
     label: "Email",
     placeholder: "Enter Your Email Address",
+    required: true,
     type: "text",
   },
   {
     name: "password",
     label: "Password",
     placeholder: "Enter Password",
+    required: true,
     type: "password",
   },
 ];
