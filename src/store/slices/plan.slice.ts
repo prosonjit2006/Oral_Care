@@ -30,13 +30,12 @@ export const fetchPlanList = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await fetchPlanListFns();
-      // console.log("fetched data", res);
+      console.log("fetched data", res);
       return res;
-    } catch {
-      const err = {
-        success: false,
-        message: "Failed to fetch",
-      };
+    } catch (error) {
+      const err =
+        error instanceof Error ? error.message : "Failed to fetch plan list";
+      toast.error("Failed to fetch plan list");
       return rejectWithValue(err);
     }
   },
@@ -48,13 +47,18 @@ export const addNewPlan = createAsyncThunk(
     try {
       const res = await addPlanFns(data);
       return res;
-    } catch {
-      const err = {
-        success: false,
-        message: "Failed to added",
-      };
+    } catch (error) {
+      const err = error instanceof Error ? error.message : "Failed to add plan";
+      toast.error("Failed to add plan");
       return rejectWithValue(err);
     }
+    // catch {
+    //   const err = {
+    //     success: false,
+    //     message: "Failed to added",
+    //   };
+    //   return rejectWithValue(err);
+    // }
   },
 );
 
@@ -68,11 +72,10 @@ export const editPlan = createAsyncThunk(
       const res = await editPlanFns({ id, data });
       //   console.log("res from edit slice", res);
       return res;
-    } catch {
-      const err = {
-        success: false,
-        message: "Failed to edit",
-      };
+    } catch (error) {
+      const err =
+        error instanceof Error ? error.message : "Failed to update plan";
+      toast.error("Failed to update plan");
       return rejectWithValue(err);
     }
   },
@@ -89,11 +92,10 @@ export const changeplanStatus = createAsyncThunk(
         ? await unpublishPlanFns(id)
         : await publishPlanFns(id);
       return res;
-    } catch {
-      const err = {
-        success: false,
-        message: "Failed to change status",
-      };
+    } catch (error) {
+      const err =
+        error instanceof Error ? error.message : "Failed to change status";
+      toast.error("Failed to change status");
       return rejectWithValue(err);
     }
   },
@@ -107,11 +109,10 @@ export const deletePlan = createAsyncThunk(
       //   console.log("res in slice sevice delete", res);
       toast.success("Service deleted successfully");
       return res;
-    } catch {
-      const err = {
-        success: false,
-        message: "Failed to delete",
-      };
+    } catch (error) {
+      const err =
+        error instanceof Error ? error.message : "Failed to delete plan";
+      toast.error("Failed to delete plan");
       return rejectWithValue(err);
     }
   },
@@ -155,10 +156,6 @@ const planSlice = createSlice({
       })
 
       // for adding new service
-      // .addCase(addNewPlan.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.isError = null;
-      // })
       .addCase(addNewPlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
@@ -170,10 +167,6 @@ const planSlice = createSlice({
       })
 
       // for editing service
-      // .addCase(addPlan.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.isError = null;
-      // })
       .addCase(editPlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
@@ -188,10 +181,6 @@ const planSlice = createSlice({
       })
 
       // for changing status service
-      // .addCase(changeStatus.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.isError = null;
-      // })
       .addCase(changeplanStatus.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
@@ -206,10 +195,6 @@ const planSlice = createSlice({
       })
 
       // for deleting service
-      // .addCase(deletePlan.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.isError = null;
-      // })
       .addCase(deletePlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;

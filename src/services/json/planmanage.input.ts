@@ -2,8 +2,8 @@ import type { PlanInterface } from "../../type/interface/admin.interface";
 
 export const planInputField: PlanInterface[] = [
   {
-    name: "name",
-    label: "Plan Duration",
+    name: "planname",
+    label: "Plan Name",
     placeholder: "Enter plan duration eg-Monthly,Yearly",
     type: "text",
     rows: 1,
@@ -26,7 +26,7 @@ export const planInputField: PlanInterface[] = [
     required: true,
   },
   {
-    name: "features",
+    name: "feature",
     label: "Features",
     placeholder: "Enter plan features",
     type: "textarea",

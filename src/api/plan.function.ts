@@ -7,11 +7,22 @@ export const fetchPlanListFns = async () => {
     tableId: "plan",
   });
 
-  // console.log("res from service data fetch", response);
-  return response.rows;
+  return response.rows.map((row) => ({
+    ...row,
+    price: Number(row.price), // ✅ convert string back to number
+  }));
 };
 
 export const addPlanFns = async (data: PlanPayload) => {
+  console.log("sending to appwrite:", {
+    // 👈 add this
+    planname: data.planname,
+    description: data.description,
+    price: String(data.price),
+    status: false,
+    feature: data.feature,
+  });
+
   const response = await tablesDB.createRow({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
     tableId: "plan",
@@ -19,13 +30,11 @@ export const addPlanFns = async (data: PlanPayload) => {
     data: {
       planname: data.planname,
       description: data.description,
-      price: data.price,
+      price: String(data.price),
       status: false,
       feature: data.feature,
     },
   });
-
-  // console.log("response from service func", response);
   return response;
 };
 
@@ -43,11 +52,10 @@ export const editPlanFns = async ({
     data: {
       planname: data.planname,
       description: data.description,
-      price: data.price,
-      feature: data.feature
+      price: String(data.price), // ✅ convert number to string
+      feature: data.feature,
     },
   });
-//   console.log("res in service update fns", response);
   return response;
 };
 

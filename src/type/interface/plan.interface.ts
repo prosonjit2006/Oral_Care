@@ -1,7 +1,7 @@
-interface Features {
-  id: string;
-  label: string;
-}
+// interface Features {
+//   id: string;
+//   label: string;
+// }
 
 export interface Plan {
   $id: string;
@@ -9,7 +9,7 @@ export interface Plan {
   description: string;
   price: number;
   status: boolean;
-  feature: Features[];
+  feature: string;
 }
 
 export interface PlanState {
@@ -24,8 +24,9 @@ export interface PlanState {
 }
 
 export interface PlanPayload {
+  $id?: string
   planname: string;
   description: string;
   price: number;
-  feature: Features[];
+  feature: string;
 }

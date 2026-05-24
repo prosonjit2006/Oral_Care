@@ -30,6 +30,7 @@ import {
   addNewPlan,
   changeplanStatus,
   deletePlan,
+  editPlan,
   fetchPlanList,
   setEditPlanDialogOpen,
   setPlanDialogClose,
@@ -37,6 +38,7 @@ import {
 } from "../../store/slices/plan.slice";
 import type { PlanPayload } from "../../type/interface/plan.interface";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const PlanManage = () => {
   const { isLoading, isError, plans, dialog } = useAppSelector(
@@ -56,7 +58,7 @@ const PlanManage = () => {
       planname: "",
       price: undefined,
       description: "",
-      feature: [],
+      feature: "",
     },
   });
 
@@ -73,16 +75,43 @@ const PlanManage = () => {
         feature: dialog.selectedPlan.feature,
       });
     } else {
-      reset({});
+      reset({
+        planname: "",
+        price: "" as unknown as number,
+        description: "",
+        feature: "",
+      });
     }
   }, [dialog.selectedPlan, reset]);
 
+  // console.log("selected data", dialog.selectedPlan);
+
   const onSubmit = async (data: PlanPayload) => {
     if (dialog.selectedPlan) {
-      console.log("edit is building");
+      try {
+        await dispatch(
+          editPlan({ id: dialog.selectedPlan.$id, data: data }),
+        ).unwrap();
+        toast.success("Plan updated successfully");
+        // dispatch(setPlanDialogClose());
+        // reset();
+      } catch (error) {
+        toast.error("Failed update plan");
+        console.error(error);
+      }
     } else {
-      dispatch(addNewPlan(data));
+      try {
+        await dispatch(addNewPlan(data)).unwrap();
+        toast.success("Plan added successfully");
+        // dispatch(setPlanDialogClose());
+        // reset();
+      } catch (error) {
+        toast.error("Failed to add plan");
+        console.error(error);
+      }
     }
+    dispatch(setPlanDialogClose());
+    reset();
   };
 
   return (
@@ -102,7 +131,10 @@ const PlanManage = () => {
           All Plan Lists
         </Typography>
 
-        <Button variant="contained" onClick={() => setPlanDialogOpen()}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(setPlanDialogOpen())}
+        >
           Add New Plans
         </Button>
       </Box>
@@ -112,7 +144,7 @@ const PlanManage = () => {
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         open={dialog.open}
-        // onClose={handleClose}
+        onClose={() => dispatch(setPlanDialogClose())}
         fullWidth
         maxWidth="xs"
       >
@@ -139,7 +171,12 @@ const PlanManage = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => dispatch(setPlanDialogClose())}>Cancel</Button>
+          <Button
+            onClick={() => dispatch(setPlanDialogClose())}
+            variant="contained"
+          >
+            Cancel
+          </Button>
           <Button type="submit" variant="contained">
             {dialog.selectedPlan ? "Update" : "Add"}
           </Button>
@@ -187,9 +224,10 @@ const PlanManage = () => {
                       <TableCell align="center">${row.price}</TableCell>
                       <TableCell align="center">{row.description}</TableCell>
                       <TableCell align="center">
-                        {row.feature.map((item) => (
+                        {/* {row.feature.map((item) => (
                           <Box key={item.id}>{item.label}</Box>
-                        ))}
+                        ))} */}
+                        {row.feature}
                       </TableCell>
                       <TableCell
                         align="center"
