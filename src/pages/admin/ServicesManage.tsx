@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Button,
@@ -22,43 +21,41 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-// import newServicesSchema from "../../services/validation/newservice.validation";
-import newServicesSchema, {
-  type NewServicesType,
-} from "../../services/validation/newservice.validation";
-import { toast } from "sonner";
+
 import { serviceInputField } from "../../services/json/admin.json";
 import DynamicInput from "../../components/DynamicInput";
-import { services } from "../../services/json/data.json";
 import { Pencil, Trash2 } from "lucide-react";
-
-// type NewServicesType = {
-//   servicename: string;
-//   description?: string;
-//   uploadimg?: string;
-// };
-
-// Add at the top of ServicesManage.tsx
-type ServiceItem = {
-  id: number | string;
-  title: string;
-  description: string;
-  img: string;
-  enabled: boolean;
-};
+import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
+import {
+  addNewService,
+  changeStatus,
+  deleteService,
+  editService,
+  fetchServiceList,
+  setEditServiceDialogOpen,
+  setServiceDialogClose,
+  setServiceDialogOpen,
+  setServiceImagePreview,
+} from "../../store/slices/service.slice";
+import type { ServicePayload } from "../../type/interface/service.interface";
+import { toast } from "sonner";
+import { useEffect } from "react";
+import newServicesSchema from "../../services/validation/newservice.validation";
 
 const ServicesManage = () => {
-  const [editItem, setEditItem] = useState<any | null>(null);
-  const [open, setOpen] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [serviceList, setServiceList] = useState<ServiceItem[]>(
-    services.map((item) => ({
-      ...item,
-      enabled: true,
-    })),
+  const dispatch = useAppDispatch();
+  const { isLoading, isError, imagePreview, services, dialog } = useAppSelector(
+    (state) => state.service,
   );
+
+  console.log("data in service ", services);
+
+  // const [serviceList, setServiceList] = useState<ServiceItem[]>(
+  //   services.map((item) => ({
+  //     ...item,
+  //     enabled: true,
+  //   })),
+  // );
 
   const {
     register,
@@ -66,139 +63,68 @@ const ServicesManage = () => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<NewServicesType>({
+  } = useForm<ServicePayload>({
     resolver: yupResolver(newServicesSchema),
     defaultValues: {
       servicename: "",
       description: "",
-      // imgurl: '',
-      uploadimg: "",
+      image: "",
     },
   });
 
-  const handleOpen = () => {
-    setOpen(true);
-    setEditItem(null);
-    reset();
-    setPreview(null);
-  };
+  useEffect(() => {
+    dispatch(fetchServiceList());
+  }, [dispatch]);
 
-  const handleClose = () => {
-    setOpen(false);
-    setEditItem(null);
-    reset();
-    setPreview(null);
-    setIsLoading(false);
-  };
-
-  //  submit - add + edit
-  const onSubmit = (data: NewServicesType) => {
-    const img = String(data.uploadimg || preview || ""); // ✅ force string
-    const description = data.description ?? "";
-
-    if (editItem) {
-      const updated: ServiceItem[] = serviceList.map((item) =>
-        item.id === editItem.id
-          ? { ...item, title: data.servicename, description, img }
-          : item,
-      );
-      setServiceList(updated); // ✅ typed as ServiceItem[]
-      toast.success("Service updated successfully");
+  /*
+  
+  useEffect(() => {
+    if (dialog.isSelectedNews) {
+      reset({
+        title: dialog.isSelectedNews.title,
+        content: dialog.isSelectedNews.content,
+        // category: dialog.isSelectedNews.category,
+      });
     } else {
-      const newService: ServiceItem = {
-        id: crypto.randomUUID(),
-        title: data.servicename,
-        description,
-        img,
-        enabled: true,
-      };
-      setServiceList((prev) => [...prev, newService]);
-      toast.success("Service added successfully");
+      reset({});
     }
+  }, [dialog.isSelectedNews, reset]);
+  */
 
-    setIsLoading(true);
-    handleClose();
+  useEffect(() => {
+    if (dialog.selectedService) {
+      reset({
+        servicename: dialog.selectedService.servicename,
+        description: dialog.selectedService.description,
+        status: dialog.selectedService.status,
+      });
+    } else {
+      reset({});
+    }
+  }, [dialog.selectedService, reset]);
+
+  const onSubmit = async (data: ServicePayload) => {
+    console.log("response in onsubmit Service Page", data);
+    if (dialog.selectedService) {
+      // console.log('update data service page')
+      dispatch(editService({ id: dialog.selectedService.$id, data: data }));
+    } else {
+      dispatch(addNewService(data));
+      toast.success("Service created successfully");
+    }
+    dispatch(setServiceDialogClose());
+    reset();
   };
 
-  // const onSubmit = (data: NewServicesType) => {
-  //   // edit
-  //   if (editItem) {
-  //     const updated = serviceList.map((item) =>
-  //       item.id === editItem.id
-  //         ? {
-  //             ...item,
-  //             title: data.servicename,
-  //             description: data.description,
-  //             img: data.uploadimg || preview,
-  //           }
-  //         : item,
-  //     );
+  // const handelStatusChange = async(id: string, status: boolean)=> {
+  //   dispatch(changeStatus({id,status}))
+  // }
 
-  //     setServiceList(updated);
-  //     toast.success("Service updated successfully");
-  //   }
-  //   // add
-  //   else {
-  //     const newService = {
-  //       id: crypto.randomUUID(),
-  //       title: data.servicename,
-  //       description: data.description,
-  //       img: data.uploadimg || preview,
-  //       enabled: true,
-  //     };
-
-  //     setServiceList((prev) => [...prev, newService]);
-  //     toast.success("Service added successfully");
-  //   }
-
-  //   setIsLoading(true);
-  //   handleClose();
+  // const handelDelete = async (id: string) => {
+  //   dispatch(deleteService(id));
   // };
 
-  // toggle
-
-  // const handelToggle = (id: number) => {
-  //   setServiceList((prev) =>
-  //     prev.map((item) =>
-  //       item.id === id ? { ...item, enabled: !item.enabled } : item,
-  //     ),
-  //   );
-  // };
-  // // delete
-  // const handelDelete = (id: number) => {
-  //   const filtered = serviceList.filter((item) => item.id !== id);
-  //   setServiceList(filtered);
-  //   toast.success("Service deleted successfully");
-  // };
-
-  // edit
-
-  //  Change parameter type from number to string | number
-
-  const handelToggle = (id: string | number) => {
-    setServiceList((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, enabled: !item.enabled } : item,
-      ),
-    );
-  };
-
-  const handelDelete = (id: string | number) => {
-    const filtered = serviceList.filter((item) => item.id !== id);
-    setServiceList(filtered);
-    toast.success("Service deleted successfully");
-  };
-
-  const handelEdit = (item: any) => {
-    setEditItem(item);
-
-    setValue("servicename", item.title);
-    setValue("description", item.description);
-    setValue("uploadimg", item.img);
-
-    setPreview(item.img);
-    setOpen(true);
-  };
+  
 
   return (
     <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
@@ -217,7 +143,10 @@ const ServicesManage = () => {
           All Service Lists
         </Typography>
 
-        <Button variant="contained" onClick={handleOpen}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(setServiceDialogOpen())}
+        >
           Add New Services
         </Button>
       </Box>
@@ -226,13 +155,13 @@ const ServicesManage = () => {
       <Dialog
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        open={open}
-        onClose={handleClose}
+        open={dialog.open}
+        onClose={() => dispatch(setServiceDialogClose())}
         fullWidth
         maxWidth="xs"
       >
         <DialogTitle>
-          {editItem ? "Edit Service" : "Add New Service"}
+          {dialog.selectedService ? "Edit Service" : "Add New Service"}
         </DialogTitle>
 
         <DialogContent
@@ -241,7 +170,7 @@ const ServicesManage = () => {
           {serviceInputField.map((field) => (
             <DynamicInput
               key={field.name}
-              name={field.name as keyof NewServicesType}
+              name={field.name}
               label={field.label}
               placeholder={field.placeholder}
               type={field.type}
@@ -253,7 +182,7 @@ const ServicesManage = () => {
           ))}
 
           <Button variant="outlined" component="label">
-            {preview ? "Update Image" : "Upload Image"}
+            {dialog.selectedService ? "Update Image" : "Upload Image"}
             <input
               type="file"
               hidden
@@ -261,17 +190,18 @@ const ServicesManage = () => {
                 const file = e.target.files?.[0];
                 if (file) {
                   const url = URL.createObjectURL(file);
-                  setValue("uploadimg", url);
-                  setPreview(url);
+                  setValue("image", url);
+                  // must have to create a fns to collect the img
+                  dispatch(setServiceImagePreview(url));
                 }
               }}
             />
           </Button>
 
-          {preview && (
+          {imagePreview && (
             <Box
               component="img"
-              src={preview}
+              src={imagePreview}
               sx={{
                 width: 200,
                 height: 200,
@@ -284,9 +214,11 @@ const ServicesManage = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={() => dispatch(setServiceDialogClose())}>
+            Cancel
+          </Button>
           <Button type="submit" variant="contained">
-            {editItem ? "Update" : "Add"}
+            {dialog.selectedService ? "Update" : "Add"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -311,19 +243,19 @@ const ServicesManage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {serviceList.map((row) => (
+              {services?.map((row) => (
                 <TableRow
-                  key={row.id}
+                  key={row.$id}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
-                    pointerEvents: row.enabled ? "auto" : "none",
-                    opacity: row.enabled ? 1 : 0.5,
+                    // pointerEvents: row.status ? "auto" : "none",
+                    opacity: row.status ? 1 : 0.5,
                   }}
                 >
                   <TableCell align="center">
                     <Box
                       component="img"
-                      src={row.img}
+                      src={row.image}
                       alt="img"
                       sx={{
                         width: "150px",
@@ -334,7 +266,7 @@ const ServicesManage = () => {
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {row.title}
+                    {row.servicename}
                   </TableCell>
                   <TableCell align="center">{row.description}</TableCell>
 
@@ -342,17 +274,24 @@ const ServicesManage = () => {
                     align="center"
                     sx={{
                       pointerEvents: "visible",
-                      opacity: row.enabled ? 1 : 1,
+                      opacity: row.status ? 1 : 1,
                       color: "white",
                     }}
                   >
-                    <Tooltip title={row.enabled ? "Disable" : "Enable"}>
+                    <Tooltip title={row.status ? "Disable" : "Enable"}>
                       <FormControlLabel
-                        label={row.enabled ? "Enable" : "Disable"}
+                        label={row.status ? "Enable" : "Disable"}
                         control={
                           <Switch
-                            checked={row.enabled}
-                            onChange={() => handelToggle(row.id)}
+                            checked={row.status}
+                            onChange={() =>
+                              dispatch(
+                                changeStatus({
+                                  id: row.$id,
+                                  status: row.status,
+                                }),
+                              )
+                            }
                           />
                         }
                       />
@@ -368,7 +307,9 @@ const ServicesManage = () => {
                     >
                       <Tooltip title="Edit">
                         <IconButton
-                          onClick={() => handelEdit(row)}
+                          onClick={() =>
+                            dispatch(setEditServiceDialogOpen(row))
+                          }
                           sx={{
                             bgcolor: "#bbdefb",
                             "&:hover": { bgcolor: "#e3f2fd" },
@@ -382,7 +323,7 @@ const ServicesManage = () => {
 
                       <Tooltip title="Delete">
                         <IconButton
-                          onClick={() => handelDelete(row.id)}
+                          onClick={() => dispatch(deleteService(row.$id))}
                           sx={{
                             bgcolor: "#ffcdd2",
                             "&:hover": { bgcolor: "#ffebee" },

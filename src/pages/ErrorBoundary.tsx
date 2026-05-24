@@ -26,7 +26,7 @@ const ErrorBoundary = () => {
         alignItems: "center",
         gap: 2,
         textAlign: "center",
-        background: "linear-gradient(135deg, #ffe3e3, #ffd6e0)",
+        background: "linear-gradient(135deg, #F1E2D1, #9FCBAD)",
       }}
     >
       <Typography variant="h3" color="error">
