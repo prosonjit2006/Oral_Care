@@ -21,6 +21,7 @@ import UsersManage from "../pages/admin/UsersManage";
 import SystemSettings from "../pages/admin/SystemSettings";
 import ScrollToTop from "../components/ScrollToTop";
 import Booking from "../pages/Booking";
+import AdminProtected from "../components/AdminProtected";
 
 // fallback UI
 const Loader = () => (
@@ -48,33 +49,39 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminWrapper />,
+    element: <AdminProtected />,
     errorElement: <ErrorBoundary />,
     children: [
       {
-        // index: true,
-        path: "dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "servicesmanage",
-        element: <ServicesManage />,
-      },
-      {
-        path: "appointmentmanage",
-        element: <AppointmentManage />,
-      },
-      {
-        path: "planmanage",
-        element: <PlanManage />,
-      },
-      {
-        path: "usersmanage",
-        element: <UsersManage />,
-      },
-      {
-        path: "systemsettings",
-        element: <SystemSettings />,
+        path: "/admin",
+        element: <AdminWrapper />,
+        children: [
+          {
+            // index: true,
+            path: "dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "servicesmanage",
+            element: <ServicesManage />,
+          },
+          {
+            path: "appointmentmanage",
+            element: <AppointmentManage />,
+          },
+          {
+            path: "planmanage",
+            element: <PlanManage />,
+          },
+          {
+            path: "usersmanage",
+            element: <UsersManage />,
+          },
+          {
+            path: "systemsettings",
+            element: <SystemSettings />,
+          },
+        ],
       },
     ],
   },

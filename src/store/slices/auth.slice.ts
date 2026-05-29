@@ -7,6 +7,7 @@ import type {
 import { loginUserfns, registerUserfns } from "../../api/auth.function";
 import Cookies from "js-cookie";
 import { account } from "../../lib/Appwrite.config";
+import { toast } from "sonner";
 
 const user = Cookies.get("user")
   ? JSON.parse(Cookies.get("user") as string)
@@ -63,6 +64,29 @@ export const LoginUser = createAsyncThunk<
   }
 });
 
+export const LogOutUser = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      // appwrite session delete
+      await account.deleteSession("current");
+
+      // remove cookies
+      Cookies.remove("token");
+      Cookies.remove("user");
+      Cookies.remove("role");
+
+      toast.success("Logout successfully");
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to Logout",
+      };
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
 // export const LogOutUser = createAsyncThunk<
 //   any, // responsetype -
 //   LoginPayload, // payloadTYpe
@@ -76,14 +100,10 @@ const authSlice = createSlice({
     setImagePreview: (state, action) => {
       state.imagePreview = action.payload;
     },
-    logout:  (state) => {
-        account.deleteSession("current");
+    logout: (state) => {
       state.isAuthenticate = false;
       state.user = null;
       state.role = null;
-      Cookies.remove('token')
-      Cookies.remove('user')
-      Cookies.remove('role')
     },
   },
   extraReducers: (builder) => {
@@ -100,8 +120,23 @@ const authSlice = createSlice({
       .addCase(RegisterUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload as string;
-      });
-    builder
+      })
+      // .addCase(LogOutUser.pending, (state) => {
+      //   state.isLoading = true;
+      //   state.isError = null;
+      // })
+      .addCase(LogOutUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = null;
+
+        state.isAuthenticate = false;
+        state.user = null;
+        state.role = null;
+      })
+      .addCase(LogOutUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.payload as string;
+      })
       .addCase(LoginUser.pending, (state) => {
         state.isLoading = true;
         state.isError = null;

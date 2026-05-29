@@ -7,8 +7,14 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import { LogOutIcon } from "lucide-react";
 import { Typography } from "@mui/material";
+import { useAppDispatch} from "../../hooks/useredux";
+import { LogOutUser } from "../../store/slices/auth.slice";
 
 function AdminNavbar() {
+
+  // const {} = useAppSelector((state)=> state.auth) // this is for the name and email showing in the avater part 
+  const dispatch = useAppDispatch()
+
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "#25343F" }}>
       <Container maxWidth="xl">
@@ -42,7 +48,7 @@ function AdminNavbar() {
                 <Avatar alt="Admin" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Logout">
+            <Tooltip title="Logout" onClick={() => dispatch(LogOutUser())}>
               <LogOutIcon
                 // color="#6594B1"
                 size={23}
