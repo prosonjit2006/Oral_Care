@@ -1,19 +1,21 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Box, Button, Dialog, Paper, Typography } from "@mui/material";
 import { useForm, type Path } from "react-hook-form";
 import { loginInputForm } from "../services/json/admin.json";
 import loginSchema from "../services/validation/login.validation";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
-import { LoginUser } from "../store/slices/auth.slice";
+import { closeDialog, LoginUser, openSignup } from "../store/slices/auth.slice";
 import type { LoginPayload } from "../type/interface/auth.interface";
 import DynamicInput from "../components/DynamicInput";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoading, isError } = useAppSelector((state) => state.auth);
+  const { isLoading, isError, isLoginDialogOpen } = useAppSelector(
+    (state) => state.auth,
+  );
 
   const {
     register,
@@ -33,12 +35,16 @@ const Login = () => {
       const response = await dispatch(LoginUser(data)).unwrap();
       console.log("res in login page", response);
       if (response.success) {
+        dispatch(closeDialog());
+
         toast.success(response.message);
+
         if (response.user.role === "admin") {
           navigate("/admin/dashboard");
         } else {
           navigate("/");
         }
+
         reset();
       } else {
         toast.error(response.message);
@@ -49,33 +55,17 @@ const Login = () => {
     }
   };
 
-  // const onSubmit = (data: LoginDataType) => {
-  //   console.log("data", data);
-  //   reset();
-  // };
-
   return (
-    <Container
-      maxWidth={false}
-      disableGutters
-      sx={{
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #d7efff 0%, #f3ddff 50%, #ffffff 100%)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: {
-          xs: "20px",
-          sm: "30px",
-        },
-      }}
+    <Dialog
+      open={isLoginDialogOpen}
+      onClose={() => dispatch(closeDialog())}
+      fullWidth
+      maxWidth="sm"
     >
       <Paper
         elevation={8}
         sx={{
           width: "100%",
-          maxWidth: "450px",
           padding: {
             xs: "25px 20px",
             sm: "40px 35px",
@@ -132,7 +122,7 @@ const Login = () => {
               placeholder={field.placeholder}
               type={field.type}
               required={field.required}
-             register={register}
+              register={register}
               errors={errors}
               sx={{
                 mt: 1,
@@ -220,14 +210,14 @@ const Login = () => {
             Don't have an account ?{" "}
             <span
               className="cursor-pointer hover:text-black hover:underline transition-all duration-300"
-              onClick={() => navigate("/signup")}
+              onClick={() => dispatch(openSignup())}
             >
               Signup
             </span>
           </Typography>
         </Box>
       </Paper>
-    </Container>
+    </Dialog>
   );
 };
 

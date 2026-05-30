@@ -1,3 +1,13 @@
+// navitems json data
+
+export const navItems = [
+  { name: "Home", path: "/" },
+  { name: "Services", path: "/services" },
+  { name: "Team", path: "/team" },
+  { name: "Subscriptions", path: "/subscription" },
+  { name: "Contact Us", path: "/contactus" },
+];
+
 // aboutTeams data
 
 import img1 from "../../assets/images/landingPage/aboutTeams/img1.png";

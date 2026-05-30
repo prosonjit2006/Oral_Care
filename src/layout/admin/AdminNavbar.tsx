@@ -7,13 +7,25 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import { LogOutIcon } from "lucide-react";
 import { Typography } from "@mui/material";
-import { useAppDispatch} from "../../hooks/useredux";
+import { useAppDispatch } from "../../hooks/useredux";
 import { LogOutUser } from "../../store/slices/auth.slice";
+import { useNavigate } from "react-router-dom";
 
 function AdminNavbar() {
+  // const {} = useAppSelector((state)=> state.auth) // this is for the name and email showing in the avater part
 
-  // const {} = useAppSelector((state)=> state.auth) // this is for the name and email showing in the avater part 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(LogOutUser()).unwrap();
+
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "#25343F" }}>
@@ -48,7 +60,7 @@ function AdminNavbar() {
                 <Avatar alt="Admin" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Logout" onClick={() => dispatch(LogOutUser())}>
+            <Tooltip title="Logout" onClick={() => handleLogout()}>
               <LogOutIcon
                 // color="#6594B1"
                 size={23}

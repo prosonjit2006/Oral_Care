@@ -3,19 +3,13 @@ import { Menu, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import type { NavLinkProps } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
-import { logout } from "../../store/slices/auth.slice";
+import { logout, openLogin } from "../../store/slices/auth.slice";
+import { navItems } from "../../services/json/data.json";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticate, user, role } = useAppSelector((state) => state.auth);
   console.log("navbar responee", isAuthenticate, user, role);
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
-    { name: "Team", path: "/team" },
-    { name: "Subscriptions", path: "/subscription" },
-    { name: "Contact Us", path: "/contactus" },
-  ];
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -72,13 +66,13 @@ const Navbar = () => {
           {/* Desktop Button */}
           {isAuthenticate ? (
             <>
-              {role=== 'admin' && (
-              <button
-                onClick={() => navigate("/admin/dashboard")}
-                className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
-              >
-                Admin Dashboard
-              </button>
+              {role === "admin" && (
+                <button
+                  onClick={() => navigate("/admin/dashboard")}
+                  className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                >
+                  Admin Dashboard
+                </button>
               )}
               <button
                 onClick={() => dispatch(logout())}
@@ -89,7 +83,8 @@ const Navbar = () => {
             </>
           ) : (
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => dispatch(openLogin())}
+              // onClick={() => navigate("/login")}
               className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
             >
               Login

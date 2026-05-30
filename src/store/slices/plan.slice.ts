@@ -32,11 +32,12 @@ export const fetchPlanList = createAsyncThunk(
       const res = await fetchPlanListFns();
       console.log("fetched data", res);
       return res;
-    } catch (error) {
-      const err =
-        error instanceof Error ? error.message : "Failed to fetch plan list";
-      toast.error("Failed to fetch plan list");
-      return rejectWithValue(err);
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to fetch plan list",
+      };
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -47,18 +48,13 @@ export const addNewPlan = createAsyncThunk(
     try {
       const res = await addPlanFns(data);
       return res;
-    } catch (error) {
-      const err = error instanceof Error ? error.message : "Failed to add plan";
-      toast.error("Failed to add plan");
-      return rejectWithValue(err);
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to added",
+      };
+      return rejectWithValue(err.message);
     }
-    // catch {
-    //   const err = {
-    //     success: false,
-    //     message: "Failed to added",
-    //   };
-    //   return rejectWithValue(err);
-    // }
   },
 );
 
@@ -72,11 +68,12 @@ export const editPlan = createAsyncThunk(
       const res = await editPlanFns({ id, data });
       //   console.log("res from edit slice", res);
       return res;
-    } catch (error) {
-      const err =
-        error instanceof Error ? error.message : "Failed to update plan";
-      toast.error("Failed to update plan");
-      return rejectWithValue(err);
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to edit plan",
+      };
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -92,11 +89,12 @@ export const changeplanStatus = createAsyncThunk(
         ? await unpublishPlanFns(id)
         : await publishPlanFns(id);
       return res;
-    } catch (error) {
-      const err =
-        error instanceof Error ? error.message : "Failed to change status";
-      toast.error("Failed to change status");
-      return rejectWithValue(err);
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to change status",
+      };
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -109,11 +107,12 @@ export const deletePlan = createAsyncThunk(
       //   console.log("res in slice sevice delete", res);
       toast.success("Service deleted successfully");
       return res;
-    } catch (error) {
-      const err =
-        error instanceof Error ? error.message : "Failed to delete plan";
-      toast.error("Failed to delete plan");
-      return rejectWithValue(err);
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to delete plan",
+      };
+      return rejectWithValue(err.message);
     }
   },
 );

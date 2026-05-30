@@ -1,8 +1,10 @@
 import { Box, Container, Typography } from "@mui/material";
-import { NavLink, type NavLinkProps } from "react-router-dom";
+import { NavLink, useNavigate, type NavLinkProps } from "react-router-dom";
 import { sidebarNavigation } from "../../services/json/admin.json";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const linkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `transition block p-[10px] text-[#ECECEC] ${
       isActive
@@ -17,7 +19,7 @@ const Sidebar = () => {
       sx={{
         width: "100%",
         height: "100vh",
-        position: 'sticky',
+        position: "sticky",
         top: 0,
         left: 0,
         background: "linear-gradient(155deg, #1D546D, #5F9598)",
@@ -39,10 +41,10 @@ const Sidebar = () => {
       >
         {/* logo */}
         <Box
-          component="a"
+          // component="a"
           // href="/"
-          onClick={() => (window.location.pathname = "/")}
-          sx={{}}
+          onClick={() => navigate("/")}
+          sx={{ cursor: "pointer" }}
         >
           <img src="/logo.png" alt="logo img" />
         </Box>
@@ -79,57 +81,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-// import { Box, Container } from "@mui/material";
-// import { NavLink } from "react-router-dom";
-// import { sidebarNavigation } from "../../services/json/admin.json";
-
-// const Sidebar = () => {
-//   return (
-//     <Container
-//       disableGutters
-//       maxWidth={false}
-//       sx={{
-//         // height: "calc(100vh - 69px)",
-//         // position: 'fixed',
-//         width: "100%",
-//         height: "100vh",
-//         background: "linear-gradient(155deg, #1D546D, #5F9598)",
-//         display: "flex",
-//         justifyContent: "flex-start",
-//       }}
-//     >
-//       <Box
-//         sx={{
-//           flex: 1
-// ,          display: "flex",
-//           flexDirection: "column",
-//           alignItems: "start",
-//           gap: "10px",
-//           padding: "25px 0px",
-//         }}
-//       >
-//         <Box sx={{ display: "flex", flexDirection: "column" }}>
-//           <Box
-//             component="a"
-//             sx={{ borderBottom: "1px solid gray", padding: "0 0 20px 0" }}
-//           >
-//             <img src="/logo.png" alt="logo img" />
-//           </Box>
-//         </Box>
-
-//         {sidebarNavigation.map((item) => (
-//           <NavLink
-//             key={item.id}
-//             to={item.path}
-//             style={{ padding: "5px 0", color: "#ECECEC" }}
-//           >
-//             {item.name}
-//           </NavLink>
-//         ))}
-//       </Box>
-//     </Container>
-//   );
-// };
-
-// export default Sidebar;

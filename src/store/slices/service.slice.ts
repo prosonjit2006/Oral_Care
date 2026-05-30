@@ -38,7 +38,7 @@ export const fetchServiceList = createAsyncThunk(
         success: false,
         message: "Failed to fetch",
       };
-      return rejectWithValue(err);
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -54,7 +54,7 @@ export const addNewService = createAsyncThunk(
         success: false,
         message: "Failed to added",
       };
-      return rejectWithValue(err);
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -74,7 +74,7 @@ export const editService = createAsyncThunk(
         success: false,
         message: "Failed to edit",
       };
-      return rejectWithValue(err);
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -95,7 +95,7 @@ export const changeStatus = createAsyncThunk(
         success: false,
         message: "Failed to change status",
       };
-      return rejectWithValue(err);
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -113,7 +113,7 @@ export const deleteService = createAsyncThunk(
         success: false,
         message: "Failed to delete",
       };
-      return rejectWithValue(err);
+      return rejectWithValue(err.message);
     }
   },
 );
@@ -134,7 +134,7 @@ const serviceSlice = createSlice({
       state.dialog.open = true;
       state.dialog.selectedService = action.payload;
 
-      console.log("img res from setedit part in slice", action.payload.image);
+      // console.log("img res from setedit part in slice", action.payload.image);
       state.imagePreview = action.payload.image;
     },
     setSelectedService: (state, action) => {

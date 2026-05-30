@@ -1,17 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-const Home = lazy(() => import("../pages/Home"));
-const Service = lazy(() => import("../pages/Service"));
-const Team = lazy(() => import("../pages/Team"));
-const Subscription = lazy(() => import("../pages/Subscription"));
-const ContactUs = lazy(() => import("../pages/ContactUs"));
+const Home = lazy(() => import("../pages/user/Home"));
+const Service = lazy(() => import("../pages/user/Service"));
+const Team = lazy(() => import("../pages/user/Team"));
+const Subscription = lazy(() => import("../pages/user/Subscription"));
+const ContactUs = lazy(() => import("../pages/user/ContactUs"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 import ErrorBoundary from "../pages/ErrorBoundary";
 import UserWrapper from "../layout/user/UserWrapper";
-import Signup from "../pages/Signup";
-import Login from "../pages/Login";
+// import Signup from "../pages/Signup";
+// import Login from "../pages/Login";
 import AdminWrapper from "../layout/admin/AdminWrapper";
 import Dashboard from "../pages/admin/Dashboard";
 import ServicesManage from "../pages/admin/ServicesManage";
@@ -20,8 +20,14 @@ import PlanManage from "../pages/admin/PlanManage";
 import UsersManage from "../pages/admin/UsersManage";
 import SystemSettings from "../pages/admin/SystemSettings";
 import ScrollToTop from "../components/ScrollToTop";
-import Booking from "../pages/Booking";
+import Booking from "../pages/user/Booking";
 import AdminProtected from "../components/AdminProtected";
+import Patient from "../pages/admin/Patient";
+import Feedback from "../pages/admin/Feedback";
+import Query from "../pages/admin/Query";
+import Doctor from "../pages/admin/Doctor";
+import Profile from "../pages/user/Profile";
+// import AuthRedirectGuards from "../components/AuthRedirectGuards";
 
 // fallback UI
 const Loader = () => (
@@ -31,20 +37,37 @@ const Loader = () => (
 );
 
 const Routes = createBrowserRouter([
-  {
-    path: "/signup",
-    element: <Signup />,
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
+  // {
+  //   path: "/signup",
+  //   element: <AuthRedirectGuards />,
+  //   children: [
+  //     {
+  //       index: true,
+  //       element: <Signup />,
+  //     },
+  //   ],
+  //   errorElement: <ErrorBoundary />,
+  // },
+  // {
+  //   path: "/login",
+  //   element: <AuthRedirectGuards />,
+  //   children: [
+  //     {
+  //       index: true,
+  //       element: <Login />,
+  //     },
+  //   ],
+  //   errorElement: <ErrorBoundary />,
+  // },
 
-    errorElement: <ErrorBoundary />,
-  },
   {
     path: "/booking",
     element: <Booking />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
     errorElement: <ErrorBoundary />,
   },
   {
@@ -62,6 +85,10 @@ const Routes = createBrowserRouter([
             element: <Dashboard />,
           },
           {
+            path: "patient",
+            element: <Patient />,
+          },
+          {
             path: "servicesmanage",
             element: <ServicesManage />,
           },
@@ -74,8 +101,20 @@ const Routes = createBrowserRouter([
             element: <PlanManage />,
           },
           {
+            path: "doctor",
+            element: <Doctor />,
+          },
+          {
             path: "usersmanage",
             element: <UsersManage />,
+          },
+          {
+            path: "feedback",
+            element: <Feedback />,
+          },
+          {
+            path: "query",
+            element: <Query />,
           },
           {
             path: "systemsettings",

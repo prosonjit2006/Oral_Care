@@ -24,7 +24,7 @@ export interface PlanState {
 }
 
 export interface PlanPayload {
-  $id?: string
+  $id?: string;
   planname: string;
   description: string;
   price: number;

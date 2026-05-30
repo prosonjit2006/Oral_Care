@@ -9,21 +9,21 @@ import {
   Typography,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import { aboutTeams, services } from "../services/json/data.json";
+import { aboutTeams, services } from "../../services/json/data.json";
 // import { yupResolver } from "@hookform/resolvers/yup";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { doctorAvailability } from "../services/json/admin.json";
-import DynamicInput from "../components/DynamicInput";
+import { doctorAvailability } from "../../services/json/admin.json";
+import DynamicInput from "../../components/DynamicInput";
 // import { bookingFormSchema } from "../services/validation/booking.validation";
 import {
   bookingFormSchema,
   type FormValues,
-} from "../services/validation/booking.validation";
+} from "../../services/validation/booking.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { bookingFormInput } from "../services/json/bookinfForm.input";
+import { bookingFormInput } from "../../services/json/bookinfForm.input";
 import { toast } from "sonner";
 
 // type FormValues = {

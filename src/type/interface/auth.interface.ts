@@ -5,7 +5,7 @@ export interface LoginPayload {
 
 export interface SignupPayload extends LoginPayload {
   name: string;
-  confirmpassword:string; 
+  confirmpassword: string;
   role?: string;
   image?: File | null;
 }
@@ -21,4 +21,6 @@ export interface Authstate {
   role: string | null;
   user: User | null;
   imagePreview: string | null;
+  isLoginDialogOpen: boolean;
+  isSignupDialogOpen: boolean;
 }

@@ -8,6 +8,8 @@ const AdminProtected = () => {
 
   const isAuth = isAuthenticate && role === "admin";
 
+  // console.log('nav location ', location.pathname)
+
   if (
     (isAuth && location.pathname === "/login") ||
     (isAuth && location.pathname === "/signup")

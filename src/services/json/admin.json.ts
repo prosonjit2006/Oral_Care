@@ -1,9 +1,13 @@
 import {
+  BriefcaseMedical,
   ChartGantt,
   ClipboardClock,
   LayoutDashboard,
+  MessageCircleQuestionMark,
+  MessageSquareWarning,
   ServerCog,
   Settings,
+  SmilePlus,
   Users,
 } from "lucide-react";
 import type {
@@ -77,30 +81,54 @@ export const sidebarNavigation: SidebarNavigationInterface[] = [
   },
   {
     id: 2,
-    name: "Services",
-    path: "/admin/servicesmanage",
-    icon: ServerCog,
-  },
-  {
-    id: 3,
     name: "Appointment",
     path: "/admin/appointmentmanage",
     icon: ClipboardClock,
   },
   {
+    id: 3,
+    name: "Patient",
+    path: "/admin/patient",
+    icon: SmilePlus,
+  },
+  {
     id: 4,
+    name: "Services",
+    path: "/admin/servicesmanage",
+    icon: ServerCog,
+  },
+  {
+    id: 5,
     name: "Plan",
     path: "/admin/planmanage",
     icon: ChartGantt,
   },
   {
-    id: 5,
+    id: 6,
+    name: "Doctor",
+    path: "/admin/doctor",
+    icon: BriefcaseMedical,
+  },
+  {
+    id: 7,
     name: "Users",
     path: "/admin/usersmanage",
     icon: Users,
   },
   {
-    id: 6,
+    id: 7,
+    name: "Feedback",
+    path: "/admin/feedback",
+    icon: MessageSquareWarning,
+  },
+  {
+    id: 7,
+    name: "Query",
+    path: "/admin/query",
+    icon: MessageCircleQuestionMark,
+  },
+  {
+    id: 7,
     name: "Settings",
     path: "/admin/systemsettings",
     icon: Settings,

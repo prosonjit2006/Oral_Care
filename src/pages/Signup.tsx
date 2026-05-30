@@ -1,21 +1,25 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Box, Button, Dialog, Paper, Typography } from "@mui/material";
 import { useForm, type Path } from "react-hook-form";
 import signupSchema from "../services/validation/signup.validation";
 import { signupInputForm } from "../services/json/admin.json";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import type { SignupPayload } from "../type/interface/auth.interface";
-import { RegisterUser, setImagePreview } from "../store/slices/auth.slice";
+import {
+  closeDialog,
+  openLogin,
+  RegisterUser,
+  setImagePreview,
+} from "../store/slices/auth.slice";
 import { toast } from "sonner";
 import DynamicInput from "../components/DynamicInput";
 
 const Signup = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoading, imagePreview, isError } = useAppSelector(
-    (state) => state.auth,
-  );
+  const { isLoading, imagePreview, isError, isSignupDialogOpen } =
+    useAppSelector((state) => state.auth);
 
   const {
     register,
@@ -42,7 +46,8 @@ const Signup = () => {
       if (response.success) {
         toast.success(response.message);
         if (response.user) {
-          navigate("/login");
+          // navigate("/login");
+          dispatch(openLogin())
           reset();
         }
       } else {
@@ -55,29 +60,19 @@ const Signup = () => {
   };
 
   return (
-    <Container
-      maxWidth={false}
-      disableGutters
-      sx={{
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #d7efff 0%, #f3ddff 50%, #ffffff 100%)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: {
-          xs: "20px",
-          sm: "30px",
-        },
-      }}
+    <Dialog
+      open={isSignupDialogOpen}
+      onClose={() => dispatch(closeDialog())}
+      fullWidth
+      maxWidth="sm"
     >
       <Paper
+        elevation={8}
         sx={{
           width: "100%",
-          maxWidth: "450px",
           padding: {
             xs: "25px 20px",
-            sm: "40px 35px",
+            sm: "16px 35px",
           },
           borderRadius: "24px",
           backdropFilter: "blur(10px)",
@@ -227,14 +222,14 @@ const Signup = () => {
             Already have an account ?{" "}
             <span
               className=" cursor-pointer hover:text-black hover:underline transition-all duration-300"
-              onClick={() => navigate("/login")}
+              onClick={() => dispatch(openLogin())}
             >
               Login
             </span>
           </Typography>
         </Box>
       </Paper>
-    </Container>
+    </Dialog>
   );
 };
 

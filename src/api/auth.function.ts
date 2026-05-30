@@ -43,11 +43,29 @@ export const registerUserfns = async (data: SignupPayload) => {
       image: imageUrl,
     },
   });
+
+  const patient = await tablesDB.createRow({
+    databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+    tableId: "patient",
+    rowId: ID.unique(),
+    data: {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: "patient",
+      phone: "",
+      address: "",
+      image: imageUrl,
+    },
+  });
+
+  console.log("patient", patient);
+
   return user;
 };
 
 export const loginUserfns = async (data: LoginPayload) => {
-    console.log('data cumming in loginfns', data)
+  console.log("data cumming in loginfns", data);
   const findUser = await tablesDB.listRows({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
     tableId: "user",

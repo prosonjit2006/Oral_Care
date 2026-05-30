@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { account } from "../../lib/Appwrite.config";
 import { toast } from "sonner";
 
+// fetching the data from the local stroage
 const user = Cookies.get("user")
   ? JSON.parse(Cookies.get("user") as string)
   : null;
@@ -22,6 +23,8 @@ const initialState: Authstate = {
   user: user,
   role: role,
   imagePreview: null,
+  isLoginDialogOpen: false,
+  isSignupDialogOpen: false,
 };
 
 export const RegisterUser = createAsyncThunk(
@@ -45,24 +48,40 @@ export const RegisterUser = createAsyncThunk(
   },
 );
 
-export const LoginUser = createAsyncThunk<
-  any, // responsetype -
-  LoginPayload, // payloadTYpe
-  { rejectValue: string }
->("auth/login", async (data: LoginPayload, { rejectWithValue }) => {
-  console.log("data comming in authslice", data);
-  try {
-    const response = await loginUserfns(data);
-    console.log("response in auth slice", response);
-    return response;
-  } catch {
-    const err = {
-      success: false,
-      message: "Failed to Login",
-    };
-    return rejectWithValue(err.message);
-  }
-});
+export const LoginUser = createAsyncThunk(
+  "admin/login",
+  async (data: LoginPayload, { rejectWithValue }) => {
+    try {
+      const res = await loginUserfns(data);
+      return res;
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to login ",
+      };
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
+// export const LoginUser = createAsyncThunk<
+//   any, // responsetype -
+//   LoginPayload, // payloadTYpe
+//   { rejectValue: string }
+// >("auth/login", async (data: LoginPayload, { rejectWithValue }) => {
+//   console.log("data comming in authslice", data);
+//   try {
+//     const response = await loginUserfns(data);
+//     console.log("response in auth slice", response);
+//     return response;
+//   } catch {
+//     const err = {
+//       success: false,
+//       message: "Failed to Login",
+//     };
+//     return rejectWithValue(err.message);
+//   }
+// });
 
 export const LogOutUser = createAsyncThunk(
   "auth/logout",
@@ -97,6 +116,20 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    openLogin: (state) => {
+      state.isSignupDialogOpen = false;
+      state.isLoginDialogOpen = true;
+    },
+
+    openSignup: (state) => {
+      state.isLoginDialogOpen = false;
+      state.isSignupDialogOpen = true;
+    },
+
+    closeDialog: (state) => {
+      state.isLoginDialogOpen = false;
+      state.isSignupDialogOpen = false;
+    },
     setImagePreview: (state, action) => {
       state.imagePreview = action.payload;
     },
@@ -148,6 +181,7 @@ const authSlice = createSlice({
         state.isAuthenticate = true;
         state.user = action.payload.user;
         state.role = action.payload.user.role;
+
         Cookies.set("user", JSON.stringify(action.payload.user));
         Cookies.set("role", action.payload.user.role);
         Cookies.set("token", "true");
@@ -159,5 +193,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setImagePreview, logout } = authSlice.actions;
+export const { setImagePreview, logout, openLogin, openSignup, closeDialog } =
+  authSlice.actions;
 export default authSlice.reducer;
