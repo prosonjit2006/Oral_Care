@@ -3,6 +3,7 @@ import type {
   Authstate,
   LoginPayload,
   SignupPayload,
+  User,
 } from "../../type/interface/auth.interface";
 import { loginUserfns, registerUserfns } from "../../api/auth.function";
 import Cookies from "js-cookie";
@@ -177,9 +178,14 @@ const authSlice = createSlice({
       .addCase(LoginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
-        console.log("login action fullfilled", action.payload);
+
+        if (!action.payload?.user) {
+          state.isAuthenticate = false;
+          return;
+        }
+
         state.isAuthenticate = true;
-        state.user = action.payload.user;
+        state.user = action.payload.user as unknown as User;
         state.role = action.payload.user.role;
 
         Cookies.set("user", JSON.stringify(action.payload.user));

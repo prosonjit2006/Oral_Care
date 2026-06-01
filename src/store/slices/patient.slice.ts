@@ -45,7 +45,7 @@ const patientSlice = createSlice({
       .addCase(fetchPatientList.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
-        state.patients = action.payload;
+        state.patients = action.payload as unknown as Patient[];
         // console.log('patient data in payload ', action.payload)
       })
       .addCase(fetchPatientList.rejected, (state) => {

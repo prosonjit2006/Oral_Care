@@ -50,13 +50,6 @@ const ServicesManage = () => {
 
   console.log("data in service ", services);
 
-  // const [serviceList, setServiceList] = useState<ServiceItem[]>(
-  //   services.map((item) => ({
-  //     ...item,
-  //     enabled: true,
-  //   })),
-  // );
-
   const {
     register,
     handleSubmit,
@@ -100,14 +93,6 @@ const ServicesManage = () => {
     dispatch(setServiceDialogClose());
     reset();
   };
-
-  // const handelStatusChange = async(id: string, status: boolean)=> {
-  //   dispatch(changeStatus({id,status}))
-  // }
-
-  // const handelDelete = async (id: string) => {
-  //   dispatch(deleteService(id));
-  // };
 
   return (
     <Container disableGutters maxWidth={false} sx={{ p: 2 }}>

@@ -10,14 +10,12 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { aboutTeams, services } from "../../services/json/data.json";
-// import { yupResolver } from "@hookform/resolvers/yup";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { doctorAvailability } from "../../services/json/admin.json";
 import DynamicInput from "../../components/DynamicInput";
-// import { bookingFormSchema } from "../services/validation/booking.validation";
 import {
   bookingFormSchema,
   type FormValues,
@@ -25,16 +23,6 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { bookingFormInput } from "../../services/json/bookinfForm.input";
 import { toast } from "sonner";
-
-// type FormValues = {
-//   service: string;
-//   doctor: { id: number; name: string; position: string } | null;
-//   datetime: object | null;
-//   name: string;
-//   email: string;
-//   phone: string;
-//   message: string;
-// };
 
 const Booking = () => {
   const {
@@ -431,7 +419,7 @@ const Booking = () => {
             gap: 2,
           }}
         >
-          {/* Title */}
+          {/* title */}
           <Typography
             variant="h6"
             sx={{
@@ -443,7 +431,7 @@ const Booking = () => {
             Personal Details
           </Typography>
 
-          {/* Inputs */}
+          {/* inputs */}
           {bookingFormInput.map((field) => (
             <DynamicInput
               key={field.name}
@@ -459,7 +447,7 @@ const Booking = () => {
           ))}
         </Box>
 
-        {/* ================= SUBMIT ================= */}
+        {/* submit */}
         <Box
           sx={{
             mt: 2,

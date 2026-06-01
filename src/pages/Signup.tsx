@@ -3,7 +3,6 @@ import { Box, Button, Dialog, Paper, Typography } from "@mui/material";
 import { useForm, type Path } from "react-hook-form";
 import signupSchema from "../services/validation/signup.validation";
 import { signupInputForm } from "../services/json/admin.json";
-// import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import type { SignupPayload } from "../type/interface/auth.interface";
 import {
@@ -47,7 +46,7 @@ const Signup = () => {
         toast.success(response.message);
         if (response.user) {
           // navigate("/login");
-          dispatch(openLogin())
+          dispatch(openLogin());
           reset();
         }
       } else {
@@ -90,7 +89,7 @@ const Signup = () => {
             gap: "18px",
           }}
         >
-          {/* Heading Section */}
+          {/* heading section */}
           <Box sx={{ textAlign: "center", mb: 1 }}>
             <Typography
               variant="h4"
@@ -117,7 +116,7 @@ const Signup = () => {
             </Typography>
           </Box>
 
-          {/* Dynamic Input Fields */}
+          {/* input fields */}
           {signupInputForm.map((field) => (
             <DynamicInput
               key={field.name}
