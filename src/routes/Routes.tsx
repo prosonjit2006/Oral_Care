@@ -8,25 +8,31 @@ const Subscription = lazy(() => import("../pages/user/Subscription"));
 const ContactUs = lazy(() => import("../pages/user/ContactUs"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
+const Booking = lazy(() => import("../pages/user/Booking"));
+
+const PlanManage = lazy(() => import("../pages/admin/PlanManage"));
+const Patient = lazy(() => import("../pages/admin/Patient"));
+const ServicesManage = lazy(() => import("../pages/admin/ServicesManage"));
+
 import ErrorBoundary from "../pages/ErrorBoundary";
 import UserWrapper from "../layout/user/UserWrapper";
-// import Signup from "../pages/Signup";
-// import Login from "../pages/Login";
 import AdminWrapper from "../layout/admin/AdminWrapper";
 import Dashboard from "../pages/admin/Dashboard";
-import ServicesManage from "../pages/admin/ServicesManage";
+// import ServicesManage from "../pages/admin/ServicesManage";
 import AppointmentManage from "../pages/admin/AppointmentManage";
-import PlanManage from "../pages/admin/PlanManage";
+// import PlanManage from "../pages/admin/PlanManage";
 import UsersManage from "../pages/admin/UsersManage";
 import SystemSettings from "../pages/admin/SystemSettings";
 import ScrollToTop from "../components/ScrollToTop";
-import Booking from "../pages/user/Booking";
 import AdminProtected from "../components/AdminProtected";
-import Patient from "../pages/admin/Patient";
+// import Patient from "../pages/admin/Patient";
 import Feedback from "../pages/admin/Feedback";
 import Query from "../pages/admin/Query";
 import Doctor from "../pages/admin/Doctor";
 import Profile from "../pages/user/Profile";
+// import Signup from "../pages/Signup";
+// import Login from "../pages/Login";
+// import Booking from "../pages/user/Booking";
 // import AuthRedirectGuards from "../components/AuthRedirectGuards";
 
 // fallback UI
@@ -60,10 +66,18 @@ const Routes = createBrowserRouter([
   //   errorElement: <ErrorBoundary />,
   // },
 
+  // {
+  //   path: "/booking",
+  //   element: <Booking />,
+  //   errorElement: <ErrorBoundary />,
+  // },
   {
     path: "/booking",
-    element: <Booking />,
-    errorElement: <ErrorBoundary />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Booking />
+      </Suspense>
+    ),
   },
   {
     path: "/profile",
@@ -86,11 +100,19 @@ const Routes = createBrowserRouter([
           },
           {
             path: "patient",
-            element: <Patient />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <Patient />
+              </Suspense>
+            ),
           },
           {
             path: "servicesmanage",
-            element: <ServicesManage />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <ServicesManage />
+              </Suspense>
+            ),
           },
           {
             path: "appointmentmanage",
@@ -98,8 +120,16 @@ const Routes = createBrowserRouter([
           },
           {
             path: "planmanage",
-            element: <PlanManage />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <PlanManage />
+              </Suspense>
+            ),
           },
+          // {
+          //   path: "planmanage",
+          //   element: <PlanManage />,
+          // },
           {
             path: "doctor",
             element: <Doctor />,
