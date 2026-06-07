@@ -2,6 +2,9 @@ export interface Patient {
   $id: string;
   name: string;
   email: string;
+  password: string;
+  status: boolean;
+  gender: string;
   role: string;
   address: string;
   phone: string;
@@ -22,7 +25,7 @@ export interface PatientState {
 }
 
 export interface PatientPayload {
-  id: string ;
+  id: string;
   name: string;
   email: string;
   password: string;

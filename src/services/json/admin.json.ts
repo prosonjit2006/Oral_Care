@@ -116,19 +116,19 @@ export const sidebarNavigation: SidebarNavigationInterface[] = [
     icon: Users,
   },
   {
-    id: 7,
+    id: 8,
     name: "Feedback",
     path: "/admin/feedback",
     icon: MessageSquareWarning,
   },
   {
-    id: 7,
+    id: 9,
     name: "Query",
     path: "/admin/query",
     icon: MessageCircleQuestionMark,
   },
   {
-    id: 7,
+    id: 10,
     name: "Settings",
     path: "/admin/systemsettings",
     icon: Settings,

@@ -69,7 +69,7 @@ export const addNewPatient = createAsyncThunk(
 );
 
 export const editPatient = createAsyncThunk<
-  any, // ! this is the response type but it is giving me error 
+  any, // ! this is the response type but it is giving me error - Parient
   { id: string; data: PatientPayload },
   { rejectValue: string }
 >("admin/editpatient", async ({ id, data }, { rejectWithValue }) => {
@@ -143,7 +143,7 @@ const patientSlice = createSlice({
     setPatientDialogOpen: (state) => {
       state.dialog.open = true;
       state.dialog.selectedPatient = null;
-      state.imagePreview = null
+      state.imagePreview = null;
     },
     setEditPatientDialogOpen: (state, action) => {
       state.dialog.open = true;
@@ -163,6 +163,7 @@ const patientSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // fetching patient list
       .addCase(fetchPatientList.pending, (state) => {
         state.isLoading = true;
         state.isError = null;
@@ -174,6 +175,58 @@ const patientSlice = createSlice({
         // console.log('patient data in payload ', action.payload)
       })
       .addCase(fetchPatientList.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = null;
+      })
+
+      // add patient list
+      .addCase(addNewPatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = null;
+        state.patients.unshift(action.payload.user as unknown as Patient);
+      })
+      .addCase(addNewPatient.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = null;
+      })
+
+      // edit patient list
+      .addCase(editPatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = null;
+        state.patients = state.patients.map((item) =>
+          item.$id === action.payload.$id ? action.payload.patient : item,
+        );
+      })
+      .addCase(editPatient.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = null;
+      })
+
+      // change status patient list
+      .addCase(changePatientStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = null;
+        state.patients = state.patients.map((item) =>
+          item.$id === action.payload.response.$id
+            ? action.payload.response
+            : item,
+        ) as Patient[]; 
+      })
+      .addCase(changePatientStatus.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = null;
+      })
+
+      // delete patient list
+      .addCase(deletePatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = null;
+        state.patients = state.patients.filter(
+          (item) => item.$id !== action.meta.arg,
+        );
+      })
+      .addCase(deletePatient.rejected, (state) => {
         state.isLoading = false;
         state.isError = null;
       });

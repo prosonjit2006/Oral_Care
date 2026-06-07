@@ -32,6 +32,8 @@ export const aboutTeams: AboutTeams[] = [
     rating: 4.9,
     reviews: "750+ Reviews",
     img: img1,
+    // services:
+    // ! must have to this for performing the filter on the service booking
   },
   {
     id: 2,

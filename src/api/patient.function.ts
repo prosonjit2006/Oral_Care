@@ -93,10 +93,10 @@ export const editPatientFns = async ({
     tableId: "patient",
     rowId: id,
     data: {
-      nane: data.name,
+      name: data.name,
       phone: data.phone,
       address: data.address,
-      image: data.image,
+      // image: data.image,
     },
   });
   console.log("response of editPatient from fns", response);

@@ -7,7 +7,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   IconButton,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -23,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
 import { useEffect } from "react";
 import {
   addNewPatient,
+  changePatientStatus,
   deletePatient,
   editPatient,
   fetchPatientList,
@@ -75,6 +78,7 @@ const Patient = () => {
   useEffect(() => {
     if (dialog.selectedPatient) {
       reset({
+        id: dialog.selectedPatient.$id,
         name: dialog.selectedPatient.name,
         phone: dialog.selectedPatient.phone,
         address: dialog.selectedPatient.address,
@@ -90,18 +94,23 @@ const Patient = () => {
   }, [dialog.selectedPatient, dispatch, reset]);
 
   // * onsubmit
-  const onSubmit = (data: PatientPayload) => {
+  const onSubmit =  (data: PatientPayload) => {
+
+    // console.log('data on submit ', data)
     if (dialog.selectedPatient) {
-      dispatch(
+      // console.log('updating data')
+       dispatch(
         editPatient({
           id: data.id,
           data: data,
         }),
-      );
-      dispatch(setPatientDialogClose());
+      ).unwrap();
+       dispatch(fetchPatientList())
+      // dispatch(setPatientDialogClose());
       toast.success("Patient Details Edited Successfully");
     } else {
-      dispatch(addNewPatient(data));
+      dispatch(addNewPatient(data)).unwrap();
+       dispatch(fetchPatientList())
       toast.success("New Patient Added Successfully");
     }
     dispatch(setPatientDialogClose());
@@ -238,9 +247,13 @@ const Patient = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Patient Image</TableCell>
-                    <TableCell align="center">Patient Name</TableCell>
+                    <TableCell align="left">Patient Image</TableCell>
+                    <TableCell align="left">Patient Name</TableCell>
                     <TableCell align="center">Patient Email</TableCell>
+                    <TableCell align="center">Password</TableCell>
+                    <TableCell align="center">Patient PH. No</TableCell>
+                    <TableCell align="center">Patient Address</TableCell>
+                    <TableCell align="center">Patient Gender</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Action</TableCell>
                   </TableRow>
@@ -272,16 +285,20 @@ const Patient = () => {
                         {row.name}
                       </TableCell>
                       <TableCell align="center">{row.email}</TableCell>
+                      <TableCell align="center">{row.password}</TableCell>
+                      <TableCell align="center">{row.phone}</TableCell>
+                      <TableCell align="center">{row.address}</TableCell>
+                      <TableCell align="center">{row.gender}</TableCell>
 
                       <TableCell
                         align="center"
                         sx={{
                           pointerEvents: "visible",
-                          // opacity: row.status ? 1 : 1,
+                          opacity: row.status ? 1 : 1,
                           color: "white",
                         }}
                       >
-                        {/* <Tooltip title={row.status ? "Disable" : "Enable"}>
+                        <Tooltip title={row.status ? "Disable" : "Enable"}>
                           <FormControlLabel
                             label={row.status ? "Enable" : "Disable"}
                             control={
@@ -289,7 +306,7 @@ const Patient = () => {
                                 checked={row.status}
                                 onChange={() =>
                                   dispatch(
-                                    changeStatus({
+                                    changePatientStatus({
                                       id: row.$id,
                                       status: row.status,
                                     }),
@@ -298,8 +315,7 @@ const Patient = () => {
                               />
                             }
                           />
-                        </Tooltip> */}
-                        Status
+                        </Tooltip>
                       </TableCell>
 
                       <TableCell align="center" sx={{ marginLeft: "10px " }}>
