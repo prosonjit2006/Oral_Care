@@ -3,11 +3,12 @@ import {
   Button,
   CircularProgress,
   Container,
-  // Dialog, DialogActions, DialogContent, DialogTitle,
-  // FormControlLabel,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Table,
-  // Switch,
   TableBody,
   TableCell,
   TableContainer,
@@ -20,18 +21,92 @@ import {
 import { Pencil, Trash2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
 import { useEffect } from "react";
-import { fetchPatientList } from "../../store/slices/patient.slice";
+import {
+  addNewPatient,
+  deletePatient,
+  editPatient,
+  fetchPatientList,
+  setEditPatientDialogOpen,
+  setPatientDialogClose,
+  setPatientDialogOpen,
+  setPatientImagePreview,
+} from "../../store/slices/patient.slice";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, type Path } from "react-hook-form";
+import DynamicInput from "../../components/DynamicInput";
+import {
+  patientAddInputField,
+  patientEditInputField,
+} from "../../services/json/patientManage.json";
+import { toast } from "sonner";
+import type { PatientPayload } from "../../type/interface/patient.interface";
+import { patientSchema } from "../../services/validation/patientmanage.validation";
 
 const Patient = () => {
-  const { isLoading, isError, patients } = useAppSelector(
+  const { isLoading, isError, patients, dialog, imagePreview } = useAppSelector(
     (state) => state.patient,
   );
   const dispatch = useAppDispatch();
 
-  useEffect(()=> {
-    dispatch(fetchPatientList())
-  },[dispatch])
+  const {
+    register,
+    reset,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<PatientPayload>({
+    resolver: yupResolver(patientSchema) as any,
+    defaultValues: {
+      id: '',
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      address: "",
+      image: null,
+    },
+  });
 
+  useEffect(() => {
+    dispatch(fetchPatientList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (dialog.selectedPatient) {
+      reset({
+        name: dialog.selectedPatient.name,
+        phone: dialog.selectedPatient.phone,
+        address: dialog.selectedPatient.address,
+      });
+      dispatch(setPatientImagePreview(dialog.selectedPatient.image));
+    } else {
+      reset({
+        name: "",
+        phone: "",
+        address: "",
+      });
+    }
+  }, [dialog.selectedPatient, dispatch, reset]);
+
+  // * onsubmit
+  const onSubmit = (data: PatientPayload) => {
+    if (dialog.selectedPatient) {
+      dispatch(
+        editPatient({
+          id: data.id,
+          data: data,
+        }),
+      );
+      dispatch(setPatientDialogClose());
+      toast.success("Patient Details Edited Successfully");
+    } else {
+      dispatch(addNewPatient(data));
+      toast.success("New Patient Added Successfully");
+    }
+    dispatch(setPatientDialogClose());
+    reset();
+  };
 
   return (
     <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
@@ -52,54 +127,70 @@ const Patient = () => {
 
         <Button
           variant="contained"
-          // onClick={() => dispatch(setServiceDialogOpen())}
+          onClick={() => dispatch(setPatientDialogOpen())}
         >
           Add New Patient
         </Button>
       </Box>
 
       {/* dialog*/}
-      {/* <Dialog
+      <Dialog
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         open={dialog.open}
-        onClose={() => dispatch(setServiceDialogClose())}
+        onClose={() => dispatch(setPatientDialogClose())}
         fullWidth
         maxWidth="xs"
       >
         <DialogTitle>
-          {dialog.selectedService ? "Edit Service" : "Add New Service"}
+          {dialog.selectedPatient ? "Edit Patient" : "Add New Patient"}
         </DialogTitle>
 
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          {serviceInputField.map((field) => (
-            <DynamicInput
-              key={field.name}
-              name={field.name as Path<ServicePayload>}
-              label={field.label}
-              placeholder={field.placeholder}
-              type={field.type}
-              rows={field.rows}
-              required={field.required}
-              register={register}
-              errors={errors}
-            />
-          ))}
+          {dialog.selectedPatient
+            ? patientEditInputField.map((field) => (
+                <DynamicInput
+                  key={field.name}
+                  name={field.name as Path<PatientPayload>}
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  type={field.type}
+                  rows={field.rows}
+                  required={field.required}
+                  register={register}
+                  errors={errors}
+                />
+              ))
+            : patientAddInputField.map((field) => (
+                <DynamicInput
+                  key={field.name}
+                  name={field.name as Path<PatientPayload>}
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  type={field.type}
+                  rows={field.rows}
+                  required={field.required}
+                  register={register}
+                  errors={errors}
+                />
+              ))}
 
           <Button variant="outlined" component="label">
-            {dialog.selectedService ? "Update Image" : "Upload Image"}
+            {dialog.selectedPatient ? "Update Image" : "Upload Image"}
             <input
               type="file"
               hidden
               onChange={(e) => {
                 const file = e.target.files?.[0];
+
                 if (file) {
-                  const url = URL.createObjectURL(file);
-                  setValue("image", url);
-                  // must have to create a fns to collect the img
-                  dispatch(setServiceImagePreview(url));
+                  setValue("image", file);
+
+                  const previewUrl = URL.createObjectURL(file);
+
+                  dispatch(setPatientImagePreview(previewUrl));
                 }
               }}
             />
@@ -121,14 +212,14 @@ const Patient = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => dispatch(setServiceDialogClose())}>
+          <Button onClick={() => dispatch(setPatientDialogClose())}>
             Cancel
           </Button>
           <Button type="submit" variant="contained">
-            {dialog.selectedService ? "Update" : "Add"}
+            {dialog.selectedPatient ? "Update" : "Add"}
           </Button>
         </DialogActions>
-      </Dialog> */}
+      </Dialog>
 
       {/* table ui part */}
       {isLoading ? (
@@ -220,9 +311,9 @@ const Patient = () => {
                         >
                           <Tooltip title="Edit">
                             <IconButton
-                              // onClick={() =>
-                              //   dispatch(setEditServiceDialogOpen(row))
-                              // }
+                              onClick={() =>
+                                dispatch(setEditPatientDialogOpen(row))
+                              }
                               sx={{
                                 bgcolor: "#bbdefb",
                                 "&:hover": { bgcolor: "#e3f2fd" },
@@ -236,7 +327,7 @@ const Patient = () => {
 
                           <Tooltip title="Delete">
                             <IconButton
-                              // onClick={() => dispatch(deleteService(row.$id))}
+                              onClick={() => dispatch(deletePatient(row.$id))}
                               sx={{
                                 bgcolor: "#ffcdd2",
                                 "&:hover": { bgcolor: "#ffebee" },

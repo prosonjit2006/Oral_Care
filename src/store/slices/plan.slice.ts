@@ -79,7 +79,7 @@ export const editPlan = createAsyncThunk(
 );
 
 export const changeplanStatus = createAsyncThunk(
-  "admin/statuschange",
+  "admin/planstatuschange",
   async (
     { id, status }: { id: string; status: boolean },
     { rejectWithValue },

@@ -13,9 +13,10 @@ export const registerUserfns = async (data: SignupPayload) => {
     name: data.name,
   });
   console.log("userauth", userAuth);
+
   let imageUrl;
   if (data.image) {
-    console.log("comming image", data.image);
+    // console.log("comeing image", data.image);
 
     const uploadImage = await bucket.createFile({
       bucketId: import.meta.env.VITE_BUCKET_ID,
@@ -28,7 +29,7 @@ export const registerUserfns = async (data: SignupPayload) => {
       fileId: uploadImage.$id,
     });
 
-    console.log("vew img", viewImage);
+    // console.log("vew img", viewImage);
     imageUrl = viewImage;
   }
   const user = await tablesDB.createRow({

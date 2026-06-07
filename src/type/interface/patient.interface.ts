@@ -1,5 +1,5 @@
 export interface Patient {
-    $id: string
+  $id: string;
   name: string;
   email: string;
   role: string;
@@ -13,6 +13,7 @@ export interface PatientState {
   isError: string | null;
 
   patients: Patient[];
+  imagePreview: string | null;
 
   dialog: {
     open: boolean;
@@ -21,9 +22,11 @@ export interface PatientState {
 }
 
 export interface PatientPayload {
-    name: string
-    email: string
-    phone: string
-    address: string
-    image:  string
+  id: string ;
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+  address?: string;
+  image?: File | string | null;
 }
