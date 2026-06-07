@@ -30,6 +30,7 @@ import Feedback from "../pages/admin/Feedback";
 import Query from "../pages/admin/Query";
 import Doctor from "../pages/admin/Doctor";
 import Profile from "../pages/user/Profile";
+import UserProtected from "../components/UserProtected";
 // import Signup from "../pages/Signup";
 // import Login from "../pages/Login";
 // import Booking from "../pages/user/Booking";
@@ -81,8 +82,14 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <UserProtected />,
     errorElement: <ErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <Profile />,
+      },
+    ],
   },
   {
     path: "/admin",

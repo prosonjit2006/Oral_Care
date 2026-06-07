@@ -12,10 +12,15 @@ import {
   quickActions,
   stats,
 } from "../../services/json/profile.json";
+import { useAppDispatch } from "../../hooks/useredux";
+import { LogOutUser } from "../../store/slices/auth.slice";
 
 // ─── Page
 
 const Profile = () => {
+
+  const dispatch = useAppDispatch()
+
   return (
     <div className="min-h-screen bg-slate-50 py-8 px-4">
       <div className="max-w-7xl mx-auto space-y-4">
@@ -44,7 +49,7 @@ const Profile = () => {
             onChangePassword={() => console.log("change password")}
             onForgotPassword={() => console.log("forgot password")}
             onDeleteAccount={() => console.log("delete account")}
-            onLogout={() => console.log("logout")}
+            onLogout={() => dispatch(LogOutUser())}
           />
         </div>
       </div>

@@ -66,12 +66,19 @@ const Navbar = () => {
           {/* Desktop Button */}
           {isAuthenticate ? (
             <>
-              {role === "admin" && (
+              {role === "admin" ? (
                 <button
                   onClick={() => navigate("/admin/dashboard")}
                   className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
                 >
                   Admin Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                >
+                  Profile
                 </button>
               )}
               <button
@@ -98,7 +105,10 @@ const Navbar = () => {
           </button>
 
           {/* Mobile Button */}
-          <button className="sm:hidden bg-blue-600 text-white px-3 py-1 rounded-full text-xs">
+          <button
+            onClick={() => navigate("/booking")}
+            className="sm:hidden bg-blue-600 text-white px-3 py-1 rounded-full text-xs"
+          >
             Get Appointment
           </button>
 
