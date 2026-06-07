@@ -1,21 +1,9 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormHelperText,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { Box, Container } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { aboutTeams, services } from "../../services/json/data.json";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { doctorAvailability } from "../../services/json/admin.json";
-import DynamicInput from "../../components/DynamicInput";
 import {
   bookingFormSchema,
   type FormValues,
@@ -23,6 +11,12 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { bookingFormInput } from "../../services/json/bookinfForm.input";
 import { toast } from "sonner";
+import BookingService from "../../Section/Booking/BookingService";
+import BookingDoctor from "../../Section/Booking/BookingDoctor";
+import BookingTime from "../../Section/Booking/BookingTime";
+import BookingPersonalDetails from "../../Section/Booking/BookingPersonalDetails";
+
+const ServicesData = ["Service", "Doctor", "Time", "Details"]
 
 const Booking = () => {
   const {
@@ -50,416 +44,202 @@ const Booking = () => {
     reset();
   };
 
-  // doctor and time marge
   const mergedDoctors = aboutTeams.map((doc) => {
-    const availability = doctorAvailability.find((d) => d.doctorId === doc.id);
-
+    const available = doctorAvailability.find((d) => d.doctorId === doc.id);
     return {
       ...doc,
-      availability: availability?.availability || [],
+      availability: available?.availability || [],
     };
   });
 
   return (
     <Container
-      // disableGutters
       maxWidth={false}
-      sx={{ p: "25px 0" }}
+      sx={{
+        py: "40px",
+        px: { xs: "16px", md: "32px", lg: "48px" },
+        backgroundColor: "#f8faf9",
+        minHeight: "100vh",
+      }}
     >
-      {/* form part */}
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        {/* service part */}
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Select Service
-        </Typography>
+      {/* Page header */}
+      <Box sx={{ mb: 5, textAlign: "center" }}>
+        <Box
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 1,
+            backgroundColor: "#E1F5EE",
+            color: "#0F6E56",
+            fontSize: "11px",
+            fontWeight: 700,
+            letterSpacing: "0.8px",
+            textTransform: "uppercase",
+            px: 2,
+            py: 0.75,
+            borderRadius: "100px",
+            mb: 1.5,
+          }}
+        >
+          Schedule a visit
+        </Box>
+        <Box
+          component="h1"
+          sx={{
+            fontSize: { xs: "26px", md: "34px" },
+            fontWeight: 600,
+            color: "#0d1b13",
+            mb: 1,
+            mt: 0,
+            fontFamily: "'Playfair Display', serif",
+          }}
+        >
+          Book Your Appointment
+        </Box>
+        <Box
+          component="p"
+          sx={{
+            fontSize: "15px",
+            color: "#6b7280",
+            fontWeight: 300,
+            m: 0,
+          }}
+        >
+          Choose your service, pick a doctor, and find a time that suits you.
+        </Box>
+      </Box>
 
-        <Controller
-          name="service"
-          control={control}
-          render={({ field }) => (
-            <FormControl error={!!errors.service} fullWidth>
-              <ToggleButtonGroup
-                exclusive
-                value={field.value}
-                onChange={(_, val) => field.onChange(val || "")}
+      {/* Step progress */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 0,
+          mb: 4,
+        }}
+      >
+        {ServicesData.map((label, i) => (
+          <Box
+            key={label}
+            sx={{ display: "flex", alignItems: "center", gap: 0 }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "4px",
+              }}
+            >
+              <Box
                 sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: "50%",
+                  border: "1.5px solid",
+                  borderColor: i === 0 ? "#1D9E75" : "#d1d5db",
+                  backgroundColor: i === 0 ? "#E1F5EE" : "transparent",
+                  color: i === 0 ? "#0F6E56" : "#9ca3af",
                   display: "flex",
-                  flexWrap: "wrap",
-                  gap: 2,
-                  border: errors.service ? "1px solid red" : "none",
-                  borderRadius: 2,
-                  p: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "13px",
+                  fontWeight: 600,
                 }}
               >
-                {services.map((item) => (
-                  <ToggleButton
-                    key={item.id}
-                    value={item.title}
-                    sx={{
-                      px: 3,
-                      py: 1,
-                      borderRadius: "12px !important",
-                      border: "1px solid #ddd",
-                      "&.Mui-selected": {
-                        backgroundColor: "#1976d2",
-                        color: "#fff",
-                      },
-                    }}
-                  >
-                    {item.title}
-                  </ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-
-              {/* heper text */}
-              <FormHelperText>
-                {errors.service?.message as string}
-              </FormHelperText>
-            </FormControl>
-          )}
-        />
-
-        {/* doctor select */}
-        <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
-          Select Doctor
-        </Typography>
-
-        <Controller
-          name="doctor"
-          control={control}
-          render={({ field }) => (
-            <FormControl error={!!errors.doctor} fullWidth>
-              <Box sx={{ width: "100%", minWidth: 0 }}>
-                <Swiper
-                  loop
-                  freeMode
-                  autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                  }}
-                  breakpoints={{
-                    320: { slidesPerView: 1, spaceBetween: 12 },
-                    576: { slidesPerView: 2, spaceBetween: 14 },
-                    768: { slidesPerView: 2, spaceBetween: 16 },
-                    992: { slidesPerView: 3, spaceBetween: 20 },
-                    1200: { slidesPerView: 4, spaceBetween: 24 },
-                    1400: { slidesPerView: 4, spaceBetween: 30 },
-                  }}
-                  modules={[FreeMode, Autoplay]}
-                >
-                  {aboutTeams.map((item) => {
-                    const isSelected = field.value?.id === item.id;
-
-                    return (
-                      <SwiperSlide key={item.id}>
-                        <Box
-                          onClick={() => field.onChange(item)}
-                          sx={{
-                            position: "relative",
-                            borderRadius: 3,
-                            overflow: "hidden",
-                            cursor: "pointer",
-                            width: "100%",
-                            border: isSelected
-                              ? "2px solid #1976d2"
-                              : "1px solid #ddd",
-                            transition: "all 0.3s ease",
-                            "&:hover .img": {
-                              transform: "scale(1.1)",
-                            },
-                          }}
-                        >
-                          {/* img */}
-                          <Box
-                            component="img"
-                            src={item.img}
-                            alt={item.name}
-                            loading="lazy"
-                            className="img"
-                            sx={{
-                              width: "100%",
-                              height: {
-                                xs: 380,
-                                sm: 350,
-                                md: 400,
-                                lg: 320,
-                                xl: 350,
-                              },
-                              objectFit: "cover",
-                              transition: "transform 0.5s ease",
-                            }}
-                          />
-
-                          {/* gradient */}
-                          <Box
-                            sx={{
-                              position: "absolute",
-                              inset: 0,
-                              background:
-                                "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2), transparent)",
-                            }}
-                          />
-
-                          {/* name */}
-                          <Typography
-                            sx={{
-                              position: "absolute",
-                              bottom: 28,
-                              left: 16,
-                              color: "#fff",
-                              fontSize: {
-                                xs: 14,
-                                sm: 16,
-                                lg: 24,
-                              },
-                              fontWeight: 500,
-                            }}
-                          >
-                            {item.name}
-                          </Typography>
-
-                          {/* role */}
-                          <Typography
-                            sx={{
-                              position: "absolute",
-                              bottom: 8,
-                              left: 16,
-                              color: "#fff",
-                              fontSize: {
-                                xs: 12,
-                                sm: 14,
-                                lg: 14,
-                              },
-                            }}
-                          >
-                            {item.position}
-                          </Typography>
-
-                          {/* Select Button */}
-                          <Button
-                            variant={isSelected ? "contained" : "outlined"}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              field.onChange(item);
-                            }}
-                            sx={{
-                              position: "absolute",
-                              bottom: 8,
-                              right: 8,
-                              textTransform: "none",
-                              fontSize: 12,
-                              px: 2,
-                              py: 0.5,
-                            }}
-                          >
-                            {isSelected ? "Selected" : "Select"}
-                          </Button>
-                        </Box>
-                      </SwiperSlide>
-                    );
-                  })}
-                </Swiper>
+                {i + 1}
               </Box>
-              {/* heper text */}
-              <FormHelperText>
-                {errors.doctor?.message as string}
-              </FormHelperText>
-            </FormControl>
-          )}
-        />
-
-        {/* time and date select */}
-        <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
-          Select Time & Date
-        </Typography>
-
-        <Controller
-          name="datetime"
-          control={control}
-          rules={{ required: "Doctor selection is required" }}
-          render={({ field }) => (
-            <FormControl error={!!errors.datetime} fullWidth>
-              <Box sx={{ width: "100%" }}>
-                <Swiper
-                  loop
-                  freeMode
-                  autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                  }}
-                  breakpoints={{
-                    320: { slidesPerView: 1, spaceBetween: 12 },
-                    576: { slidesPerView: 2, spaceBetween: 14 },
-                    768: { slidesPerView: 2, spaceBetween: 16 },
-                    992: { slidesPerView: 3, spaceBetween: 20 },
-                    1200: { slidesPerView: 4, spaceBetween: 24 },
-                    1400: { slidesPerView: 4, spaceBetween: 30 },
-                  }}
-                  modules={[FreeMode, Autoplay]}
-                >
-                  {mergedDoctors.map((doctor) => (
-                    <SwiperSlide key={doctor.id}>
-                      <Box
-                        sx={{
-                          p: 2,
-                          borderRadius: 3,
-                          border: "1px solid #ddd",
-                          minHeight: 200,
-                        }}
-                      >
-                        {/* doctor name */}
-                        <Typography
-                          sx={{
-                            fontSize: 18,
-                            fontWeight: 600,
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {doctor.name}
-                        </Typography>
-
-                        {/* doctor role */}
-                        <Typography sx={{ fontSize: 14, mb: 1 }}>
-                          {doctor.position}
-                        </Typography>
-
-                        {/* slot 1 */}
-                        {doctor.availability[0] && (
-                          <Box sx={{ mt: 1 }}>
-                            <Typography variant="body2">
-                              {doctor.availability[0].date}
-                            </Typography>
-
-                            <Button
-                              fullWidth
-                              variant={
-                                field.value?.doctorId === doctor.id &&
-                                field.value?.date ===
-                                  doctor.availability[0].date
-                                  ? "contained"
-                                  : "outlined"
-                              }
-                              onClick={() =>
-                                field.onChange({
-                                  doctorId: doctor.id,
-                                  date: doctor.availability[0].date,
-                                  time: doctor.availability[0].slots[0],
-                                })
-                              }
-                              sx={{ mt: 1 }}
-                            >
-                              {doctor.availability[0].slots[0]}
-                            </Button>
-                          </Box>
-                        )}
-
-                        {/* slot 2 */}
-                        {doctor.availability[1] && (
-                          <Box sx={{ mt: 1 }}>
-                            <Typography variant="body2">
-                              {doctor.availability[1].date}
-                            </Typography>
-
-                            <Button
-                              fullWidth
-                              variant={
-                                field.value?.doctorId === doctor.id &&
-                                field.value?.date ===
-                                  doctor.availability[1].date
-                                  ? "contained"
-                                  : "outlined"
-                              }
-                              onClick={() =>
-                                field.onChange({
-                                  doctorId: doctor.id,
-                                  date: doctor.availability[1].date,
-                                  time: doctor.availability[1].slots[0],
-                                })
-                              }
-                              sx={{ mt: 1 }}
-                            >
-                              {doctor.availability[1].slots[0]}
-                            </Button>
-                          </Box>
-                        )}
-                      </Box>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+              <Box
+                sx={{
+                  fontSize: "11px",
+                  color: i === 0 ? "#0F6E56" : "#9ca3af",
+                  fontWeight: 500,
+                }}
+              >
+                {label}
               </Box>
+            </Box>
+            {i < 3 && (
+              <Box
+                sx={{
+                  width: { xs: 32, sm: 48 },
+                  height: "1.5px",
+                  backgroundColor: "#e5e7eb",
+                  mb: "16px",
+                  mx: 0.5,
+                }}
+              />
+            )}
+          </Box>
+        ))}
+      </Box>
 
-              {/* heper text */}
-              <FormHelperText>
-                {errors.datetime?.message as string}
-              </FormHelperText>
-            </FormControl>
-          )}
+      {/* Form */}
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        <BookingService control={control} errors={errors} services={services} />
+        <BookingDoctor
+          control={control}
+          errors={errors}
+          aboutTeams={aboutTeams}
+        />
+        <BookingTime
+          control={control}
+          errors={errors}
+          mergedDoctors={mergedDoctors}
+        />
+        <BookingPersonalDetails
+          bookingFormInput={bookingFormInput}
+          register={register}
+          errors={errors}
         />
 
-        {/*  personal details */}
-        {/* <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
-          Personal Details
-        </Typography> */}
-
+        {/* Submit */}
         <Box
           sx={{
-            maxWidth: 500,
-            mx: "auto",
-            mt: 4,
-            p: 3,
-            borderRadius: 3,
-            boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-            backgroundColor: "#fff",
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          {/* title */}
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 600,
-              mb: 1,
-              textAlign: "center",
-            }}
-          >
-            Personal Details
-          </Typography>
-
-          {/* inputs */}
-          {bookingFormInput.map((field) => (
-            <DynamicInput
-              key={field.name}
-              name={field.name as keyof FormValues}
-              label={field.label}
-              placeholder={field.placeholder}
-              type={field.type}
-              rows={field.rows}
-              required={field.required}
-              register={register}
-              errors={errors}
-            />
-          ))}
-        </Box>
-
-        {/* submit */}
-        <Box
-          sx={{
-            mt: 2,
+            mt: 3,
             width: "100%",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
+            gap: 1,
           }}
         >
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
+          <Box
+            component="button"
+            type="submit"
+            sx={{
+              backgroundColor: "#1D9E75",
+              color: "#fff",
+              border: "none",
+              borderRadius: "10px",
+              px: "52px",
+              py: "14px",
+              fontSize: "15px",
+              fontWeight: 600,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              transition: "background 0.15s, transform 0.1s",
+              fontFamily: "inherit",
+              "&:hover": { backgroundColor: "#0F6E56" },
+              "&:active": { transform: "scale(0.98)" },
+            }}
+          >
+            Confirm Appointment
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.75,
+              color: "#9ca3af",
+              fontSize: "12px",
+            }}
+          >
+            Your information is private and secure
+          </Box>
         </Box>
       </Box>
     </Container>
