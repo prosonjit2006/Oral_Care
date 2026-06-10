@@ -1,9 +1,9 @@
 import { Droplets, User, Hospital } from "lucide-react";
 import { Card, SectionHeader, InfoRow, Divider } from "./Ui";
-import type { InfoItem } from "../../type/interface/profile.interface";
+import type { InfoItem, Profile } from "../../type/interface/profile.interface";
 
 interface ProfileInfoProps {
-  personalInfo: InfoItem[];
+  personalInfo: Profile;
   medicalInfo: InfoItem[];
   bloodGroup: string;
 }
@@ -25,9 +25,20 @@ const ProfileInfo = ({
         />
         <Divider className="mb-4" />
         <div className="space-y-1">
-          {personalInfo.map((r) => (
-            <InfoRow key={r.label} label={r.label} value={r.value} />
-          ))}
+          <InfoRow label="Full Name" value={personalInfo?.name ?? "N/A"} />
+          <InfoRow label="Email" value={personalInfo?.email ?? "N/A"} />
+          <InfoRow label="Phone" value={personalInfo?.phone ?? "N/A"} />
+          <InfoRow label="Gender" value={personalInfo?.gender ?? "N/A"} />
+          <InfoRow label="Date of Birth" value={personalInfo?.dob ?? "N/A"} />
+          <InfoRow label="Address" value={personalInfo?.address ?? "N/A"} />
+          <InfoRow
+            label="Joined"
+            value={
+              personalInfo?.$createdAt
+                ? new Date(personalInfo.$createdAt).toLocaleDateString()
+                : "N/A"
+            }
+          />
         </div>
       </Card>
 

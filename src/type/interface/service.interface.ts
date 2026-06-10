@@ -24,3 +24,9 @@ export interface ServicePayload {
   status: boolean ;
   image: string;
 }
+
+
+// ! Till this part ann the interface is for the data type 
+// ? From hare the interface is for the slice 
+
+

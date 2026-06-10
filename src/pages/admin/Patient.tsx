@@ -61,7 +61,7 @@ const Patient = () => {
   } = useForm<PatientPayload>({
     resolver: yupResolver(patientSchema) as any,
     defaultValues: {
-      id: '',
+      id: "",
       name: "",
       email: "",
       password: "",
@@ -94,23 +94,22 @@ const Patient = () => {
   }, [dialog.selectedPatient, dispatch, reset]);
 
   // * onsubmit
-  const onSubmit =  (data: PatientPayload) => {
-
+  const onSubmit = (data: PatientPayload) => {
     // console.log('data on submit ', data)
     if (dialog.selectedPatient) {
       // console.log('updating data')
-       dispatch(
+      dispatch(
         editPatient({
           id: data.id,
           data: data,
         }),
       ).unwrap();
-       dispatch(fetchPatientList())
+      dispatch(fetchPatientList());
       // dispatch(setPatientDialogClose());
       toast.success("Patient Details Edited Successfully");
     } else {
       dispatch(addNewPatient(data)).unwrap();
-       dispatch(fetchPatientList())
+      dispatch(fetchPatientList());
       toast.success("New Patient Added Successfully");
     }
     dispatch(setPatientDialogClose());

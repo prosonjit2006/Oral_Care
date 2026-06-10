@@ -9,13 +9,13 @@ export const fetchPlanListFns = async () => {
 
   return response.rows.map((row) => ({
     ...row,
-    price: Number(row.price), // ✅ convert string back to number
+    price: Number(row.price), 
   }));
 };
 
 export const addPlanFns = async (data: PlanPayload) => {
   console.log("sending to appwrite:", {
-    // 👈 add this
+    
     planname: data.planname,
     description: data.description,
     price: String(data.price),
@@ -52,7 +52,7 @@ export const editPlanFns = async ({
     data: {
       planname: data.planname,
       description: data.description,
-      price: String(data.price), // ✅ convert number to string
+      price: String(data.price), 
       feature: data.feature,
     },
   });

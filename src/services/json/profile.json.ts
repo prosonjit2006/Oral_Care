@@ -143,3 +143,42 @@ export const notifications: NotificationItem[] = [
     checked: false,
   },
 ];
+
+// ! json data for the patientProfile edit dialog
+
+export const profileEditInput = [
+  {
+    label: "Name",
+    name: "name",
+    placeholder: "Enter your name",
+    type: "text",
+    required: false,
+  },
+  // {
+  //   label: "Email",
+  //   name: "email",
+  //   placeholder: "Enter your email address",
+  //   type: "email"
+  // },
+  {
+    label: "Phone",
+    name: "phone",
+    placeholder: "Enter your phone number",
+    type: "text",
+    required: false,
+  },
+  {
+    label: "Address",
+    name: "address",
+    placeholder: "Enter your address",
+    type: "text",
+    required: false,
+  },
+  {
+    label: "Date of Birth",
+    name: "dob",
+    placeholder: "Enter your date of birth eg. 01/01/2000",
+    type: "text",
+    required: false,
+  },
+];

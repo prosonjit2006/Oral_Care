@@ -1,4 +1,4 @@
-// import type{ PatientPayload as PatientPayloadType  } from "./../../type/interface/patient.interface";
+
 import {
   addNewPatientFns,
   deletePatientFns,
@@ -78,7 +78,7 @@ export const editPatient = createAsyncThunk<
     //   console.log("res from edit slice", res);
     return {
       success: true,
-      message: "New Patient added Successfully",
+      message: "Patient edited Successfully",
       patient: res,
     };
   } catch {
