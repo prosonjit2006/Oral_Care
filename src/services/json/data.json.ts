@@ -32,7 +32,7 @@ export const aboutTeams: AboutTeams[] = [
     rating: 4.9,
     reviews: "750+ Reviews",
     img: img1,
-    // services:
+    services: ["Root Canal & Surgery"],
     // ! must have to this for performing the filter on the service booking
   },
   {
@@ -42,6 +42,7 @@ export const aboutTeams: AboutTeams[] = [
     rating: 4.8,
     reviews: "650+ Reviews",
     img: img2,
+    services: ["General Checkups", "Teeth Whitening"],
   },
   {
     id: 3,
@@ -50,6 +51,7 @@ export const aboutTeams: AboutTeams[] = [
     rating: 5.0,
     reviews: "950+ Reviews",
     img: img3,
+    services: ["General Checkups"],
   },
   {
     id: 4,
@@ -58,6 +60,7 @@ export const aboutTeams: AboutTeams[] = [
     rating: 4.8,
     reviews: "850+ Reviews",
     img: img4,
+    services: ["Root Canal & Surgery", "Kids Dental Care"],
   },
   {
     id: 5,
@@ -66,6 +69,7 @@ export const aboutTeams: AboutTeams[] = [
     rating: 4.5,
     reviews: "980+ Reviews",
     img: img5,
+    services: ["Kids Dental Care", "Teeth Whitening"],
   },
 ];
 

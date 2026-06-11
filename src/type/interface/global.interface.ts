@@ -8,6 +8,7 @@ export interface AboutTeams {
   rating: number;
   reviews: string;
   img: string;
+  services: string[]
 }
 
 export interface ReviewsData {

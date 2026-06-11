@@ -1,20 +1,34 @@
 import { Box } from "@mui/material";
 import DynamicInput from "../../components/DynamicInput";
 import type { FormValues } from "../../services/validation/booking.validation";
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import type { BookingPersonalDetailsType } from "../../type/interface/booking.interface";
+import { useEffect } from "react";
 
 interface BookingPersonalDetailsProps {
   register: UseFormRegister<FormValues>;
   errors: FieldErrors<FormValues>;
   bookingFormInput: BookingPersonalDetailsType[];
+  setValue: UseFormSetValue<FormValues>; 
+  user?: { name: string; email: string; phone: string };
 }
 
 const BookingPersonalDetails = ({
   bookingFormInput,
   register,
   errors,
+  setValue,
+  user,
 }: BookingPersonalDetailsProps) => {
+  
+  // Pre-fill fields when user data is available
+  useEffect(() => {
+    if (!user) return;
+    if (user.name) setValue("name", user.name, { shouldValidate: false });
+    if (user.email) setValue("email", user.email, { shouldValidate: false });
+    if (user.phone) setValue("phone", user.phone, { shouldValidate: false });
+  }, [user, setValue]);
+
   return (
     <Box
       sx={{
@@ -92,6 +106,6 @@ const BookingPersonalDetails = ({
       </Box>
     </Box>
   );
-};
+};;
 
 export default BookingPersonalDetails;

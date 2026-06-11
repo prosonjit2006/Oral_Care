@@ -5,6 +5,7 @@ import patientReducer from "./slices/patient.slice";
 import serviceReducer from "./slices/service.slice";
 import planReducer from "./slices/plan.slice";
 import profileReducer from "./slices/profile.slice";
+import bookingReducer from "./slices/booking.slice";
 
 export const Store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const Store = configureStore({
     service: serviceReducer,
     plan: planReducer,
     profile: profileReducer,
+    booking: bookingReducer,
   },
 });

@@ -10,9 +10,16 @@ interface BookingDoctorProps {
   control: Control<FormValues>;
   errors: FieldErrors<FormValues>;
   aboutTeams: BookingDoctorType[];
+  selectedService: string;
+  
 }
 
-const BookingDoctor = ({ control, errors, aboutTeams }: BookingDoctorProps) => {
+const BookingDoctor = ({
+  control,
+  errors,
+  aboutTeams,
+  selectedService,
+}: BookingDoctorProps) => {
   return (
     <Box
       sx={{
@@ -97,10 +104,16 @@ const BookingDoctor = ({ control, errors, aboutTeams }: BookingDoctorProps) => {
                   //   .join("")
                   //   .toUpperCase();
 
+                  // If a service is chosen, check if this doctor handles it
+                  const isCompatible =
+                    !selectedService ||
+                    !item.services ||
+                    item.services.includes(selectedService);
+
                   return (
                     <SwiperSlide key={item.id}>
                       <Box
-                        onClick={() => field.onChange(item)}
+                        onClick={() => isCompatible && field.onChange(item)}
                         sx={{
                           position: "relative",
                           borderRadius: "14px",
@@ -109,7 +122,7 @@ const BookingDoctor = ({ control, errors, aboutTeams }: BookingDoctorProps) => {
                           width: "100%",
                           border: "1.5px solid",
                           borderColor: isSelected ? "#1D9E75" : "#e5e7eb",
-                          transition: "all 0.2s ease",
+                          // transition: "all 0.2s ease",
                           backgroundColor: isSelected ? "#E1F5EE" : "#fff",
                           "&:hover": {
                             borderColor: "#1D9E75",
@@ -117,6 +130,11 @@ const BookingDoctor = ({ control, errors, aboutTeams }: BookingDoctorProps) => {
                           "&:hover .doc-img": {
                             transform: "scale(1.05)",
                           },
+
+                          opacity: isCompatible ? 1 : 0.35, // ← dim incompatible
+                          pointerEvents: isCompatible ? "auto" : "none", // ← disable click
+                          filter: isCompatible ? "none" : "grayscale(40%)", // ← subtle grey
+                          transition: "all 0.2s ease",
                         }}
                       >
                         {/* Selected badge */}

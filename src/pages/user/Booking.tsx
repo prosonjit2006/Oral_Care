@@ -1,5 +1,5 @@
 import { Box, Container } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { aboutTeams, services } from "../../services/json/data.json";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -15,15 +15,31 @@ import BookingService from "../../Section/Booking/BookingService";
 import BookingDoctor from "../../Section/Booking/BookingDoctor";
 import BookingTime from "../../Section/Booking/BookingTime";
 import BookingPersonalDetails from "../../Section/Booking/BookingPersonalDetails";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
+import {
+  bookedService,
+  fetchPaitentData,
+} from "../../store/slices/booking.slice";
 
-const ServicesData = ["Service", "Doctor", "Time", "Details"]
+const ServicesData = ["Service", "Doctor", "Time", "Details"];
 
 const Booking = () => {
+  const userCookie = Cookies.get("user");
+  const user = userCookie ? JSON.parse(userCookie) : null;
+
+  const dispatch = useAppDispatch();
+  const { patient } = useAppSelector((state) => state.booking);
+
+  console.log("patient", patient);
+
   const {
     register,
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: yupResolver(bookingFormSchema),
@@ -38,8 +54,40 @@ const Booking = () => {
     },
   });
 
+  useEffect(() => {
+    if (user?.email) {
+      dispatch(fetchPaitentData(user.email));
+    }
+  }, [dispatch]);
+
+  // Watch selected service and doctor
+  const selectedService = useWatch({ control, name: "service" });
+  const selectedDoctor = useWatch({ control, name: "doctor" });
+
+  // Mock logged-in user (replace with real Redux/auth selector)
+  const loggedInUser = {
+    name: patient?.name,
+    email: patient?.email,
+    phone: patient?.phone,
+  };
+
   const onSubmit = (data: FormValues) => {
     console.log("Full Form Data:", data);
+    dispatch(
+      bookedService({
+        serviceTitle: data.service,
+        doctorId: data.doctor.id,
+        doctorName: data.doctor.name,
+        appointmentDate: data.datetime.date,
+        appointmentTime: data.datetime.time,
+        patientName: data.name,
+        patientEmail: data.email,
+        patientPhone: data.phone,
+        message: data.message || "",
+        status: false,
+        userId: user?.$id ?? null,
+      }),
+    );
     toast.success("Appointment booked successfully");
     reset();
   };
@@ -52,6 +100,7 @@ const Booking = () => {
     };
   });
 
+  // ! return part starts from here
   return (
     <Container
       maxWidth={false}
@@ -182,16 +231,20 @@ const Booking = () => {
           control={control}
           errors={errors}
           aboutTeams={aboutTeams}
+          selectedService={selectedService}
         />
         <BookingTime
           control={control}
           errors={errors}
           mergedDoctors={mergedDoctors}
+          selectedDoctorId={selectedDoctor?.id ?? null}
         />
         <BookingPersonalDetails
           bookingFormInput={bookingFormInput}
           register={register}
           errors={errors}
+          setValue={setValue}
+          user={loggedInUser}
         />
 
         {/* Submit */}

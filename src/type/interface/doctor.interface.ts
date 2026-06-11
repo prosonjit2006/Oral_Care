@@ -5,7 +5,8 @@ export interface Doctor {
   rating: string;
   review: string;
   status: boolean;
-  image: string
+  image: string;
+  services?: string[];
 }
 
 export interface DoctorState {
