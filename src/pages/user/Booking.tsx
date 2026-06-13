@@ -23,7 +23,8 @@ import {
   fetchPaitentData,
 } from "../../store/slices/booking.slice";
 import { Check } from "lucide-react";
-import { serviceCheckout } from "../../lib/service.stripe";
+import { toast } from "sonner";
+import { serviceCheckout } from "../../lib/serviceCheckout";
 
 const ServicesData = ["Service", "Doctor", "Time", "Details"];
 
@@ -99,8 +100,8 @@ const Booking = () => {
         userId: user?.$id ?? null,
       }),
     );
-    // toast.success("Appointment booked successfully");
-   await serviceCheckout();
+    await serviceCheckout();
+    toast.success("Appointment booked successfully");
     reset();
   };
 
