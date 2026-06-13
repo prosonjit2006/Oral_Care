@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 // import { plans } from "../../services/json/data.json";
 import type { BillingType } from "../../type/type/global.type";
 import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
-import { fetchPlanList } from "../../store/slices/plan.slice";
+import { fetchPlanList, setCheckoutPlan } from "../../store/slices/plan.slice";
 import { useNavigate } from "react-router-dom";
 // import Cookies from 'js-cookie'
 
@@ -128,6 +128,7 @@ const SubscriptionPlans = () => {
                     try {
                       // if(!isAuth) return
                     //  await checkout(itm.$id, itm.planname, itm.price);
+                    dispatch(setCheckoutPlan(itm));
                     navigate('/payment')
                     } catch (error) {
                       console.error("Checkout failed:", error);
