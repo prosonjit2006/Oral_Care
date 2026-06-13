@@ -22,24 +22,28 @@ import {
   updatePatientProfile,
 } from "../../store/slices/profile.slice";
 import Cookies from "js-cookie";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Fab,
   FormControl,
   FormHelperText,
   InputLabel,
   MenuItem,
   Select,
+  Tooltip,
 } from "@mui/material";
 import DynamicInput from "../../components/DynamicInput";
 import { Controller, useForm, type Path } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { EditProfilePayload } from "../../type/interface/profile.interface";
 import { editProfileSchema } from "../../services/validation/profile.validation";
+import { useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 
 const userCookie = Cookies.get("user");
 
@@ -47,6 +51,9 @@ const user = userCookie ? JSON.parse(userCookie) : null;
 // console.log("rowID", user);
 
 const Profile = () => {
+
+  const navigate = useNavigate()
+
   const dispatch = useAppDispatch();
   const {
     isLoading,
@@ -120,6 +127,20 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 py-8 px-4">
+      {/* floating button - animate  */}
+      <motion.div
+        animate={{ x: [8, -5, 8] }}
+        transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
+        style={{ position: "fixed", top: 24, left: 24, zIndex: 1000 }}
+      >
+        <Tooltip title="Back">
+
+        <Fab color="primary" onClick={() => navigate(-1)}>
+          <ArrowLeft />
+        </Fab>
+        </Tooltip>
+      </motion.div>
+
       {/* dialog part */}
       <Dialog
         component="form"

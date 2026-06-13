@@ -15,7 +15,7 @@ const PaymentProtected = () => {
   if (!isAuthenticated) {
       <Navigate to="/" replace />;
       dispatch(openLogin());
-      toast.error("login before payment");
+      toast.error("Login Before Access");
     }
     
     if (!["admin", "user"].includes(role ?? "")) {

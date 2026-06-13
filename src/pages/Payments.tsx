@@ -14,6 +14,7 @@ import {
   Stack,
   Typography,
   Fab,
+  Tooltip,
 } from "@mui/material";
 import { ArrowLeft, CheckCircle, CreditCard, Lock, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import { useEffect } from "react";
 import { fetchPlanList, setCheckoutPlan } from "../store/slices/plan.slice";
 import { SubscriptionCheckout } from "../lib/subscriptionCheckout";
+import { motion } from "motion/react";
 
 const Payments = () => {
   const navigate = useNavigate();
@@ -90,18 +92,17 @@ const Payments = () => {
     >
       <Container maxWidth="lg">
         {/* floating button - animate  */}
-        <Fab
-          color="primary"
-          onClick={() => navigate("/subscription")}
-          sx={{
-            position: "fixed",
-            top: 24,
-            left: 24,
-            zIndex: 1000,
-          }}
+        <motion.div
+          animate={{ x: [8, -5, 8] }}
+          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+          style={{ position: "fixed", top: 24, left: 24, zIndex: 1000 }}
         >
-          <ArrowLeft />
-        </Fab>
+          <Tooltip title="Back">
+            <Fab color="primary" onClick={() => navigate("/subscription")}>
+              <ArrowLeft />
+            </Fab>
+          </Tooltip>
+        </motion.div>
 
         {/* Header */}
         <Box sx={{ textAlign: "center", mb: 5 }}>

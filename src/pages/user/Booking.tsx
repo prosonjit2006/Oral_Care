@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Fab, Tooltip, Typography } from "@mui/material";
 import { useForm, useWatch } from "react-hook-form";
 import { aboutTeams, services } from "../../services/json/data.json";
 import "swiper/css";
@@ -22,9 +22,12 @@ import {
   bookedService,
   fetchPaitentData,
 } from "../../store/slices/booking.slice";
-import { Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { toast } from "sonner";
 import { serviceCheckout } from "../../lib/serviceCheckout";
+import { motion } from "motion/react";
+import { useNavigate } from "react-router-dom";
+
 
 const ServicesData = ["Service", "Doctor", "Time", "Details"];
 
@@ -32,6 +35,8 @@ const userCookie = Cookies.get("user");
 const user = userCookie ? JSON.parse(userCookie) : null;
 
 const Booking = () => {
+
+  const navigate = useNavigate()
   const dispatch = useAppDispatch();
   const { patient } = useAppSelector((state) => state.booking);
 
@@ -124,6 +129,19 @@ const Booking = () => {
         minHeight: "100vh",
       }}
     >
+      {/* floating button - animate  */}
+      <motion.div
+        animate={{ x: [8, -5, 8] }}
+        transition={{ repeat: Infinity, duration: 6, ease: "easeOut" }}
+        style={{ position: "static", top: 26, left: 24, zIndex: 1000 }}
+      >
+        <Tooltip title="Back">
+          <Fab color="primary" onClick={() => navigate(-1)}>
+            <ArrowLeft />
+          </Fab>
+        </Tooltip>
+      </motion.div>
+
       {/* Page header */}
       <Box sx={{ mb: 5, textAlign: "center" }}>
         <Box
@@ -277,17 +295,18 @@ const Booking = () => {
         {/* Submit */}
         {activeStep >= 3 && (
           <Box
-          sx={{
-            mt: 3,
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 1,
-          }}
+            sx={{
+              mt: 3,
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+            }}
           >
-
-          <Typography variant="body1" sx={{textAlign: 'center', mb: 1}}>Pay Booking Amount To Confirm Appointment </Typography>
+            <Typography variant="body1" sx={{ textAlign: "center", mb: 1 }}>
+              Pay Booking Amount To Confirm Appointment{" "}
+            </Typography>
 
             <Box
               component="button"
