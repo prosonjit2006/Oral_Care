@@ -37,15 +37,19 @@ const Payments = () => {
     }
   }, [checkOutSelectedPlan]);
 
-  const checkSelectedplan = localStorage.getItem("selectedPlan");
-  const selectedPlan = checkSelectedplan ? JSON.parse(checkSelectedplan) : null;
+  // const checkSelectedplan = localStorage.getItem("selectedPlan");
+  const storedPlan = localStorage.getItem("selectedPlan");
+
+  const selectedPlan =
+    checkOutSelectedPlan || (storedPlan ? JSON.parse(storedPlan) : null);
 
   const handlePlanChange = (planId: string) => {
     const selectedPlan = plans.find((item) => item.$id === planId);
 
     if (selectedPlan) {
-      localStorage.removeItem("selectedPlan");
       dispatch(setCheckoutPlan(selectedPlan));
+
+      localStorage.setItem("selectedPlan", JSON.stringify(selectedPlan));
     }
   };
 
@@ -59,7 +63,7 @@ const Payments = () => {
     console.log("checkout", selectedPlan);
   };
 
-  if (!selectedPlan) return; // ! not null just return
+  if (!selectedPlan) return null;
 
   return (
     <Box
@@ -287,7 +291,7 @@ const Payments = () => {
                   fullWidth
                   size="large"
                   variant="contained"
-                  onClick={()=> handleCheckout}
+                  onClick={handleCheckout}
                   sx={{
                     mt: 4,
                     py: 1.8,
