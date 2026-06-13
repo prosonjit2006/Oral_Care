@@ -10,12 +10,12 @@ import { fetchPlanList } from "../../store/slices/plan.slice";
 const SubscriptionPlans = () => {
   // const navigate = useNavigate();
 
-  const dispatch = useAppDispatch()
-  const {plans} = useAppSelector((state)=> state.plan)
+  const dispatch = useAppDispatch();
+  const { plans } = useAppSelector((state) => state.plan);
 
-  useEffect(()=> {
+  useEffect(() => {
     dispatch(fetchPlanList());
-  },[dispatch])
+  }, [dispatch]);
 
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
@@ -95,9 +95,7 @@ const SubscriptionPlans = () => {
 
                   <h3 className="text-3xl font-bold mt-2">
                     ${itm.price}
-                    <span className="text-sm font-normal">
-                      {itm.planname}
-                    </span>
+                    <span className="text-sm font-normal">{itm.planname}</span>
                   </h3>
 
                   <p className="text-sm text-gray-600 mt-3">
@@ -122,7 +120,7 @@ const SubscriptionPlans = () => {
                     setSelectedPlan(itm.$id);
                     setLoadingPlan(itm.$id);
                     try {
-                      await checkout(itm.$id);
+                     await checkout(itm.$id, itm.planname, itm.price);
                     } catch (error) {
                       console.error("Checkout failed:", error);
                     } finally {
