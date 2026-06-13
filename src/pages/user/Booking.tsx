@@ -22,13 +22,14 @@ import {
   bookedService,
   fetchPaitentData,
 } from "../../store/slices/booking.slice";
+import { Check } from "lucide-react";
 
 const ServicesData = ["Service", "Doctor", "Time", "Details"];
 
-const Booking = () => {
-  const userCookie = Cookies.get("user");
-  const user = userCookie ? JSON.parse(userCookie) : null;
+const userCookie = Cookies.get("user");
+const user = userCookie ? JSON.parse(userCookie) : null;
 
+const Booking = () => {
   const dispatch = useAppDispatch();
   const { patient } = useAppSelector((state) => state.booking);
 
@@ -63,6 +64,15 @@ const Booking = () => {
   // Watch selected service and doctor
   const selectedService = useWatch({ control, name: "service" });
   const selectedDoctor = useWatch({ control, name: "doctor" });
+  const selectedTime = useWatch({ control, name: "datetime" });
+
+  // Derive active step from selections
+  const activeStep = (() => {
+    if (selectedTime?.date) return 3; // Details visible
+    if (selectedDoctor?.id) return 2; // Time visible
+    if (selectedService) return 1; // Doctor visible
+    return 0; // Only service visible
+  })();
 
   // Mock logged-in user (replace with real Redux/auth selector)
   const loggedInUser = {
@@ -187,9 +197,9 @@ const Booking = () => {
                   height: 32,
                   borderRadius: "50%",
                   border: "1.5px solid",
-                  borderColor: i === 0 ? "#1D9E75" : "#d1d5db",
-                  backgroundColor: i === 0 ? "#E1F5EE" : "transparent",
-                  color: i === 0 ? "#0F6E56" : "#9ca3af",
+                  borderColor: i <= activeStep ? "#1D9E75" : "#d1d5db", // ← was i === 0
+                  backgroundColor: i <= activeStep ? "#E1F5EE" : "transparent", // ← was i === 0
+                  color: i <= activeStep ? "#0F6E56" : "#9ca3af", // ← was i === 0
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -197,12 +207,13 @@ const Booking = () => {
                   fontWeight: 600,
                 }}
               >
-                {i + 1}
+                {i < activeStep ? <Check size={14} /> : i + 1}{" "}
+                {/* ← tick on completed steps */}
               </Box>
               <Box
                 sx={{
                   fontSize: "11px",
-                  color: i === 0 ? "#0F6E56" : "#9ca3af",
+                  color: i <= activeStep ? "#0F6E56" : "#9ca3af",
                   fontWeight: 500,
                 }}
               >
@@ -214,7 +225,7 @@ const Booking = () => {
                 sx={{
                   width: { xs: 32, sm: 48 },
                   height: "1.5px",
-                  backgroundColor: "#e5e7eb",
+                  backgroundColor: i < activeStep ? "#1D9E75" : "#e5e7eb", // ← connector fills too
                   mb: "16px",
                   mx: 0.5,
                 }}
@@ -226,74 +237,89 @@ const Booking = () => {
 
       {/* Form */}
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        {/* Step 1 — always visible */}
         <BookingService control={control} errors={errors} services={services} />
-        <BookingDoctor
-          control={control}
-          errors={errors}
-          aboutTeams={aboutTeams}
-          selectedService={selectedService}
-        />
-        <BookingTime
-          control={control}
-          errors={errors}
-          mergedDoctors={mergedDoctors}
-          selectedDoctorId={selectedDoctor?.id ?? null}
-        />
-        <BookingPersonalDetails
-          bookingFormInput={bookingFormInput}
-          register={register}
-          errors={errors}
-          setValue={setValue}
-          user={loggedInUser}
-        />
+
+        {/* Step 2 — visible after service selected */}
+        {activeStep >= 0 && (
+          <BookingDoctor
+            control={control}
+            errors={errors}
+            aboutTeams={aboutTeams}
+            selectedService={selectedService}
+          />
+        )}
+
+        {/* Step 3 — visible after doctor selected */}
+        {activeStep >= 2 && (
+          <BookingTime
+            control={control}
+            errors={errors}
+            mergedDoctors={mergedDoctors}
+            selectedDoctorId={selectedDoctor?.id ?? null}
+          />
+        )}
+
+        {/* Step 4 — visible after time selected */}
+        {activeStep >= 3 && (
+          <BookingPersonalDetails
+            bookingFormInput={bookingFormInput}
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            user={loggedInUser}
+          />
+        )}
 
         {/* Submit */}
-        <Box
-          sx={{
-            mt: 3,
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
+        {activeStep >= 3 && (
           <Box
-            component="button"
-            type="submit"
             sx={{
-              backgroundColor: "#1D9E75",
-              color: "#fff",
-              border: "none",
-              borderRadius: "10px",
-              px: "52px",
-              py: "14px",
-              fontSize: "15px",
-              fontWeight: 600,
-              cursor: "pointer",
+              mt: 3,
+              width: "100%",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
               gap: 1,
-              transition: "background 0.15s, transform 0.1s",
-              fontFamily: "inherit",
-              "&:hover": { backgroundColor: "#0F6E56" },
-              "&:active": { transform: "scale(0.98)" },
             }}
           >
-            Confirm Appointment
+            <Box
+              component="button"
+              type="submit"
+              sx={{
+                backgroundColor: "#1D9E75",
+                color: "#fff",
+                border: "none",
+                borderRadius: "10px",
+                px: "52px",
+                py: "14px",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                transition: "background 0.15s, transform 0.1s",
+                fontFamily: "inherit",
+                "&:hover": { backgroundColor: "#0F6E56" },
+                "&:active": { transform: "scale(0.98)" },
+              }}
+            >
+              Confirm Appointment
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.75,
+                color: "#9ca3af",
+                fontSize: "12px",
+              }}
+            >
+              Your information is private and secure
+            </Box>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.75,
-              color: "#9ca3af",
-              fontSize: "12px",
-            }}
-          >
-            Your information is private and secure
-          </Box>
-        </Box>
+        )}
       </Box>
     </Container>
   );

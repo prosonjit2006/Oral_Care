@@ -3,13 +3,13 @@ import { Menu, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import type { NavLinkProps } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
-import { logout, openLogin } from "../../store/slices/auth.slice";
+import { LogOutUser, openLogin } from "../../store/slices/auth.slice";
 import { navItems } from "../../services/json/data.json";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticate, user, role } = useAppSelector((state) => state.auth);
-  console.log("navbar responee", isAuthenticate, user, role);
+  const { isAuthenticate, role } = useAppSelector((state) => state.auth);
+  // console.log("navbar responee", isAuthenticate, user, role);
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -82,7 +82,7 @@ const Navbar = () => {
                 </button>
               )}
               <button
-                onClick={() => dispatch(logout())}
+                onClick={() => dispatch(LogOutUser())}
                 className="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
               >
                 Logout

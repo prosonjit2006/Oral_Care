@@ -14,6 +14,7 @@ export interface BookingDoctorType {
   rating: number;
   reviews: string;
   img: string;
+  services?: string[];
 }
 
 export interface BookingTimeType {
@@ -34,7 +35,7 @@ export interface BookingPersonalDetailsType {
   label: string;
   placeholder: string;
   type: string;
-  rows: number;
+  rows?: number;
   required: boolean;
 }
 
@@ -47,7 +48,7 @@ export interface Booking {
 export interface BookingState {
   isLoading: boolean;
   isError: string | null;
-  patient: Patient | null;
+  patient: Patient ;
 }
 
 export interface BookingPayload {

@@ -1,4 +1,3 @@
-
 import {
   addNewPatientFns,
   deletePatientFns,
@@ -68,27 +67,51 @@ export const addNewPatient = createAsyncThunk(
   },
 );
 
-export const editPatient = createAsyncThunk<
-  any, // ! this is the response type but it is giving me error - Parient
-  { id: string; data: PatientPayload },
-  { rejectValue: string }
->("admin/editpatient", async ({ id, data }, { rejectWithValue }) => {
-  try {
-    const res = await editPatientFns({ id, data });
-    //   console.log("res from edit slice", res);
-    return {
-      success: true,
-      message: "Patient edited Successfully",
-      patient: res,
-    };
-  } catch {
-    const err = {
-      success: false,
-      message: "Failed to edit Patient",
-    };
-    return rejectWithValue(err.message);
-  }
-});
+// export const editPatient = createAsyncThunk<
+//   any, // ! this is the response type but it is giving me error - Parient
+//   { id: string; data: PatientPayload },
+//   { rejectValue: string }
+// >("admin/editpatient", async ({ id, data }, { rejectWithValue }) => {
+//   try {
+//     const res = await editPatientFns({ id, data });
+//     //   console.log("res from edit slice", res);
+//     return {
+//       success: true,
+//       message: "Patient edited Successfully",
+//       patient: res,
+//     };
+//   } catch {
+//     const err = {
+//       success: false,
+//       message: "Failed to edit Patient",
+//     };
+//     return rejectWithValue(err.message);
+//   }
+// });
+
+export const editPatient = createAsyncThunk(
+  "admin/editpatient",
+  async (
+    { id, data }: { id: string; data: PatientPayload },
+    { rejectWithValue },
+  ) => {
+    try {
+      const res = await editPatientFns({ id, data });
+      //   console.log("res from edit slice", res);
+      return {
+        success: true,
+        message: "Patient edited Successfully",
+        patient: res,
+      };
+    } catch {
+      const err = {
+        success: false,
+        message: "Failed to edit Patient",
+      };
+      return rejectWithValue(err.message);
+    }
+  },
+);
 
 export const changePatientStatus = createAsyncThunk(
   "admin/patientStatusChange",
@@ -174,9 +197,9 @@ const patientSlice = createSlice({
         state.patients = action.payload.patient as unknown as Patient[];
         // console.log('patient data in payload ', action.payload)
       })
-      .addCase(fetchPatientList.rejected, (state) => {
+      .addCase(fetchPatientList.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = null;
+        state.isError = action.payload as string;
       })
 
       // add patient list
@@ -185,9 +208,9 @@ const patientSlice = createSlice({
         state.isError = null;
         state.patients.unshift(action.payload.user as unknown as Patient);
       })
-      .addCase(addNewPatient.rejected, (state) => {
+      .addCase(addNewPatient.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = null;
+        state.isError = action.payload as string;
       })
 
       // edit patient list
@@ -195,12 +218,14 @@ const patientSlice = createSlice({
         state.isLoading = false;
         state.isError = null;
         state.patients = state.patients.map((item) =>
-          item.$id === action.payload.$id ? action.payload.patient : item,
-        );
+          item.$id === action.payload.patient.$id
+            ? action.payload.patient
+            : item,
+        ) as unknown as Patient[];
       })
-      .addCase(editPatient.rejected, (state) => {
+      .addCase(editPatient.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = null;
+        state.isError = action.payload as string;
       })
 
       // change status patient list
@@ -211,7 +236,7 @@ const patientSlice = createSlice({
           item.$id === action.payload.response.$id
             ? action.payload.response
             : item,
-        ) as Patient[]; 
+        ) as Patient[];
       })
       .addCase(changePatientStatus.rejected, (state) => {
         state.isLoading = false;
@@ -226,9 +251,9 @@ const patientSlice = createSlice({
           (item) => item.$id !== action.meta.arg,
         );
       })
-      .addCase(deletePatient.rejected, (state) => {
+      .addCase(deletePatient.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = null;
+        state.isError = action.payload as string;
       });
   },
 });

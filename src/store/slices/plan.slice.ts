@@ -139,7 +139,7 @@ const planSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // for fetching serviceList
+      // for fetching plan
       .addCase(fetchPlanList.pending, (state) => {
         state.isLoading = true;
         state.isError = null;
@@ -154,7 +154,7 @@ const planSlice = createSlice({
         state.isError = action.payload as string;
       })
 
-      // for adding new service
+      // for adding new plan
       .addCase(addNewPlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
@@ -165,7 +165,7 @@ const planSlice = createSlice({
         state.isError = action.payload as string;
       })
 
-      // for editing service
+      // for editing plan
       .addCase(editPlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
@@ -179,7 +179,7 @@ const planSlice = createSlice({
         state.isError = action.payload as string;
       })
 
-      // for changing status service
+      // for changing status plan
       .addCase(changeplanStatus.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;
@@ -193,7 +193,7 @@ const planSlice = createSlice({
         state.isError = action.payload as string;
       })
 
-      // for deleting service
+      // for deleting plan
       .addCase(deletePlan.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = null;

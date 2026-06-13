@@ -438,7 +438,7 @@ export const tipsImages = [
 
 export const plans: Plan[] = [
   {
-    id: "monthly",
+    id: "6a1310cb001c492f1fef",
     title: "Monthly",
     price: 29,
     durationLabel: "/mo",
@@ -450,7 +450,7 @@ export const plans: Plan[] = [
     ],
   },
   {
-    id: "quarterly",
+    id: "6a1311ae0011c12bdffe",
     title: "Quarterly",
     price: 99,
     durationLabel: "/qu",
@@ -463,7 +463,7 @@ export const plans: Plan[] = [
     ],
   },
   {
-    id: "yearly",
+    id: "6a1311dc002ce8a7719b",
     title: "Yearly",
     price: 179,
     durationLabel: "/yr",

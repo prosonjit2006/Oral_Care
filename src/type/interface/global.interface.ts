@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react";
-import type { BillingType } from "../type/global.type";
 
 export interface AboutTeams {
   id: number;
@@ -8,7 +7,7 @@ export interface AboutTeams {
   rating: number;
   reviews: string;
   img: string;
-  services: string[]
+  services: string[];
 }
 
 export interface ReviewsData {
@@ -44,7 +43,7 @@ export interface PlanFeature {
 }
 
 export interface Plan {
-  id: BillingType;
+  id: string;
   title: string;
   price: number;
   durationLabel: string;

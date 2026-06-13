@@ -24,3 +24,22 @@ const bookingFormSchema = yup.object({
 
 export type FormValues = yup.InferType<typeof bookingFormSchema>;
 export { bookingFormSchema };
+ 
+
+ // ! new schema 
+// import * as yup from 'yup'
+
+// export const bookingFormSchema = yup.object({
+//   service:  yup.string().required("Please select a service"),
+//   doctor:   yup.object({ id: yup.number().required(), name: yup.string().required() }).required("Please select a doctor"),
+//   datetime: yup.object({ doctorId: yup.number(), date: yup.string(), time: yup.string() }).required("Please select a time"),
+//   name:     yup.string().required("Full name is required"),
+//   email:    yup.string().email("Invalid email").required("Email is required"),
+//   phone:    yup.string().required("Phone number is required"),
+//   gender:   yup.string().required("Gender is required"),
+//   dob:      yup.string().required("Date of birth is required"),
+//   address:  yup.string().required("Address is required"),
+//   message:  yup.string().optional(),
+// });
+
+// export type FormValues = yup.InferType<typeof bookingFormSchema>;

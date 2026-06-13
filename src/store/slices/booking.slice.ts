@@ -3,13 +3,16 @@ import type {
   BookingPayload,
   BookingState,
 } from "../../type/interface/booking.interface";
-import { bookedServiceFns, fetchPatientDataFns } from "../../api/booking.function";
+import {
+  bookedServiceFns,
+  fetchPatientDataFns,
+} from "../../api/booking.function";
 import type { Patient } from "../../type/interface/patient.interface";
 
 const initialState: BookingState = {
   isLoading: false,
   isError: null,
-  patient: null,
+  patient: {} as Patient,
 };
 
 export const fetchPaitentData = createAsyncThunk(

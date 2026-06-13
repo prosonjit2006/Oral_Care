@@ -10,8 +10,13 @@ import { Typography } from "@mui/material";
 import { useAppDispatch } from "../../hooks/useredux";
 import { LogOutUser } from "../../store/slices/auth.slice";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function AdminNavbar() {
+  const loginData = Cookies.get("user");
+  const loginCradintial = loginData ? JSON.parse(loginData) : null;
+  console.log("login crendital", loginCradintial);
+
   // const {} = useAppSelector((state)=> state.auth) // this is for the name and email showing in the avater part
 
   const dispatch = useAppDispatch();
@@ -48,18 +53,29 @@ function AdminNavbar() {
               gap: "10px",
             }}
           >
-            <Tooltip title="Profile Details">
-              <IconButton
-                sx={{
-                  p: 0,
-                  color: "white",
-                  border: "1px solid #605B51",
-                  backgroundColor: "#213C51",
-                }}
-              >
-                <Avatar alt="Admin" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+            <Box sx={{ display: "flex", gap: 1}}>
+              <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'end', textTransform: 'capitalize' }}>
+                <Typography variant="body2">{loginCradintial.email}</Typography>
+                <Typography variant="caption">{loginCradintial.role}</Typography>
+              </Box>
+
+              {/* icon part */}
+              <Tooltip title="Profile Details">
+                <IconButton
+                  sx={{
+                    p: 0,
+                    color: "white",
+                    border: "1px solid #605B51",
+                    backgroundColor: "#213C51",
+                  }}
+                >
+                  <Avatar
+                    alt={loginCradintial.name}
+                    src={loginCradintial.image}
+                  />
+                </IconButton>
+              </Tooltip>
+            </Box>
             <Tooltip title="Logout" onClick={() => handleLogout()}>
               <LogOutIcon
                 // color="#6594B1"
