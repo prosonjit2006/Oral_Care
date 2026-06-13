@@ -3,12 +3,18 @@ import { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 // import { plans } from "../../services/json/data.json";
 import type { BillingType } from "../../type/type/global.type";
-import { checkout } from "../../lib/paymemts.steipe";
 import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
 import { fetchPlanList } from "../../store/slices/plan.slice";
+import { useNavigate } from "react-router-dom";
+// import Cookies from 'js-cookie'
 
 const SubscriptionPlans = () => {
   // const navigate = useNavigate();
+
+  // const checkAuth = Cookies.get('user')
+  // const isAuth = checkAuth ? JSON.parse(checkAuth) : null
+
+  const navigate = useNavigate()
 
   const dispatch = useAppDispatch();
   const { plans } = useAppSelector((state) => state.plan);
@@ -120,7 +126,9 @@ const SubscriptionPlans = () => {
                     setSelectedPlan(itm.$id);
                     setLoadingPlan(itm.$id);
                     try {
-                     await checkout(itm.$id, itm.planname, itm.price);
+                      // if(!isAuth) return
+                    //  await checkout(itm.$id, itm.planname, itm.price);
+                    navigate('/payment')
                     } catch (error) {
                       console.error("Checkout failed:", error);
                     } finally {

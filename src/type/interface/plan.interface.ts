@@ -16,6 +16,7 @@ export interface PlanState {
   isLoading: boolean;
   isError: string | null;
   plans: Plan[];
+  checkOutSelectedPlan: Plan | null;
 
   dialog: {
     open: boolean;

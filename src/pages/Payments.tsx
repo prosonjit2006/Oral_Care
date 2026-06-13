@@ -6,25 +6,68 @@ import {
   Chip,
   Container,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Typography,
+  Fab,
 } from "@mui/material";
-import { CheckCircle, CreditCard, Lock, Shield } from "lucide-react";
-
-const selectedPlan = {
-  title: "Quarterly Plan",
-  duration: "3 Months",
-  price: 99,
-  features: [
-    "Free Check-up Every 3 Months",
-    "20% Off On Medicines",
-    "10% Off On Treatments",
-    "Priority Appointment Booking",
-  ],
-};
+import { ArrowLeft, CheckCircle, CreditCard, Lock, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/useredux";
+import { useEffect } from "react";
+import { setCheckoutPlan } from "../store/slices/plan.slice";
 
 const Payments = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const { plans, checkOutSelectedPlan } = useAppSelector((state) => state.plan);
+
+  useEffect(() => {
+    if (!checkOutSelectedPlan) {
+      navigate("/payment");
+    }
+  }, [checkOutSelectedPlan, navigate]);
+
+  const handlePlanChange = (planId: string) => {
+    const selectedPlan = plans.find((item) => item.$id === planId);
+
+    if (selectedPlan) {
+      dispatch(setCheckoutPlan(selectedPlan));
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (!checkOutSelectedPlan) return;
+
+    // stripe checkout logic here
+
+    console.log("checkout", checkOutSelectedPlan);
+
+    /*
+     onClick={async (e) => {
+                    e.stopPropagation();
+                    setSelectedPlan(itm.$id);
+                    setLoadingPlan(itm.$id);
+                    try {
+                      // if(!isAuth) return
+                    //  await checkout(itm.$id, itm.planname, itm.price);
+                    navigate('/payment')
+                    } catch (error) {
+                      console.error("Checkout failed:", error);
+                    } finally {
+                      setLoadingPlan(null);
+                    }
+                  }}
+    */
+  };
+
+  if (!checkOutSelectedPlan) return; // ! not null just return
+
   return (
     <Box
       sx={{
@@ -34,6 +77,20 @@ const Payments = () => {
       }}
     >
       <Container maxWidth="lg">
+        {/* floating button - animate  */}
+        <Fab
+          color="primary"
+          onClick={() => navigate(-1)}
+          sx={{
+            position: "fixed",
+            top: 24,
+            left: 24,
+            zIndex: 1000,
+          }}
+        >
+          <ArrowLeft />
+        </Fab>
+
         {/* Header */}
         <Box sx={{ textAlign: "center", mb: 5 }}>
           <Chip label="Secure Checkout" color="primary" sx={{ mb: 2 }} />
@@ -46,78 +103,121 @@ const Payments = () => {
         </Box>
 
         <Grid container spacing={4}>
-          {/* Order Summary */}
+          {/* LEFT SIDE */}
           <Grid size={{ xs: 12, md: 5 }}>
-            <Card
-              elevation={0}
-              sx={{
-                borderRadius: 4,
-                border: "1px solid #e5e7eb",
-                height: "100%",
-              }}
-            >
-              <CardContent sx={{ p: 4 }}>
-                <Typography variant="h6">Order Summary</Typography>
+            <Stack spacing={3}>
+              {/* Plan Selection */}
+              <Card
+                elevation={0}
+                sx={{
+                  borderRadius: 4,
+                  border: "1px solid #e5e7eb",
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h6" sx={{ mb: 2 }}>
+                    Change Membership Plan
+                  </Typography>
 
-                <Divider sx={{ my: 2 }} />
+                  <FormControl fullWidth>
+                    <InputLabel>Select Plan</InputLabel>
 
-                <Stack spacing={2}>
-                  <Box>
-                    <Typography variant="body2" color="text.secondary">
-                      Selected Plan
-                    </Typography>
-
-                    <Typography variant="h5">{selectedPlan.title}</Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="body2" color="text.secondary">
-                      Duration
-                    </Typography>
-
-                    <Typography>{selectedPlan.duration}</Typography>
-                  </Box>
-
-                  <Divider />
-
-                  <Box>
-                    <Typography variant="body2" sx={{ mb: 1 }}>
-                      Benefits Included
-                    </Typography>
-
-                    <Stack spacing={1}>
-                      {selectedPlan.features.map((feature) => (
-                        <Box
-                          key={feature}
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                        >
-                          <CheckCircle className="" />
-
-                          <Typography variant="body2">{feature}</Typography>
-                        </Box>
+                    <Select
+                      value={checkOutSelectedPlan.$id}
+                      label="Select Plan"
+                      onChange={(e) => handlePlanChange(e.target.value)}
+                    >
+                      {plans.map((plan) => (
+                        <MenuItem key={plan.$id} value={plan.$id}>
+                          {plan.planname} • ₹{plan.price}
+                        </MenuItem>
                       ))}
-                    </Stack>
-                  </Box>
+                    </Select>
+                  </FormControl>
+                </CardContent>
+              </Card>
 
-                  <Divider />
+              {/* Order Summary */}
+              <Card
+                elevation={0}
+                sx={{
+                  borderRadius: 4,
+                  border: "1px solid #e5e7eb",
+                }}
+              >
+                <CardContent sx={{ p: 4 }}>
+                  <Typography variant="h6">Order Summary</Typography>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography variant="h6">Total</Typography>
+                  <Divider sx={{ my: 2 }} />
 
-                    <Typography variant="h4">${selectedPlan.price}</Typography>
-                  </Box>
-                </Stack>
-              </CardContent>
-            </Card>
+                  <Stack spacing={3}>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Selected Plan
+                      </Typography>
+
+                      <Typography variant="h5">
+                        {checkOutSelectedPlan.planname}
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Duration
+                      </Typography>
+
+                      <Typography>{checkOutSelectedPlan.planname}</Typography>
+                    </Box>
+
+                    <Divider />
+
+                    <Box>
+                      <Typography variant="body2" sx={{ mb: 2 }}>
+                        Benefits Included
+                      </Typography>
+
+                      <Stack spacing={1.5}>
+                        {checkOutSelectedPlan.feature
+                          .split(",")
+                          .map((feature) => (
+                            <Box
+                              key={feature}
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              <CheckCircle size={18} />
+
+                              <Typography variant="body2">{feature}</Typography>
+                            </Box>
+                          ))}
+                      </Stack>
+                    </Box>
+
+                    <Divider />
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="h6">Total</Typography>
+
+                      <Typography variant="h4" color="primary">
+                        ₹{checkOutSelectedPlan.price}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Stack>
           </Grid>
 
-          {/* Payment Section */}
+          {/* RIGHT SIDE */}
           <Grid size={{ xs: 12, md: 7 }}>
             <Card
               elevation={0}
@@ -128,14 +228,17 @@ const Payments = () => {
             >
               <CardContent sx={{ p: 4 }}>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mb: 3,
+                  }}
                 >
                   <CreditCard />
 
                   <Typography variant="h6">Payment Information</Typography>
                 </Box>
-
-                {/* Stripe Placeholder */}
 
                 <Box
                   sx={{
@@ -146,25 +249,25 @@ const Payments = () => {
                     bgcolor: "#fafafa",
                   }}
                 >
-                  <CreditCard className=" text-2xl text-[#94a3b8] mb: 2" />
+                  <CreditCard size={48} />
 
-                  <Typography variant="h6">Stripe Payment Element</Typography>
+                  <Typography variant="h6" sx={{ mt: 2 }}>
+                    Stripe Checkout
+                  </Typography>
 
-                  <Typography color="text.secondary">
-                    Replace this section with Stripe Elements after integration.
+                  <Typography color="text.secondary" sx={{ mt: 1 }}>
+                    You will be redirected securely to Stripe to complete your
+                    payment.
                   </Typography>
                 </Box>
 
                 <Stack
-                  sx={{
-                    display: "flex",
-                    flexDirection: {
-                      xs: "column",
-                      sm: "row",
-                    },
-                    mt: 4,
-                    gap: 2,
+                  direction={{
+                    xs: "column",
+                    sm: "row",
                   }}
+                  spacing={3}
+                  sx={{ mt: 4 }}
                 >
                   <Box
                     sx={{
@@ -173,8 +276,7 @@ const Payments = () => {
                       gap: 1,
                     }}
                   >
-                    <Shield />
-
+                    <Shield size={18} />
                     <Typography variant="body2">SSL Secured</Typography>
                   </Box>
 
@@ -185,8 +287,7 @@ const Payments = () => {
                       gap: 1,
                     }}
                   >
-                    <Lock />
-
+                    <Lock size={18} />
                     <Typography variant="body2">Stripe Protected</Typography>
                   </Box>
                 </Stack>
@@ -195,14 +296,15 @@ const Payments = () => {
                   fullWidth
                   size="large"
                   variant="contained"
+                  onClick={handleCheckout}
                   sx={{
                     mt: 4,
-                    py: 1.6,
+                    py: 1.8,
                     borderRadius: 3,
                     fontWeight: 700,
                   }}
                 >
-                  Pay ${selectedPlan.price}
+                  Pay ${checkOutSelectedPlan.price}
                 </Button>
               </CardContent>
             </Card>

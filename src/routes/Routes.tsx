@@ -32,6 +32,7 @@ import Doctor from "../pages/admin/Doctor";
 import Profile from "../pages/user/Profile";
 import UserProtected from "../components/UserProtected";
 import Payments from "../pages/Payments";
+import PaymentProtected from "../components/PaymentProtected";
 // import Signup from "../pages/Signup";
 // import Login from "../pages/Login";
 // import Booking from "../pages/user/Booking";
@@ -75,7 +76,13 @@ const Routes = createBrowserRouter([
   // },
   {
     path: "/payment",
-    element: <Payments />,
+    element: <PaymentProtected />,
+    children: [
+      {
+        index: true,
+        element: <Payments />,
+      },
+    ],
   },
   {
     path: "/booking",

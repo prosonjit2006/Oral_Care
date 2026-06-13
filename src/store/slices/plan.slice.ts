@@ -18,6 +18,7 @@ const initialState: PlanState = {
   isLoading: false,
   isError: null,
   plans: [],
+  checkOutSelectedPlan: null,
 
   dialog: {
     open: false,
@@ -136,6 +137,9 @@ const planSlice = createSlice({
     setselectedPlan: (state, action) => {
       state.dialog.selectedPlan = action.payload;
     },
+    setCheckoutPlan: (state, action)=> {
+      state.checkOutSelectedPlan = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -213,5 +217,6 @@ export const {
   setPlanDialogClose,
   setEditPlanDialogOpen,
   setselectedPlan,
+  setCheckoutPlan
 } = planSlice.actions;
 export default planSlice.reducer;
