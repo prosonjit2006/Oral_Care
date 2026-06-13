@@ -19,7 +19,7 @@ import { ArrowLeft, CheckCircle, CreditCard, Lock, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import { useEffect } from "react";
-import { setCheckoutPlan } from "../store/slices/plan.slice";
+import { fetchPlanList, setCheckoutPlan } from "../store/slices/plan.slice";
 import { checkout } from "../lib/paymemts.steipe";
 
 const Payments = () => {
@@ -29,19 +29,30 @@ const Payments = () => {
   const { plans, checkOutSelectedPlan } = useAppSelector((state) => state.plan);
 
   useEffect(() => {
+    dispatch(fetchPlanList());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (checkOutSelectedPlan) {
       localStorage.setItem(
         "selectedPlan",
         JSON.stringify(checkOutSelectedPlan),
       );
     }
-  }, []);
+  }, [checkOutSelectedPlan]);
 
   // const checkSelectedplan = localStorage.getItem("selectedPlan");
   const storedPlan = localStorage.getItem("selectedPlan");
 
   const selectedPlan =
     checkOutSelectedPlan || (storedPlan ? JSON.parse(storedPlan) : null);
+
+  // Restore Redux from localStorage after refresh
+  useEffect(() => {
+    if (!checkOutSelectedPlan && selectedPlan) {
+      dispatch(setCheckoutPlan(selectedPlan));
+    }
+  }, [checkOutSelectedPlan, selectedPlan, dispatch]);
 
   const handlePlanChange = (planId: string) => {
     const selectedPlan = plans.find((item) => item.$id === planId);
@@ -308,6 +319,6 @@ const Payments = () => {
       </Container>
     </Box>
   );
-};
+};;
 
 export default Payments;
