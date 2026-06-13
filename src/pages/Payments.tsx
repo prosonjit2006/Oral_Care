@@ -35,7 +35,7 @@ const Payments = () => {
         JSON.stringify(checkOutSelectedPlan),
       );
     }
-  }, [checkOutSelectedPlan, localStorage]);
+  }, []);
 
   // const checkSelectedplan = localStorage.getItem("selectedPlan");
   const storedPlan = localStorage.getItem("selectedPlan");
