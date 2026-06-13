@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useForm, useWatch } from "react-hook-form";
 import { aboutTeams, services } from "../../services/json/data.json";
 import "swiper/css";
@@ -10,7 +10,7 @@ import {
 } from "../../services/validation/booking.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { bookingFormInput } from "../../services/json/bookinfForm.input";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import BookingService from "../../Section/Booking/BookingService";
 import BookingDoctor from "../../Section/Booking/BookingDoctor";
 import BookingTime from "../../Section/Booking/BookingTime";
@@ -23,6 +23,7 @@ import {
   fetchPaitentData,
 } from "../../store/slices/booking.slice";
 import { Check } from "lucide-react";
+import { serviceCheckout } from "../../lib/service.stripe";
 
 const ServicesData = ["Service", "Doctor", "Time", "Details"];
 
@@ -81,7 +82,7 @@ const Booking = () => {
     phone: patient?.phone,
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log("Full Form Data:", data);
     dispatch(
       bookedService({
@@ -98,7 +99,8 @@ const Booking = () => {
         userId: user?.$id ?? null,
       }),
     );
-    toast.success("Appointment booked successfully");
+    // toast.success("Appointment booked successfully");
+   await serviceCheckout();
     reset();
   };
 
@@ -274,15 +276,18 @@ const Booking = () => {
         {/* Submit */}
         {activeStep >= 3 && (
           <Box
-            sx={{
-              mt: 3,
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-            }}
+          sx={{
+            mt: 3,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1,
+          }}
           >
+
+          <Typography variant="body1" sx={{textAlign: 'center', mb: 1}}>Pay Booking Amount To Confirm Appointment </Typography>
+
             <Box
               component="button"
               type="submit"
@@ -305,7 +310,7 @@ const Booking = () => {
                 "&:active": { transform: "scale(0.98)" },
               }}
             >
-              Confirm Appointment
+              Pay Amount
             </Box>
             <Box
               sx={{

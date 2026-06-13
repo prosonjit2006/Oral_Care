@@ -87,10 +87,10 @@ const AppointmentManage = () => {
     ? Object.keys(selectedDoctor.schedule)
     : [];
 
- const selectedSlots =
-   selectedDoctor?.schedule?.[
-     watch("appointmentDate") as keyof typeof selectedDoctor.schedule
-   ] || [];
+  const selectedSlots =
+    selectedDoctor?.schedule?.[
+      watch("appointmentDate") as keyof typeof selectedDoctor.schedule
+    ] || [];
 
   useEffect(() => {
     dispatch(fetchAppointmentList());

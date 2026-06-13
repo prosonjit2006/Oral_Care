@@ -24,5 +24,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/pages/admin/.tsx"]
+  "include": [
+    "src",
+    "src/pages/admin/.tsx",
+    "api/paymemts.steipe.ts",
+    "api/checkout.js",
+    "src/lib/service.stripe.ts"
+  ]
 }

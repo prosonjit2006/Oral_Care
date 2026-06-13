@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import { useEffect } from "react";
 import { fetchPlanList, setCheckoutPlan } from "../store/slices/plan.slice";
-import { checkout } from "../lib/paymemts.steipe";
+import { SubscriptionCheckout } from "../lib/subscription.stripe";
 
 const Payments = () => {
   const navigate = useNavigate();
@@ -69,7 +69,11 @@ const Payments = () => {
 
     // stripe checkout fns
 
-    await checkout(selectedPlan.$id, selectedPlan.planname, selectedPlan.price);
+    await SubscriptionCheckout(
+      selectedPlan.$id,
+      selectedPlan.planname,
+      selectedPlan.price,
+    );
 
     console.log("checkout", selectedPlan);
   };
@@ -319,6 +323,6 @@ const Payments = () => {
       </Container>
     </Box>
   );
-};;
+};
 
 export default Payments;

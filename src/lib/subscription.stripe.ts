@@ -1,4 +1,4 @@
-export const checkout = async (
+export const SubscriptionCheckout = async (
   planId: string,
   planName: string,
   planPrice: number,
