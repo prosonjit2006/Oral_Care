@@ -86,11 +86,17 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/booking",
-    element: (
-      <Suspense fallback={<Loader />}>
-        <Booking />
-      </Suspense>
-    ),
+    element: <PaymentProtected />,
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Booking />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: "/profile",

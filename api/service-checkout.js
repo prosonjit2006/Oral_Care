@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       ],
       metadata: { paymentType: "service-booking" },
       success_url: "https://oral-care-tau.vercel.app/service-payment-success",
-      cancel_url: "https://oral-care-tau.vercel.app",
+      cancel_url: "https://oral-care-tau.vercel.app/profile",
     });
 
     return res.status(200).json({ success: true, url: session.url });
