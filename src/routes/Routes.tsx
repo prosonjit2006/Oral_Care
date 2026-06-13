@@ -74,7 +74,7 @@ const Routes = createBrowserRouter([
   //   errorElement: <ErrorBoundary />,
   // },
   {
-    path: "/payments",
+    path: "/payment",
     element: <Payments />,
   },
   {
