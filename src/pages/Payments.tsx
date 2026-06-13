@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import { useEffect } from "react";
 import { setCheckoutPlan } from "../store/slices/plan.slice";
+import { checkout } from "../lib/paymemts.steipe";
 
 const Payments = () => {
   const navigate = useNavigate();
@@ -28,45 +29,37 @@ const Payments = () => {
   const { plans, checkOutSelectedPlan } = useAppSelector((state) => state.plan);
 
   useEffect(() => {
-    if (!checkOutSelectedPlan) {
-      navigate("/payment");
+    if (checkOutSelectedPlan) {
+      localStorage.setItem(
+        "selectedPlan",
+        JSON.stringify(checkOutSelectedPlan),
+      );
     }
-  }, [checkOutSelectedPlan, navigate]);
+  }, [checkOutSelectedPlan]);
+
+  const checkSelectedplan = localStorage.getItem("selectedPlan");
+  const selectedPlan = checkSelectedplan ? JSON.parse(checkSelectedplan) : null;
 
   const handlePlanChange = (planId: string) => {
     const selectedPlan = plans.find((item) => item.$id === planId);
 
     if (selectedPlan) {
+      localStorage.removeItem("selectedPlan");
       dispatch(setCheckoutPlan(selectedPlan));
     }
   };
 
   const handleCheckout = async () => {
-    if (!checkOutSelectedPlan) return;
+    if (!selectedPlan) return;
 
-    // stripe checkout logic here
+    // stripe checkout fns
 
-    console.log("checkout", checkOutSelectedPlan);
+    await checkout(selectedPlan.$id, selectedPlan.planname, selectedPlan.price);
 
-    /*
-     onClick={async (e) => {
-                    e.stopPropagation();
-                    setSelectedPlan(itm.$id);
-                    setLoadingPlan(itm.$id);
-                    try {
-                      // if(!isAuth) return
-                    //  await checkout(itm.$id, itm.planname, itm.price);
-                    navigate('/payment')
-                    } catch (error) {
-                      console.error("Checkout failed:", error);
-                    } finally {
-                      setLoadingPlan(null);
-                    }
-                  }}
-    */
+    console.log("checkout", selectedPlan);
   };
 
-  if (!checkOutSelectedPlan) return; // ! not null just return
+  if (!selectedPlan) return; // ! not null just return
 
   return (
     <Box
@@ -123,7 +116,7 @@ const Payments = () => {
                     <InputLabel>Select Plan</InputLabel>
 
                     <Select
-                      value={checkOutSelectedPlan.$id}
+                      value={selectedPlan.$id}
                       label="Select Plan"
                       onChange={(e) => handlePlanChange(e.target.value)}
                     >
@@ -157,7 +150,7 @@ const Payments = () => {
                       </Typography>
 
                       <Typography variant="h5">
-                        {checkOutSelectedPlan.planname}
+                        {selectedPlan.planname}
                       </Typography>
                     </Box>
 
@@ -166,7 +159,7 @@ const Payments = () => {
                         Duration
                       </Typography>
 
-                      <Typography>{checkOutSelectedPlan.planname}</Typography>
+                      <Typography>{selectedPlan.planname}</Typography>
                     </Box>
 
                     <Divider />
@@ -177,22 +170,20 @@ const Payments = () => {
                       </Typography>
 
                       <Stack spacing={1.5}>
-                        {checkOutSelectedPlan.feature
-                          .split(",")
-                          .map((feature) => (
-                            <Box
-                              key={feature}
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1,
-                              }}
-                            >
-                              <CheckCircle size={18} />
+                        {selectedPlan.feature.split(",").map((feature: any) => (
+                          <Box
+                            key={feature}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <CheckCircle size={18} />
 
-                              <Typography variant="body2">{feature}</Typography>
-                            </Box>
-                          ))}
+                            <Typography variant="body2">{feature}</Typography>
+                          </Box>
+                        ))}
                       </Stack>
                     </Box>
 
@@ -208,7 +199,7 @@ const Payments = () => {
                       <Typography variant="h6">Total</Typography>
 
                       <Typography variant="h4" color="primary">
-                        ₹{checkOutSelectedPlan.price}
+                        ${selectedPlan.price}
                       </Typography>
                     </Box>
                   </Stack>
@@ -296,7 +287,7 @@ const Payments = () => {
                   fullWidth
                   size="large"
                   variant="contained"
-                  onClick={handleCheckout}
+                  onClick={()=> handleCheckout}
                   sx={{
                     mt: 4,
                     py: 1.8,
@@ -304,7 +295,7 @@ const Payments = () => {
                     fontWeight: 700,
                   }}
                 >
-                  Pay ${checkOutSelectedPlan.price}
+                  Pay ${selectedPlan.price}
                 </Button>
               </CardContent>
             </Card>
