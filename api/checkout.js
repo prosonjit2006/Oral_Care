@@ -1,4 +1,4 @@
-const Stripe = require("stripe");
+import Stripe from "stripe";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    const { planId, planName, planPrice } = req.body;
+    const { planName, planPrice } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -21,8 +21,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: "http://localhost:5173/payment-success",
-      cancel_url: "http://localhost:5173/payment",
+      success_url: "https://oral-care-tau.vercel.app/payment-success",
+      cancel_url: "https://oral-care-tau.vercel.app/payment",
     });
 
     return res.status(200).json({ success: true, url: session.url });
