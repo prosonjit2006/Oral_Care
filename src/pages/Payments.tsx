@@ -35,7 +35,7 @@ const Payments = () => {
         JSON.stringify(checkOutSelectedPlan),
       );
     }
-  }, [checkOutSelectedPlan]);
+  }, [checkOutSelectedPlan, localStorage]);
 
   // const checkSelectedplan = localStorage.getItem("selectedPlan");
   const storedPlan = localStorage.getItem("selectedPlan");
@@ -77,7 +77,7 @@ const Payments = () => {
         {/* floating button - animate  */}
         <Fab
           color="primary"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/subscription")}
           sx={{
             position: "fixed",
             top: 24,
@@ -126,7 +126,7 @@ const Payments = () => {
                     >
                       {plans.map((plan) => (
                         <MenuItem key={plan.$id} value={plan.$id}>
-                          {plan.planname} • ₹{plan.price}
+                          {plan.planname} • ${plan.price}
                         </MenuItem>
                       ))}
                     </Select>
