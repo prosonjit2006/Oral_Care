@@ -46,6 +46,7 @@ import {
   doctors,
   
 } from "../../services/json/appointment.json";
+import { fetchServiceList } from "../../store/slices/service.slice";
 
 const AppointmentManage = () => {
   const { isLoading, isError, Appointments, dialog } = useAppSelector(
@@ -97,6 +98,7 @@ const AppointmentManage = () => {
 
   useEffect(() => {
     dispatch(fetchAppointmentList());
+    dispatch(fetchServiceList())
   }, [dispatch]);
 
   useEffect(() => {
