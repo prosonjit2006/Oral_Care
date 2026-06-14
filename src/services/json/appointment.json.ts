@@ -1,132 +1,48 @@
-// ! all the static json data 
+// * Temporary dummy schedule data.
+// * Keyed by doctor NAME so it works with the real doctors[] from Redux
+// * (which only has $id, name, specialization, etc. — no schedule yet).
+// * Replace this with real schedule data from Appwrite later.
 
-// export const services = [
-//   {
-//     id: 1,
-//     title: "Kids Dental Care",
-//   },
-//   {
-//     id: 2,
-//     title: "Root Canal & Surgery",
-//   },
-//   {
-//     id: 3,
-//     title: "Teeth Whitening",
-//   },
-//   {
-//     id: 4,
-//     title: "General Checkups",
-//   },
-// ];
-
-export const doctors = [
-  {
-    id: "1",
-    name: "Dr. John Smith",
-    service: "Cardiology",
-
-    schedule: {
-      "2026-06-15": ["09:00 AM", "10:00 AM", "11:00 AM"],
-
-      "2026-06-16": ["02:00 PM", "03:00 PM"],
-
-      "2026-06-18": ["09:00 AM", "04:00 PM"],
-    },
+export const dummySchedule: Record<string, Record<string, string[]>> = {
+  "Dr. John Smith": {
+    "2026-06-15": ["09:00 AM", "10:00 AM", "11:00 AM"],
+    "2026-06-16": ["02:00 PM", "03:00 PM"],
+    "2026-06-18": ["09:00 AM", "04:00 PM"],
   },
-
-  {
-    id: "2",
-    name: "Dr. Sarah Wilson",
-    service: "Cardiology",
-
-    schedule: {
-      "2026-06-17": ["10:00 AM", "11:00 AM"],
-
-      "2026-06-18": ["01:00 PM", "02:00 PM", "03:00 PM"],
-    },
+  "Dr. Sarah Wilson": {
+    "2026-06-17": ["10:00 AM", "11:00 AM"],
+    "2026-06-18": ["01:00 PM", "02:00 PM", "03:00 PM"],
   },
-
-  {
-    id: "3",
-    name: "Dr. Michael Brown",
-    service: "Neurology",
-
-    schedule: {
-      "2026-06-15": ["09:00 AM", "10:00 AM"],
-
-      "2026-06-19": ["01:00 PM", "02:00 PM"],
-    },
+  "Dr. Michael Brown": {
+    "2026-06-15": ["09:00 AM", "10:00 AM"],
+    "2026-06-19": ["01:00 PM", "02:00 PM"],
   },
-
-  {
-    id: "4",
-    name: "Dr. David Miller",
-    service: "Orthopedics",
-
-    schedule: {
-      "2026-06-20": ["09:00 AM", "10:00 AM", "11:00 AM"],
-    },
+  "Dr. David Miller": {
+    "2026-06-20": ["09:00 AM", "10:00 AM", "11:00 AM"],
   },
-
-  {
-    id: "5",
-    name: "Dr. Emily Davis",
-    service: "Pediatrics",
-
-    schedule: {
-      "2026-06-16": ["09:00 AM", "10:00 AM"],
-
-      "2026-06-17": ["03:00 PM", "04:00 PM"],
-    },
+  "Dr. Emily Davis": {
+    "2026-06-16": ["09:00 AM", "10:00 AM"],
+    "2026-06-17": ["03:00 PM", "04:00 PM"],
   },
-];
+};
 
+// * Fallback schedule used for any doctor not present in dummySchedule above
+export const fallbackSchedule: Record<string, string[]> = {
+  "2026-06-15": ["09:00 AM", "10:00 AM", "11:00 AM"],
+  "2026-06-16": ["02:00 PM", "03:00 PM"],
+  "2026-06-18": ["09:00 AM", "04:00 PM"],
+};
 
-
+export const getDoctorSchedule = (
+  doctorName?: string,
+): Record<string, string[]> => {
+  if (!doctorName) return {};
+  return dummySchedule[doctorName] || fallbackSchedule;
+};
 
 // ! all the appoinments input fields
 
 export const appointmentAddInputField = [
-//   {
-//     name: "serviceTitle",
-//     label: "Service Title",
-//     placeholder: "Enter service title",
-//     type: "text",
-//     required: true,
-//     rows: 1,
-//   },
-//   {
-//     name: "doctorId",
-//     label: "Doctor ID",
-//     placeholder: "Enter doctor ID",
-//     type: "text",
-//     required: true,
-//     rows: 1,
-//   },
-//   {
-//     name: "doctorName",
-//     label: "Doctor Name",
-//     placeholder: "Enter doctor name",
-//     type: "text",
-//     required: true,
-//     rows: 1,
-//   },
-//   {
-//     name: "appointmentDate",
-//     label: "Appointment Date",
-//     placeholder: "Select appointment date",
-//     type: "date",
-//     required: true,
-//     rows: 1,
-//   },
-//   {
-//     name: "appointmentTime",
-//     label: "Appointment Time",
-//     placeholder: "Select appointment time",
-//     type: "time",
-//     required: true,
-//     rows: 1,
-//   },
   {
     name: "patientName",
     label: "Patient Name",
@@ -194,5 +110,4 @@ export const appointmentEditInputField = [
     required: false,
     rows: 3,
   },
-
 ];

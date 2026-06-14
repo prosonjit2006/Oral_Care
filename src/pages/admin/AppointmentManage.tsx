@@ -9,7 +9,6 @@ import {
   DialogTitle,
   FormControlLabel,
   IconButton,
-  MenuItem,
   Switch,
   Table,
   TableBody,
@@ -17,11 +16,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-// import DynamicInput from "../../components/DynamicInput";
 import { Pencil, Trash2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useredux";
 import { useEffect } from "react";
@@ -41,19 +38,18 @@ import {
   setEditAppointmentDialogOpen,
 } from "../../store/slices/appointment.slice";
 import { appointmentSchema } from "../../services/validation/appointment.validation";
-import {
-  appointmentAddInputField,
-  doctors,
-  
-} from "../../services/json/appointment.json";
+import { appointmentAddInputField } from "../../services/json/appointment.json";
 import { fetchServiceList } from "../../store/slices/service.slice";
+import { fetchDoctorList } from "../../store/slices/doctor.slice";
+import ServiceDoctorDateTimeFields from "../../Section/admin/Servicedoctordatetimefields ";
 
 const AppointmentManage = () => {
   const { isLoading, isError, Appointments, dialog } = useAppSelector(
     (state) => state.appointment,
   );
 
-  const {services} = useAppSelector((state)=> state.service)
+  const { services } = useAppSelector((state) => state.service);
+  const { doctors } = useAppSelector((state) => state.doctor);
 
   const dispatch = useAppDispatch();
 
@@ -81,24 +77,14 @@ const AppointmentManage = () => {
     },
   });
 
-  const filteredDoctors = doctors.filter(
-    (doctor) => doctor.service === watch("serviceTitle"),
-  );
   const selectedDoctor = doctors.find(
     (doctor) => doctor.name === watch("doctorName"),
   );
-  const availableDates = selectedDoctor
-    ? Object.keys(selectedDoctor.schedule)
-    : [];
-
-  const selectedSlots =
-    selectedDoctor?.schedule?.[
-      watch("appointmentDate") as keyof typeof selectedDoctor.schedule
-    ] || [];
 
   useEffect(() => {
     dispatch(fetchAppointmentList());
-    dispatch(fetchServiceList())
+    dispatch(fetchServiceList());
+    dispatch(fetchDoctorList());
   }, [dispatch]);
 
   useEffect(() => {
@@ -135,26 +121,21 @@ const AppointmentManage = () => {
 
   // * onsubmit
   const onSubmit = (data: AppointmentPayload) => {
-    // console.log('data on submit ', data)
     if (dialog.selectedAppointment) {
-      // console.log('updating data')
       dispatch(
         editAppointment({
           id: data.id,
           data: data,
         }),
       ).unwrap();
-      // dispatch(fetchAppointmentList());
-      // dispatch(setAppointmentDialogClose());
       toast.success("Appointment Details Edited Successfully");
     } else {
       dispatch(
         addNewAppointment({
           ...data,
-          doctorId: selectedDoctor?.id || "",
+          doctorId: selectedDoctor?.$id || "",
         }),
       ).unwrap();
-      // dispatch(fetchAppointmentList());
       toast.success("New Appointment Added Successfully");
     }
     dispatch(setAppointmentDialogClose());
@@ -186,7 +167,7 @@ const AppointmentManage = () => {
         </Button>
       </Box>
 
-      {/* dialog*/}
+      {/* dialog */}
       <Dialog
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -204,270 +185,44 @@ const AppointmentManage = () => {
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
+          {/* * Shared cascading Service -> Doctor -> Date -> Time fields,
+              used for both Add and Edit flows */}
+          <ServiceDoctorDateTimeFields
+            register={register}
+            watch={watch}
+            setValue={setValue}
+            errors={errors}
+            services={services}
+            doctors={doctors}
+          />
+
           {dialog.selectedAppointment ? (
-            <>
-              {/* Service */}
-              <TextField
-                {...register("serviceTitle")}
-                select
-                label="Service"
-                fullWidth
-                value={watch("serviceTitle")}
-                onChange={(e) => {
-                  setValue("serviceTitle", e.target.value, {
-                    shouldValidate: true,
-                  });
-                  setValue("doctorName", "");
-                  setValue("doctorId", "");
-                  setValue("appointmentDate", "");
-                  setValue("appointmentTime", "");
-                }}
-                error={!!errors.serviceTitle}
-                helperText={errors.serviceTitle?.message}
-              >
-                {services.map((service) => (
-                  <MenuItem key={service.$id} value={service.servicename}>
-                    {service.servicename}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              {/* Doctor */}
-              <TextField
-                {...register("doctorName")}
-                select
-                label="Doctor"
-                fullWidth
-                value={watch("doctorName")}
-                onChange={(e) => {
-                  const name = e.target.value;
-                  const doc = doctors.find((d) => d.name === name);
-                  setValue("doctorName", name, { shouldValidate: true });
-                  setValue("doctorId", doc?.id || "");
-                  setValue("appointmentDate", "");
-                  setValue("appointmentTime", "");
-                }}
-                error={!!errors.doctorName}
-                helperText={errors.doctorName?.message}
-                disabled={!watch("serviceTitle")}
-              >
-                {filteredDoctors.length > 0 ? (
-                  filteredDoctors.map((doctor) => (
-                    <MenuItem key={doctor.id} value={doctor.name}>
-                      {doctor.name}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled value="">
-                    Select a service first
-                  </MenuItem>
-                )}
-              </TextField>
-
-              {/* Date */}
-              <TextField
-                {...register("appointmentDate")}
-                select
-                label="Appointment Date"
-                fullWidth
-                value={watch("appointmentDate")}
-                onChange={(e) => {
-                  setValue("appointmentDate", e.target.value, {
-                    shouldValidate: true,
-                  });
-                  setValue("appointmentTime", "");
-                }}
-                error={!!errors.appointmentDate}
-                helperText={errors.appointmentDate?.message}
-                disabled={!watch("doctorName")}
-              >
-                {availableDates.length > 0 ? (
-                  availableDates.map((date) => (
-                    <MenuItem key={date} value={date}>
-                      {date}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled value="">
-                    Select a doctor first
-                  </MenuItem>
-                )}
-              </TextField>
-
-              {/* Time */}
-              <TextField
-                {...register("appointmentTime")}
-                select
-                label="Appointment Time"
-                fullWidth
-                value={watch("appointmentTime")}
-                onChange={(e) =>
-                  setValue("appointmentTime", e.target.value, {
-                    shouldValidate: true,
-                  })
-                }
-                error={!!errors.appointmentTime}
-                helperText={errors.appointmentTime?.message}
-                disabled={!watch("appointmentDate")}
-              >
-                {selectedSlots.length > 0 ? (
-                  selectedSlots.map((time: string) => (
-                    <MenuItem key={time} value={time}>
-                      {time}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled value="">
-                    Select a date first
-                  </MenuItem>
-                )}
-              </TextField>
-
-              {/* Message only — no status */}
+            // * Edit mode — only Message is shown beyond the cascading fields
+            <DynamicInput
+              name="message"
+              label="Message"
+              placeholder="Update message or notes"
+              type="text"
+              rows={3}
+              required={false}
+              register={register}
+              errors={errors}
+            />
+          ) : (
+            // * Add mode — full set of patient detail fields
+            appointmentAddInputField.map((field) => (
               <DynamicInput
-                name="message"
-                label="Message"
-                placeholder="Update message or notes"
-                type="text"
-                rows={3}
-                required={false}
+                key={field.name}
+                name={field.name as Path<AppointmentPayload>}
+                label={field.label}
+                placeholder={field.placeholder}
+                type={field.type}
+                rows={field.rows}
+                required={field.required}
                 register={register}
                 errors={errors}
               />
-            </>
-          ) : (
-            // ! Add appointment part starts from here
-            <>
-              {/* Service */}
-              <TextField
-                {...register("serviceTitle")}
-                select
-                label="Service"
-                fullWidth
-                value={watch("serviceTitle")}
-                onChange={(e) => {
-                  setValue("serviceTitle", e.target.value, {
-                    shouldValidate: true,
-                  });
-                  setValue("doctorName", "");
-                  setValue("appointmentDate", "");
-                  setValue("appointmentTime", "");
-                }}
-                error={!!errors.serviceTitle}
-                helperText={errors.serviceTitle?.message}
-              >
-                {services.map((service) => (
-                  <MenuItem key={service.$id} value={service.servicename}>
-                    {service.servicename}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              {/* Doctor */}
-              <TextField
-                {...register("doctorName")}
-                select
-                label="Doctor"
-                fullWidth
-                value={watch("doctorName")}
-                onChange={(e) => {
-                  const name = e.target.value;
-                  const doc = doctors.find((d) => d.name === name);
-                  setValue("doctorName", name, { shouldValidate: true });
-                  setValue("doctorId", doc?.id || "");
-                  setValue("appointmentDate", "");
-                  setValue("appointmentTime", "");
-                }}
-                error={!!errors.doctorName}
-                helperText={errors.doctorName?.message}
-                disabled={!watch("serviceTitle")}
-              >
-                {filteredDoctors.length > 0 ? (
-                  filteredDoctors.map((doctor) => (
-                    <MenuItem key={doctor.id} value={doctor.name}>
-                      {doctor.name}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled value="">
-                    Select a service first
-                  </MenuItem>
-                )}
-              </TextField>
-
-              {/* Date */}
-              <TextField
-                {...register("appointmentDate")}
-                select
-                label="Appointment Date"
-                fullWidth
-                value={watch("appointmentDate")}
-                onChange={(e) => {
-                  setValue("appointmentDate", e.target.value, {
-                    shouldValidate: true,
-                  });
-                  setValue("appointmentTime", "");
-                }}
-                error={!!errors.appointmentDate}
-                helperText={errors.appointmentDate?.message}
-                disabled={!watch("doctorName")}
-              >
-                {availableDates.length > 0 ? (
-                  availableDates.map((date) => (
-                    <MenuItem key={date} value={date}>
-                      {date}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled value="">
-                    Select a doctor first
-                  </MenuItem>
-                )}
-              </TextField>
-
-              {/* Time */}
-              <TextField
-                {...register("appointmentTime")}
-                select
-                label="Appointment Time"
-                fullWidth
-                value={watch("appointmentTime")}
-                onChange={(e) =>
-                  setValue("appointmentTime", e.target.value, {
-                    shouldValidate: true,
-                  })
-                }
-                error={!!errors.appointmentTime}
-                helperText={errors.appointmentTime?.message}
-                disabled={!watch("appointmentDate")}
-              >
-                {selectedSlots.length > 0 ? (
-                  selectedSlots.map((time: string) => (
-                    <MenuItem key={time} value={time}>
-                      {time}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem disabled value="">
-                    Select a date first
-                  </MenuItem>
-                )}
-              </TextField>
-
-              {appointmentAddInputField.map((field) => (
-                <DynamicInput
-                  key={field.name}
-                  name={field.name as Path<AppointmentPayload>}
-                  label={field.label}
-                  placeholder={field.placeholder}
-                  type={field.type}
-                  rows={field.rows}
-                  required={field.required}
-                  register={register}
-                  errors={errors}
-                />
-              ))}
-            </>
+            ))
           )}
         </DialogContent>
 
@@ -486,11 +241,9 @@ const AppointmentManage = () => {
         <CircularProgress size={25} />
       ) : (
         <>
-          {/* is error part  */}
           {isError ? (
             <Typography>{isError}</Typography>
           ) : (
-            // actual table part
             <TableContainer>
               <Table
                 sx={{ minWidth: 650, color: "#fff" }}
@@ -515,33 +268,25 @@ const AppointmentManage = () => {
                       key={row.$id}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
-                        // pointerEvents: row.status ? "auto" : "none",
-                        // opacity: row.status ? 1 : 0.5,
                       }}
                     >
                       <TableCell>{row.serviceTitle}</TableCell>
-
                       <TableCell>{row.doctorName}</TableCell>
-
                       <TableCell>{row.appointmentDate}</TableCell>
-
                       <TableCell>{row.appointmentTime}</TableCell>
-
                       <TableCell>{row.patientName}</TableCell>
-
                       <TableCell>{row.patientEmail}</TableCell>
-
                       <TableCell>{row.patientPhone}</TableCell>
 
                       <TableCell
                         align="center"
                         sx={{
                           pointerEvents: "visible",
-                          opacity: row.status ? 1 : 1,
+                          opacity: 1,
                           color: "white",
                         }}
                       >
-                        <Tooltip title={row.status ? "Rejected" : "Apptoved"}>
+                        <Tooltip title={row.status ? "Rejected" : "Approved"}>
                           <FormControlLabel
                             label={row.status ? "Approved" : "Rejected"}
                             control={
@@ -562,12 +307,7 @@ const AppointmentManage = () => {
                       </TableCell>
 
                       <TableCell align="center" sx={{ marginLeft: "10px " }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 1,
-                          }}
-                        >
+                        <Box sx={{ display: "flex", gap: 1 }}>
                           <Tooltip title="Edit">
                             <IconButton
                               onClick={() =>
