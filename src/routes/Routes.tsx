@@ -1,86 +1,56 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
+// * User pages
 const Home = lazy(() => import("../pages/user/Home"));
 const Service = lazy(() => import("../pages/user/Service"));
 const Team = lazy(() => import("../pages/user/Team"));
 const Subscription = lazy(() => import("../pages/user/Subscription"));
 const ContactUs = lazy(() => import("../pages/user/ContactUs"));
-const NotFound = lazy(() => import("../pages/NotFound"));
-
+const Profile = lazy(() => import("../pages/user/Profile"));
 const Booking = lazy(() => import("../pages/user/Booking"));
 
+// * Misc pages
+const NotFound = lazy(() => import("../pages/NotFound"));
+const Payments = lazy(() => import("../pages/Payments"));
+
+// * Admin pages
+const Dashboard = lazy(() => import("../pages/admin/Dashboard"));
 const PlanManage = lazy(() => import("../pages/admin/PlanManage"));
 const Patient = lazy(() => import("../pages/admin/Patient"));
 const ServicesManage = lazy(() => import("../pages/admin/ServicesManage"));
+const AppointmentManage = lazy(
+  () => import("../pages/admin/AppointmentManage"),
+);
+const UsersManage = lazy(() => import("../pages/admin/UsersManage"));
+const SystemSettings = lazy(() => import("../pages/admin/SystemSettings"));
+const Feedback = lazy(() => import("../pages/admin/Feedback"));
+const Query = lazy(() => import("../pages/admin/Query"));
+const Doctor = lazy(() => import("../pages/admin/Doctor"));
 
+// * Layouts / wrappers / guards (kept eager — small and needed immediately)
 import ErrorBoundary from "../pages/ErrorBoundary";
 import UserWrapper from "../layout/user/UserWrapper";
 import AdminWrapper from "../layout/admin/AdminWrapper";
-import Dashboard from "../pages/admin/Dashboard";
-// import ServicesManage from "../pages/admin/ServicesManage";
-import AppointmentManage from "../pages/admin/AppointmentManage";
-// import PlanManage from "../pages/admin/PlanManage";
-import UsersManage from "../pages/admin/UsersManage";
-import SystemSettings from "../pages/admin/SystemSettings";
 import ScrollToTop from "../components/ScrollToTop";
 import AdminProtected from "../components/AdminProtected";
-// import Patient from "../pages/admin/Patient";
-import Feedback from "../pages/admin/Feedback";
-import Query from "../pages/admin/Query";
-import Doctor from "../pages/admin/Doctor";
-import Profile from "../pages/user/Profile";
 import UserProtected from "../components/UserProtected";
-import Payments from "../pages/Payments";
 import PaymentProtected from "../components/PaymentProtected";
-// import Signup from "../pages/Signup";
-// import Login from "../pages/Login";
-// import Booking from "../pages/user/Booking";
-// import AuthRedirectGuards from "../components/AuthRedirectGuards";
+import Loading from "../pages/Loading";
 
-// fallback UI
-const Loader = () => (
-  <div className="h-screen flex items-center justify-center text-red-600">
-    Loading...
-  </div>
+// * Small helper so every lazy route gets the same fallback consistently
+const withLoading = (element: React.ReactNode) => (
+  <Suspense fallback={<Loading />}>{element}</Suspense>
 );
 
 const Routes = createBrowserRouter([
-  // {
-  //   path: "/signup",
-  //   element: <AuthRedirectGuards />,
-  //   children: [
-  //     {
-  //       index: true,
-  //       element: <Signup />,
-  //     },
-  //   ],
-  //   errorElement: <ErrorBoundary />,
-  // },
-  // {
-  //   path: "/login",
-  //   element: <AuthRedirectGuards />,
-  //   children: [
-  //     {
-  //       index: true,
-  //       element: <Login />,
-  //     },
-  //   ],
-  //   errorElement: <ErrorBoundary />,
-  // },
-
-  // {
-  //   path: "/booking",
-  //   element: <Booking />,
-  //   errorElement: <ErrorBoundary />,
-  // },
   {
     path: "/payment",
     element: <PaymentProtected />,
     children: [
       {
         index: true,
-        element: <Payments />,
+        element: withLoading(<Payments />),
       },
     ],
   },
@@ -90,11 +60,7 @@ const Routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Booking />
-          </Suspense>
-        ),
+        element: withLoading(<Booking />),
       },
     ],
   },
@@ -105,7 +71,7 @@ const Routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Profile />,
+        element: withLoading(<Profile />),
       },
     ],
   },
@@ -119,61 +85,44 @@ const Routes = createBrowserRouter([
         element: <AdminWrapper />,
         children: [
           {
-            // index: true,
             path: "dashboard",
-            element: <Dashboard />,
+            element: withLoading(<Dashboard />),
           },
           {
             path: "patient",
-            element: (
-              <Suspense fallback={<Loader />}>
-                <Patient />
-              </Suspense>
-            ),
+            element: withLoading(<Patient />),
           },
           {
             path: "servicesmanage",
-            element: (
-              <Suspense fallback={<Loader />}>
-                <ServicesManage />
-              </Suspense>
-            ),
+            element: withLoading(<ServicesManage />),
           },
           {
             path: "appointmentmanage",
-            element: <AppointmentManage />,
+            element: withLoading(<AppointmentManage />),
           },
           {
             path: "planmanage",
-            element: (
-              <Suspense fallback={<Loader />}>
-                <PlanManage />
-              </Suspense>
-            ),
+            element: withLoading(<PlanManage />),
           },
-          // {
-          //   path: "planmanage",
-          //   element: <PlanManage />,
-          // },
           {
             path: "doctor",
-            element: <Doctor />,
+            element: withLoading(<Doctor />),
           },
           {
             path: "usersmanage",
-            element: <UsersManage />,
+            element: withLoading(<UsersManage />),
           },
           {
             path: "feedback",
-            element: <Feedback />,
+            element: withLoading(<Feedback />),
           },
           {
             path: "query",
-            element: <Query />,
+            element: withLoading(<Query />),
           },
           {
             path: "systemsettings",
-            element: <SystemSettings />,
+            element: withLoading(<SystemSettings />),
           },
         ],
       },
@@ -191,53 +140,29 @@ const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Home />
-          </Suspense>
-        ),
+        element: withLoading(<Home />),
       },
       {
         path: "/services",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Service />
-          </Suspense>
-        ),
+        element: withLoading(<Service />),
       },
       {
         path: "/team",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Team />
-          </Suspense>
-        ),
+        element: withLoading(<Team />),
       },
       {
         path: "/subscription",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Subscription />
-          </Suspense>
-        ),
+        element: withLoading(<Subscription />),
       },
       {
         path: "/contactus",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <ContactUs />
-          </Suspense>
-        ),
+        element: withLoading(<ContactUs />),
       },
     ],
   },
   {
     path: "*",
-    element: (
-      <Suspense fallback={<Loader />}>
-        <NotFound />
-      </Suspense>
-    ),
+    element: withLoading(<NotFound />),
   },
 ]);
 
