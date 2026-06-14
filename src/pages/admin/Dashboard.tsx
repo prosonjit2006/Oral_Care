@@ -11,7 +11,7 @@ const Dashboard = () => {
   }, [dispatch]);
 
   return (
-    <div className="min-h-screen bg-black p-6 lg:p-8">
+    <div className="h-auto ">
       {/* Main grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart card — top-left, spans two columns */}

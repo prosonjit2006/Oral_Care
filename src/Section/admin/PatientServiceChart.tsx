@@ -171,6 +171,8 @@ const options: ChartOptions<"bar"> = {
 
 const PatientServiceChart = () => {
   const { Appointments } = useSelector((state: RootState) => state.appointment);
+  console.log('appointments', Appointments);
+  
 
   if (!Appointments || Appointments.length === 0) {
     return (
