@@ -1,23 +1,23 @@
 // ! all the static json data 
 
-export const services = [
-  {
-    id: 1,
-    title: "Cardiology",
-  },
-  {
-    id: 2,
-    title: "Neurology",
-  },
-  {
-    id: 3,
-    title: "Orthopedics",
-  },
-  {
-    id: 4,
-    title: "Pediatrics",
-  },
-];
+// export const services = [
+//   {
+//     id: 1,
+//     title: "Kids Dental Care",
+//   },
+//   {
+//     id: 2,
+//     title: "Root Canal & Surgery",
+//   },
+//   {
+//     id: 3,
+//     title: "Teeth Whitening",
+//   },
+//   {
+//     id: 4,
+//     title: "General Checkups",
+//   },
+// ];
 
 export const doctors = [
   {

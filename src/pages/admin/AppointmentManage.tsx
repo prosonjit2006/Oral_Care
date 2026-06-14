@@ -44,13 +44,16 @@ import { appointmentSchema } from "../../services/validation/appointment.validat
 import {
   appointmentAddInputField,
   doctors,
-  services,
+  
 } from "../../services/json/appointment.json";
 
 const AppointmentManage = () => {
   const { isLoading, isError, Appointments, dialog } = useAppSelector(
     (state) => state.appointment,
   );
+
+  const {services} = useAppSelector((state)=> state.service)
+
   const dispatch = useAppDispatch();
 
   const {
@@ -352,8 +355,8 @@ const AppointmentManage = () => {
                 helperText={errors.serviceTitle?.message}
               >
                 {services.map((service) => (
-                  <MenuItem key={service.id} value={service.title}>
-                    {service.title}
+                  <MenuItem key={service.$id} value={service.servicename}>
+                    {service.servicename}
                   </MenuItem>
                 ))}
               </TextField>
