@@ -19,6 +19,7 @@ interface Doctor {
   name: string;
   specialization?: string;
   service?: string;
+  status?: boolean;
 }
 
 interface ServiceDoctorDateTimeFieldsProps {
@@ -44,10 +45,12 @@ const ServiceDoctorDateTimeFields = ({
   const doctorName = watch("doctorName");
   const appointmentDate = watch("appointmentDate");
 
-  // * doctors whose specialization/service matches the selected service
-  const filteredDoctors = doctors.filter(
-    (doctor) => (doctor.specialization || doctor.service) === serviceTitle,
-  );
+  // * NOTE: doctor.specialization (e.g. "Endodontics") does not match
+  // * service.servicename (e.g. "General Checkups") in the current data,
+  // * so filtering doctors by service was always returning an empty list.
+  // * Until services/specializations share a common field, show all
+  // * active doctors (status === true) once a service is picked.
+  const filteredDoctors = doctors.filter((doctor) => doctor.status !== false);
 
   const selectedDoctor = doctors.find((doctor) => doctor.name === doctorName);
 

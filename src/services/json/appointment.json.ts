@@ -1,26 +1,21 @@
-// * Temporary dummy schedule data.
-// * Keyed by doctor NAME so it works with the real doctors[] from Redux
-// * (which only has $id, name, specialization, etc. — no schedule yet).
-// * Replace this with real schedule data from Appwrite later.
-
 export const dummySchedule: Record<string, Record<string, string[]>> = {
-  "Dr. John Smith": {
+  "Jack Jones": {
     "2026-06-15": ["09:00 AM", "10:00 AM", "11:00 AM"],
     "2026-06-16": ["02:00 PM", "03:00 PM"],
     "2026-06-18": ["09:00 AM", "04:00 PM"],
   },
-  "Dr. Sarah Wilson": {
+  "William Jones": {
     "2026-06-17": ["10:00 AM", "11:00 AM"],
     "2026-06-18": ["01:00 PM", "02:00 PM", "03:00 PM"],
   },
-  "Dr. Michael Brown": {
+  "Cameron Wills": {
     "2026-06-15": ["09:00 AM", "10:00 AM"],
     "2026-06-19": ["01:00 PM", "02:00 PM"],
   },
-  "Dr. David Miller": {
+  "Anatoli Black": {
     "2026-06-20": ["09:00 AM", "10:00 AM", "11:00 AM"],
   },
-  "Dr. Emily Davis": {
+  "Merry Jones": {
     "2026-06-16": ["09:00 AM", "10:00 AM"],
     "2026-06-17": ["03:00 PM", "04:00 PM"],
   },
