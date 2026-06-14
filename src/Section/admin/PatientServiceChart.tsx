@@ -21,9 +21,11 @@ ChartJS.register(
   Legend,
 );
 
-// Shape of a single document in the `appointment` Appwrite collection.
+// Shape of a single document in the `appointments` Appwrite collection.
 interface Appointment {
   $id: string;
+  $createdAt: string;
+  $updatedAt: string;
   serviceTitle: string;
   doctorName: string;
   appointmentDate: string;
@@ -35,8 +37,6 @@ interface Appointment {
   status: boolean | string;
   userId: string;
   doctorId: number;
-  $createdAt: string;
-  $updatedAt: string;
 }
 
 interface RootState {
@@ -45,55 +45,55 @@ interface RootState {
   };
 }
 
-// Brighter pairing for the dark card: teal for "confirmed", gold for
-// "pending" — the gold echoes the "Admin Console" accent in the sidebar.
-const STATUS_COLORS = {
-  confirmed: "#2DD4BF", // teal-400
-  pending: "#FBBF24", // amber-400
-};
+const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const isConfirmed = (status: boolean | string): boolean =>
-  status === true || status === "true";
+// One color per service, cycling if there are more services than colors.
+// All chosen to pop against the dark dashboard card.
+const SERVICE_COLOR_PALETTE = [
+  "#2DD4BF", // teal-400
+  "#FBBF24", // amber-400
+  "#F472B6", // pink-400
+  "#818CF8", // indigo-400
+  "#34D399", // emerald-400
+  "#FB923C", // orange-400
+];
 
+// JS's Date.getDay() is Sunday-first (0-6). Convert to Monday-first (0-6)
+// so it lines up with DAY_LABELS.
+const toMondayFirstIndex = (date: Date): number => (date.getDay() + 6) % 7;
+
+// Count how many appointments were *booked* (by $createdAt) on each
+// weekday, broken down per service — so admins can see both booking
+// volume and which services are driving it.
 const buildChartData = (appointments: Appointment[]): ChartData<"bar"> => {
   const serviceTitles = Array.from(
     new Set(appointments.map((a) => a.serviceTitle)),
   );
 
-  const confirmedCounts = serviceTitles.map(
-    (title) =>
-      appointments.filter(
-        (a) => a.serviceTitle === title && isConfirmed(a.status),
-      ).length,
-  );
+  const datasets = serviceTitles.map((title, index) => {
+    const countsByDay = Array(7).fill(0);
 
-  const pendingCounts = serviceTitles.map(
-    (title) =>
-      appointments.filter(
-        (a) => a.serviceTitle === title && !isConfirmed(a.status),
-      ).length,
-  );
+    appointments
+      .filter((a) => a.serviceTitle === title)
+      .forEach((a) => {
+        const createdAt = new Date(a.$createdAt);
+        countsByDay[toMondayFirstIndex(createdAt)] += 1;
+      });
+
+    return {
+      label: title,
+      data: countsByDay,
+      backgroundColor:
+        SERVICE_COLOR_PALETTE[index % SERVICE_COLOR_PALETTE.length],
+      borderRadius: 3,
+      categoryPercentage: 0.5,
+      barPercentage: 1,
+    };
+  });
 
   return {
-    labels: serviceTitles,
-    datasets: [
-      {
-        label: "Confirmed",
-        data: confirmedCounts,
-        backgroundColor: STATUS_COLORS.confirmed,
-        borderRadius: 3,
-        categoryPercentage: 0.5,
-        barPercentage: 1,
-      },
-      {
-        label: "Pending",
-        data: pendingCounts,
-        backgroundColor: STATUS_COLORS.pending,
-        borderRadius: 3,
-        categoryPercentage: 0.5,
-        barPercentage: 1,
-      },
-    ],
+    labels: DAY_LABELS,
+    datasets,
   };
 };
 
@@ -171,8 +171,6 @@ const options: ChartOptions<"bar"> = {
 
 const PatientServiceChart = () => {
   const { Appointments } = useSelector((state: RootState) => state.appointment);
-  console.log('appointments', Appointments);
-  
 
   if (!Appointments || Appointments.length === 0) {
     return (
