@@ -95,6 +95,7 @@ export const LogOutUser = createAsyncThunk(
       Cookies.remove("token");
       Cookies.remove("user");
       Cookies.remove("role");
+      Cookies.remove("patient");
 
       toast.success("Logout successfully");
     } catch {

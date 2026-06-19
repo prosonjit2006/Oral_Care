@@ -37,6 +37,7 @@ import AdminProtected from "../components/AdminProtected";
 import UserProtected from "../components/UserProtected";
 import PaymentProtected from "../components/PaymentProtected";
 import Loading from "../pages/Loading";
+import PaymentSuccess from "../pages/PaymentSuccess";
 
 // * Small helper so every lazy route gets the same fallback consistently
 const withLoading = (element: React.ReactNode) => (
@@ -53,6 +54,10 @@ const Routes = createBrowserRouter([
         element: withLoading(<Payments />),
       },
     ],
+  },
+  {
+    path: "paymentsuccess",
+    element: withLoading(<PaymentSuccess />),
   },
   {
     path: "/booking",

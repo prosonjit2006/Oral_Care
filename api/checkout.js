@@ -14,14 +14,14 @@ export default async function handler(req, res) {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "inr",
             product_data: { name: planName },
             unit_amount: Number(planPrice) * 100,
           },
           quantity: 1,
         },
       ],
-      success_url: "https://oral-care-tau.vercel.app/payment-success",
+      success_url: "https://oral-care-tau.vercel.app/paymentsuccess",
       cancel_url: "https://oral-care-tau.vercel.app/payment",
     });
 
