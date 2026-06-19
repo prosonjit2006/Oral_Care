@@ -15,9 +15,6 @@ import Cookies from "js-cookie";
 function AdminNavbar() {
   const loginData = Cookies.get("user");
   const loginCradintial = loginData ? JSON.parse(loginData) : null;
-  console.log("login crendital", loginCradintial);
-
-  // const {} = useAppSelector((state)=> state.auth) // this is for the name and email showing in the avater part
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -25,7 +22,6 @@ function AdminNavbar() {
   const handleLogout = async () => {
     try {
       await dispatch(LogOutUser()).unwrap();
-
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -33,33 +29,73 @@ function AdminNavbar() {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "#25343F" }}>
-      <Container maxWidth="xl">
+    <AppBar
+      position="static" // Changed from sticky to static because the wrapper handles layout now
+      elevation={0} // Removes the drop shadow for a flatter, modern look
+      sx={{
+        backgroundColor: "#25343F",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.1)", // Subtle divider
+      }}
+    >
+      <Container maxWidth={false} sx={{ px: { xs: 1, sm: 2, md: 3 } }}>
         <Toolbar
           disableGutters
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            minHeight: { xs: "56px", md: "64px" }, // Slightly thinner on mobile
           }}
         >
-          <Typography variant="h4">Dashboard</Typography>
+          {/* Responsive Typography */}
+          <Typography
+            variant="h4"
+            sx={{
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.5rem",
+                md: "1.8rem",
+                lg: "2rem",
+              },
+              fontWeight: 600,
+            }}
+          >
+            Dashboard
+          </Typography>
 
-          {/* icon and logout icon */}
+          {/* User Profile & Logout */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
+              gap: { xs: "8px", sm: "16px" },
             }}
           >
-            <Box sx={{ display: "flex", gap: 1}}>
-              <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'end', textTransform: 'capitalize' }}>
-                <Typography variant="body2">{loginCradintial.email}</Typography>
-                <Typography variant="caption">{loginCradintial.role}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: { xs: 1, sm: 1.5 },
+                alignItems: "center",
+              }}
+            >
+              {/* Hide text on 'xs' (mobile) to prevent squishing, show on 'sm' and up */}
+              <Box
+                sx={{
+                  display: { xs: "none", sm: "flex" },
+                  flexDirection: "column",
+                  alignItems: "end",
+                  textTransform: "capitalize",
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {loginCradintial?.email || "Admin User"}
+                </Typography>
+                <Typography variant="caption" sx={{ color: "#8C9BAB" }}>
+                  {loginCradintial?.role || "Admin"}
+                </Typography>
               </Box>
 
-              {/* icon part */}
+              {/* Avatar */}
               <Tooltip title="Profile Details">
                 <IconButton
                   sx={{
@@ -67,21 +103,30 @@ function AdminNavbar() {
                     color: "white",
                     border: "1px solid #605B51",
                     backgroundColor: "#213C51",
+                    width: { xs: 32, sm: 40 }, // Smaller avatar on mobile
+                    height: { xs: 32, sm: 40 },
                   }}
                 >
                   <Avatar
-                    alt={loginCradintial.name}
-                    src={loginCradintial.image}
+                    alt={loginCradintial?.name}
+                    src={loginCradintial?.image}
+                    sx={{ width: "100%", height: "100%" }}
                   />
                 </IconButton>
               </Tooltip>
             </Box>
-            <Tooltip title="Logout" onClick={() => handleLogout()}>
-              <LogOutIcon
-                // color="#6594B1"
-                size={23}
-                className=" text-[#6594B1] hover:text-[#E8E2D8] transition-all duration-300"
-              />
+
+            {/* Logout Icon */}
+            <Tooltip title="Logout">
+              <IconButton
+                onClick={() => handleLogout()}
+                sx={{ p: { xs: 0.5, sm: 1 } }}
+              >
+                <LogOutIcon
+                  size={20} // Slightly smaller icon to match
+                  className="text-[#6594B1] hover:text-[#E8E2D8] transition-all duration-300"
+                />
+              </IconButton>
             </Tooltip>
           </Box>
         </Toolbar>
@@ -89,4 +134,5 @@ function AdminNavbar() {
     </AppBar>
   );
 }
+
 export default AdminNavbar;

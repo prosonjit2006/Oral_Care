@@ -96,7 +96,7 @@ const Sidebar = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: { xs: "8px", md: "12px" },
+                  gap: { xs: "8px", md: "10px" },
                 }}
               >
                 <Icon size={20} className="shrink-0" />
@@ -113,14 +113,14 @@ const Sidebar = () => {
         variant="outlined"
         onClick={() => navigate("/")} // Hooked up the navigate action
         sx={{
-          mt: "auto", // This is the magic that pushes the button to the absolute bottom
+          mt: "auto", 
           flexShrink: 0, // Prevents the button from being squished by the scroll area
           color: "white",
-          borderColor: "rgba(255,255,255,0.5)",
+          borderColor: "#fafafa",
           textTransform: "none", // Stops text from being fully capitalized
           fontWeight: 600,
-          fontSize: { xs: "0.75rem", sm: "0.8rem", md: "0.9rem" },
-          padding: { xs: "8px", md: "10px 16px" },
+          fontSize: { xs: "0.5rem", sm: "0.6rem", md: "0.8rem" },
+          padding: { xs: "8px", md: "10px 13px" },
           display: "flex",
           gap: "8px",
           "&:hover": {
@@ -130,8 +130,8 @@ const Sidebar = () => {
         }}
       >
         <ArrowLeft size={18} />
-        {/* Hide text on very small screens, keep just the icon if needed */}
-        <span className="hidden sm:inline">Back To Home</span>
+        {/* Hide text on very small screens - md, keep just the icon if needed */}
+        <span className="hidden md:inline">Back To Home</span>
       </Button>
     </Container>
   );
