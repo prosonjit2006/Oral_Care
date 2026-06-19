@@ -1,0 +1,118 @@
+// lib/checkoutHelpers.ts
+// Reads the "patient" cookie, builds the payload, and calls the checkout APIs
+
+/**
+ * Parses the "patient" cookie and returns patient data.
+ * Cookie is expected to be a JSON string.
+ */
+function getPatientFromCookie(): {
+  patient_id: string;
+  name: string;
+  email: string;
+} | null {
+  try {
+    const cookies = document.cookie.split(";").reduce(
+      (acc, cookie) => {
+        const [key, val] = cookie.trim().split("=");
+        acc[key] = decodeURIComponent(val);
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+
+    if (!cookies["patient"]) return null;
+
+    const patient = JSON.parse(cookies["patient"]);
+    return patient;
+  } catch (err) {
+    console.error("Failed to parse patient cookie:", err);
+    return null;
+  }
+}
+
+// ─────────────────────────────────────────────
+// ✅ SUBSCRIPTION CHECKOUT
+// ─────────────────────────────────────────────
+export const SubscriptionCheckout = async (
+  planId: string,
+  planName: string,
+  planPrice: number,
+) => {
+  const patient = getPatientFromCookie();
+
+  if (!patient) {
+    console.error("No patient session found. Cannot proceed to checkout.");
+    alert("Your session has expired. Please log in again.");
+    return;
+  }
+
+  // Merge plan info + patient data into one payload
+  const payload = {
+    planId,
+    planName,
+    planPrice,
+    patientId: patient.patient_id,
+    patientName: patient.name,
+    patientEmail: patient.email,
+  };
+
+  try {
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    console.log("Subscription checkout data:", data);
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || "No URL returned from checkout");
+    }
+  } catch (error) {
+    console.error("Subscription checkout failed:", error);
+    alert("Something went wrong. Please try again.");
+  }
+};
+
+// ─────────────────────────────────────────────
+// ✅ SERVICE BOOKING CHECKOUT
+// ─────────────────────────────────────────────
+export const serviceCheckout = async () => {
+  const patient = getPatientFromCookie();
+
+  if (!patient) {
+    console.error("No patient session found. Cannot proceed to checkout.");
+    alert("Your session has expired. Please log in again.");
+    return;
+  }
+
+  // Merge service booking payload with patient data
+  const payload = {
+    patientId: patient.patient_id,
+    patientName: patient.name,
+    patientEmail: patient.email,
+  };
+
+  try {
+    const response = await fetch("/api/service-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    console.log("Service checkout data:", data);
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || "No URL returned from service checkout");
+    }
+  } catch (error) {
+    console.error("Service checkout failed:", error);
+    alert("Something went wrong. Please try again.");
+  }
+};
