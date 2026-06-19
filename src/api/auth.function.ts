@@ -75,13 +75,15 @@ export const loginUserfns = async (data: LoginPayload) => {
   });
 
   console.log("find user", findUser);
-
+  
   if (findUser.rows.length > 0) {
     await account.createEmailPasswordSession({
       email: data.email,
       password: data.password,
     });
-
+    
+    console.log("row list", findUser.rows);
+    console.log("email", findUser.rows[0].email);
 
     // ! based on the user email fetch the patient data and store it on the cookies 
      const patient = await tablesDB.listRows({
@@ -89,6 +91,9 @@ export const loginUserfns = async (data: LoginPayload) => {
        tableId: "patient",
        queries: [Query.equal("email", findUser.rows[0].email)],
      });
+
+     console.log('patient', patient)
+
      if(patient){
       Cookies.set('patient', JSON.stringify(patient.rows[0]))
      }
