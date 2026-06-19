@@ -46,7 +46,7 @@ const AdminWrapper = () => {
             flexGrow: 1, // Takes up remaining height below navbar
             overflowY: "auto", // Adds a scrollbar here when content overflows
             p: { xs: 1.5, sm: 2, md: 3 }, // Responsive padding
-            backgroundColor: "#F4F7FE", // Optional: Light background for content area contrast
+            backgroundColor: "#25343F", // Optional: Light background for content area contrast
             borderTopLeftRadius: "16px", // Adds a nice modern curve to the content box
           }}
         >
