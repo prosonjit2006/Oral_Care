@@ -89,7 +89,7 @@ export const loginUserfns = async (data: LoginPayload) => {
      const patient = await tablesDB.listRows({
        databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
        tableId: "patient",
-       queries: [Query.equal("email", findUser.rows[0].email)],
+       queries: [Query.equal("email", [data.email])],
      });
 
      console.log('patient', patient)
