@@ -1,12 +1,16 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, IconButton } from "@mui/material";
 import { NavLink, useNavigate, type NavLinkProps } from "react-router-dom";
 import { sidebarNavigation } from "../../services/json/admin.json";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react"; // Added X icon
 
-const Sidebar = () => {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+const Sidebar = ({ onClose }: SidebarProps) => {
+  // Accept onClose prop
   const navigate = useNavigate();
 
-  // Added responsive text sizing (text-sm to text-base) and responsive padding
   const linkStyle: NavLinkProps["className"] = ({ isActive }) =>
     `transition block p-2 md:p-[10px] text-sm md:text-base text-[#ECECEC] rounded-sm ${
       isActive
@@ -20,16 +24,36 @@ const Sidebar = () => {
       maxWidth={false}
       sx={{
         width: "100%",
-        height: "100vh", // Full viewport height
-        position: "sticky",
-        top: 0,
-        left: 0,
-        background: "linear-gradient(155deg, #1D546D, #5F9598)",
+        height: "100vh",
+        position: "relative", // Required for absolute positioning of the X button
+        background: "linear-gradient(155deg, #0f1c24, #1D546D)", // Deepened gradient to match ref image
         display: "flex",
-        flexDirection: "column", // Stack items vertically
-        padding: { xs: 1.5, sm: 2, lg: 2.5 }, // Responsive padding
+        flexDirection: "column",
+        padding: { xs: 1.5, sm: 2, lg: 2.5 },
+        boxShadow: "4px 0 15px rgba(0,0,0,0.5)", // Gives it depth when sliding out
       }}
     >
+      {/* ── MOBILE CLOSE BUTTON (Matches Reference Image) ── */}
+      {onClose && (
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            backgroundColor: "white",
+            color: "black",
+            width: 28,
+            height: 28,
+            "&:hover": { backgroundColor: "#e0e0e0" },
+            display: { lg: "none" }, // Failsafe to ensure it never shows on desktop
+            zIndex: 50,
+          }}
+        >
+          <X size={18} strokeWidth={3} />
+        </IconButton>
+      )}
+
       {/* ── 1. TOP: FIXED LOGO AREA ── */}
       <Box
         onClick={() => navigate("/")}
@@ -38,44 +62,31 @@ const Sidebar = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.2)", // Softer border
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
           paddingBottom: { xs: 1.5, md: 2 },
           marginBottom: { xs: 1, md: 2 },
-          flexShrink: 0, // Prevents this section from squishing when nav items fill up
+          flexShrink: 0,
           cursor: "pointer",
           width: "100%",
+          pt: onClose ? 2 : 0, // Adds top padding if the close button is present so logo doesn't overlap
         }}
       >
-        {/* Made the logo image width responsive via Tailwind */}
         <img
           src="/logo.png"
           alt="logo img"
-          className="w-12 sm:w-14 md:w-16 lg:w-20 object-contain"
+          className="w-16 sm:w-20 md:w-24 lg:w-28 object-contain"
         />
-        <Typography
-          variant="subtitle1"
-          sx={{
-            color: "wheat",
-            textAlign: "center",
-            mt: 1,
-            fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" },
-            fontWeight: 500,
-          }}
-        >
-          Admin Console
-        </Typography>
       </Box>
 
       {/* ── 2. MIDDLE: SCROLLABLE NAV ITEMS ── */}
       <Box
         sx={{
-          flexGrow: 1, // Takes up all remaining vertical space
-          overflowY: "auto", // Makes only this section scrollable
+          flexGrow: 1,
+          overflowY: "auto",
           display: "flex",
           flexDirection: "column",
           gap: "4px",
           paddingRight: "4px",
-          // Customizing the scrollbar so it looks clean against the blue gradient
           "&::-webkit-scrollbar": { width: "4px" },
           "&::-webkit-scrollbar-thumb": {
             backgroundColor: "rgba(255,255,255,0.2)",
@@ -91,17 +102,11 @@ const Sidebar = () => {
               to={item.path}
               end={item.path === "/admin/dashboard"}
               className={linkStyle}
+              onClick={onClose} // Auto-closes the mobile drawer when a link is clicked!
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: { xs: "8px", md: "10px" },
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <Icon size={20} className="shrink-0" />
-                {/* Truncate text just in case the screen gets too narrow */}
-                <span className="truncate">{item.name}</span>
+                <span className="truncate tracking-wide">{item.name}</span>
               </Box>
             </NavLink>
           );
@@ -111,16 +116,16 @@ const Sidebar = () => {
       {/* ── 3. BOTTOM: FIXED BUTTON ── */}
       <Button
         variant="outlined"
-        onClick={() => navigate("/")} // Hooked up the navigate action
+        onClick={() => navigate("/")}
         sx={{
-          mt: "auto", 
-          flexShrink: 0, // Prevents the button from being squished by the scroll area
+          mt: "auto",
+          flexShrink: 0,
           color: "white",
-          borderColor: "#fafafa",
-          textTransform: "none", // Stops text from being fully capitalized
-          fontWeight: 600,
-          fontSize: { xs: "0.5rem", sm: "0.6rem", md: "0.8rem" },
-          padding: { xs: "8px", md: "10px 13px" },
+          borderColor: "rgba(255,255,255,0.3)",
+          textTransform: "none",
+          fontWeight: 500,
+          fontSize: "0.85rem",
+          padding: "10px 16px",
           display: "flex",
           gap: "8px",
           "&:hover": {
@@ -130,8 +135,7 @@ const Sidebar = () => {
         }}
       >
         <ArrowLeft size={18} />
-        {/* Hide text on very small screens - md, keep just the icon if needed */}
-        <span className="hidden md:inline">Back To Home</span>
+        Back To Home
       </Button>
     </Container>
   );

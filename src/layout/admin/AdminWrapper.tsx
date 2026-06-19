@@ -1,26 +1,57 @@
-import { Box, Container } from "@mui/material";
+import { useState } from "react";
+import { Box, Container, Drawer } from "@mui/material";
 import AdminNavbar from "./AdminNavbar";
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 
 const AdminWrapper = () => {
+  // State to manage the mobile sidebar toggle
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawerWidth = 280; // Fixed width for the mobile drawer
+
   return (
     <Container
       disableGutters
       maxWidth={false}
       sx={{
-        backgroundColor: "#25343F",
+        backgroundColor: "#1B2730", // Matched dark theme from reference image
         display: "flex",
         flexDirection: "row",
-        height: "100vh", // 1. Locks the entire wrapper to the screen height
-        overflow: "hidden", // 2. Prevents the whole page from scrolling
+        height: "100vh",
+        overflow: "hidden",
       }}
     >
-      {/* ── LEFT SIDE: SIDEBAR ── */}
+      {/* ── MOBILE OVERLAY SIDEBAR (Hidden on lg and above) ── */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile
+        }}
+        sx={{
+          display: { xs: "block", lg: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+            backgroundColor: "transparent", // Let the Sidebar's gradient show
+            border: "none",
+          },
+        }}
+      >
+        <Sidebar onClose={handleDrawerToggle} />
+      </Drawer>
+
+      {/* ── DESKTOP PERMANENT SIDEBAR (Hidden below lg) ── */}
       <Box
         sx={{
-          // Responsive width: slightly wider on mobile to fit text, 15% on desktop
-          width: { xs: "25%", sm: "22%", md: "20%", lg: "15%" },
+          display: { xs: "none", lg: "block" },
+          width: { lg: "220px", xl: "260px" }, // Fixed responsive widths
           flexShrink: 0,
         }}
       >
@@ -30,24 +61,27 @@ const AdminWrapper = () => {
       {/* ── RIGHT SIDE: NAVBAR + CONTENT ── */}
       <Box
         sx={{
-          width: { xs: "75%", sm: "78%", md: "80%", lg: "85%" },
+          flexGrow: 1,
           display: "flex",
           flexDirection: "column",
+          width: {
+            xs: "100%",
+            lg: "calc(100% - 220px)",
+            xl: "calc(100% - 260px)",
+          },
         }}
       >
-        {/* Navbar sits at the top naturally */}
         <Box sx={{ flexShrink: 0 }}>
-          <AdminNavbar />
+          {/* Pass the toggle function to the Navbar */}
+          <AdminNavbar onMenuClick={handleDrawerToggle} />
         </Box>
 
-        {/* Content Area: This is the ONLY part that scrolls */}
         <Box
           sx={{
-            flexGrow: 1, // Takes up remaining height below navbar
-            overflowY: "auto", // Adds a scrollbar here when content overflows
-            p: { xs: 1.5, sm: 2, md: 3 }, // Responsive padding
-            backgroundColor: "#25343F", // Optional: Light background for content area contrast
-            borderTopLeftRadius: "16px", // Adds a nice modern curve to the content box
+            flexGrow: 1,
+            overflowY: "auto",
+            p: { xs: 1.5, sm: 2, md: 3 },
+            backgroundColor: "#1A222B", // Dark content area matching reference
           }}
         >
           <Outlet />

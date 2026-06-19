@@ -5,14 +5,19 @@ import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, Menu } from "lucide-react"; // Added Menu icon
 import { Typography } from "@mui/material";
 import { useAppDispatch } from "../../hooks/useredux";
 import { LogOutUser } from "../../store/slices/auth.slice";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-function AdminNavbar() {
+interface AdminNavbarProps {
+  onMenuClick: () => void;
+}
+
+function AdminNavbar({ onMenuClick }:AdminNavbarProps) {
+  // Accept the prop here
   const loginData = Cookies.get("user");
   const loginCradintial = loginData ? JSON.parse(loginData) : null;
 
@@ -30,11 +35,11 @@ function AdminNavbar() {
 
   return (
     <AppBar
-      position="static" // Changed from sticky to static because the wrapper handles layout now
-      elevation={0} // Removes the drop shadow for a flatter, modern look
+      position="static"
+      elevation={0}
       sx={{
         backgroundColor: "#25343F",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.1)", // Subtle divider
+        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
       }}
     >
       <Container maxWidth={false} sx={{ px: { xs: 1, sm: 2, md: 3 } }}>
@@ -44,24 +49,37 @@ function AdminNavbar() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            minHeight: { xs: "56px", md: "64px" }, // Slightly thinner on mobile
+            minHeight: { xs: "60px", md: "70px" },
           }}
         >
-          {/* Responsive Typography */}
-          <Typography
-            variant="h4"
-            sx={{
-              fontSize: {
-                xs: "1.2rem",
-                sm: "1.5rem",
-                md: "1.8rem",
-                lg: "2rem",
-              },
-              fontWeight: 600,
-            }}
-          >
-            Dashboard
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {/* ── HAMBURGER TOGGLE (Hidden on Desktop) ── */}
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={onMenuClick}
+              sx={{ display: { lg: "none" }, color: "white" }}
+            >
+              <Menu size={28} />
+            </IconButton>
+
+            <Typography
+              variant="h4"
+              sx={{
+                fontSize: {
+                  xs: "1.2rem",
+                  sm: "1.5rem",
+                  md: "1.8rem",
+                  lg: "2rem",
+                },
+                fontWeight: 600,
+                color: "white",
+              }}
+            >
+              Dashboard
+            </Typography>
+          </Box>
 
           {/* User Profile & Logout */}
           <Box
@@ -78,7 +96,6 @@ function AdminNavbar() {
                 alignItems: "center",
               }}
             >
-              {/* Hide text on 'xs' (mobile) to prevent squishing, show on 'sm' and up */}
               <Box
                 sx={{
                   display: { xs: "none", sm: "flex" },
@@ -95,7 +112,6 @@ function AdminNavbar() {
                 </Typography>
               </Box>
 
-              {/* Avatar */}
               <Tooltip title="Profile Details">
                 <IconButton
                   sx={{
@@ -103,7 +119,7 @@ function AdminNavbar() {
                     color: "white",
                     border: "1px solid #605B51",
                     backgroundColor: "#213C51",
-                    width: { xs: 32, sm: 40 }, // Smaller avatar on mobile
+                    width: { xs: 32, sm: 40 },
                     height: { xs: 32, sm: 40 },
                   }}
                 >
@@ -116,14 +132,13 @@ function AdminNavbar() {
               </Tooltip>
             </Box>
 
-            {/* Logout Icon */}
             <Tooltip title="Logout">
               <IconButton
                 onClick={() => handleLogout()}
                 sx={{ p: { xs: 0.5, sm: 1 } }}
               >
                 <LogOutIcon
-                  size={20} // Slightly smaller icon to match
+                  size={20}
                   className="text-[#6594B1] hover:text-[#E8E2D8] transition-all duration-300"
                 />
               </IconButton>
