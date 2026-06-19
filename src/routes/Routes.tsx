@@ -56,7 +56,7 @@ const Routes = createBrowserRouter([
     ],
   },
   {
-    path: "paymentsuccess",
+    path: "/paymentsuccess",
     element: withLoading(<PaymentSuccess />),
   },
   {

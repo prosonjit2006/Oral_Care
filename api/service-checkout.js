@@ -1,13 +1,13 @@
-// api/service-checkout.js — Service Booking Checkout
+// api/service-checkout.js
 import Stripe from "stripe";
-import { Client, Databases, ID } from "node-appwrite";
+import { Client, TablesDB, ID } from "node-appwrite";
 
 const appwriteClient = new Client()
   .setEndpoint(process.env.APPWRITE_ENDPOINT)
   .setProject(process.env.APPWRITE_PROJECT_ID)
   .setKey(process.env.APPWRITE_API_KEY);
 
-const databases = new Databases(appwriteClient);
+const tablesDB = new TablesDB(appwriteClient);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,44 +16,50 @@ export default async function handler(req, res) {
 
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-    // Patient data passed from the frontend (read from "patient" cookie)
     const { patientId, patientName, patientEmail } = req.body;
+
+    if (!patientEmail) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: "Missing patientEmail — session expired",
+        });
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      customer_email: patientEmail, // ✅ Pre-fills email in Stripe checkout
+      customer_email: patientEmail,
       line_items: [
         {
           price_data: {
             currency: "usd",
             product_data: { name: "Service Booking Fee" },
-            unit_amount: 500, // $5.00
+            unit_amount: 500,
           },
           quantity: 1,
         },
       ],
       metadata: {
         paymentType: "service-booking",
-        patientId,
-        patientName,
+        patientId: patientId || "",
+        patientName: patientName || "",
         patientEmail,
       },
-      success_url: `https://oral-care-tau.vercel.app/service-payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `https://oral-care-tau.vercel.app/paymentsuccess?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: "https://oral-care-tau.vercel.app/profile",
     });
 
-    // ✅ Save initial payment record to Appwrite bookingHistory
     const invoiceId = `INV-SVC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    await databases.createDocument(
-      process.env.APPWRITE_DATABASE_ID,
-      process.env.APPWRITE_BOOKING_HISTORY_COLLECTION_ID,
-      ID.unique(),
-      {
+    await tablesDB.createRow({
+      databaseId: process.env.APPWRITE_DATABASE_ID,
+      tableId: "bookingHistory",
+      rowId: ID.unique(),
+      data: {
         invoice_id: invoiceId,
         stripe_session_id: session.id,
-        patient_name: patientName,
+        patient_name: patientName || "",
         patient_email: patientEmail,
         item_name: "Service Booking Fee",
         item_type: "service-booking",
@@ -63,9 +69,9 @@ export default async function handler(req, res) {
         card_brand: "",
         card_last4: "",
         interval: "one-time",
-        patient_id: patientId,
+        patient_id: patientId || "",
       },
-    );
+    });
 
     return res.status(200).json({ success: true, url: session.url });
   } catch (error) {

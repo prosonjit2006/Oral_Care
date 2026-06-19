@@ -24,9 +24,9 @@ import {
 } from "../../store/slices/booking.slice";
 import { ArrowLeft, Check } from "lucide-react";
 import { toast } from "sonner";
-import { serviceCheckout } from "../../lib/serviceCheckout";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
+import { serviceCheckout } from "../../lib/checkoutHelpers";
 
 
 const ServicesData = ["Service", "Doctor", "Time", "Details"];

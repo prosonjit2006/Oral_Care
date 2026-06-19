@@ -21,8 +21,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/useredux";
 import { useEffect } from "react";
 import { fetchPlanList, setCheckoutPlan } from "../store/slices/plan.slice";
-import { SubscriptionCheckout } from "../lib/subscriptionCheckout";
 import { motion } from "motion/react";
+import { SubscriptionCheckout } from "../lib/checkoutHelpers";
 
 const Payments = () => {
   const navigate = useNavigate();
