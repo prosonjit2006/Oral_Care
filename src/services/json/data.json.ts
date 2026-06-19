@@ -29,6 +29,7 @@ export const aboutTeams: AboutTeams[] = [
     id: 1,
     name: "Jack Jones",
     position: "Endodontics",
+    experience: 7,
     rating: 4.9,
     reviews: "750+ Reviews",
     img: img1,
@@ -39,6 +40,7 @@ export const aboutTeams: AboutTeams[] = [
     id: 2,
     name: "William Jones",
     position: "Orthodontics",
+    experience: 12,
     rating: 4.8,
     reviews: "650+ Reviews",
     img: img2,
@@ -48,6 +50,7 @@ export const aboutTeams: AboutTeams[] = [
     id: 3,
     name: "Cameron Wills",
     position: "Periodontics",
+    experience: 9,
     rating: 5.0,
     reviews: "950+ Reviews",
     img: img3,
@@ -57,6 +60,7 @@ export const aboutTeams: AboutTeams[] = [
     id: 4,
     name: "Anatoli Black",
     position: "Oral and Maxillofacial Surgery",
+    experience: 10,
     rating: 4.8,
     reviews: "850+ Reviews",
     img: img4,
@@ -66,6 +70,7 @@ export const aboutTeams: AboutTeams[] = [
     id: 5,
     name: "Merry Jones",
     position: "Dental Anesthesiology",
+    experience: 8,
     rating: 4.5,
     reviews: "980+ Reviews",
     img: img5,
@@ -73,8 +78,42 @@ export const aboutTeams: AboutTeams[] = [
   },
 ];
 
-// reviews data
+// banner doctor card
+// export const doctorsCard = [
+//   {
+//     id: 1,
+//     name: "Dr. Jones Mills",
+//     specialty: "Pediatric Dentist",
+//     experience: 7,
+//     // imageUrl: "/doctors/jones.jpg",  ← uncomment when you have images
+//   },
+//   {
+//     id: 2,
+//     name: "Dr. Sarah Chen",
+//     specialty: "Orthodontist",
+//     experience: 12,
+//   },
+//   {
+//     id: 3,
+//     name: "Dr. Raj Patel",
+//     specialty: "Oral Surgeon",
+//     experience: 9,
+//   },
+//   {
+//     id: 4,
+//     name: "Dr. Maria Torres",
+//     specialty: "Endodontist",
+//     experience: 15,
+//   },
+//   {
+//     id: 5,
+//     name: "Dr. Lena Bauer",
+//     specialty: "Periodontist",
+//     experience: 6,
+//   },
+// ];
 
+// reviews data
 import rev_img1 from "../../assets/images/landingPage/reviews/rev_img1.png";
 import rev_img2 from "../../assets/images/landingPage/reviews/rev_img2.png";
 import rev_img3 from "../../assets/images/landingPage/reviews/rev_img3.png";

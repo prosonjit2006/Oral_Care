@@ -1,6 +1,7 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { NavLink, useNavigate, type NavLinkProps } from "react-router-dom";
 import { sidebarNavigation } from "../../services/json/admin.json";
+import { ArrowLeft } from "lucide-react";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -76,6 +77,11 @@ const Sidebar = () => {
           );
         })}
       </Box>
+
+      {/* backto home btn */}
+      <Button variant="outlined">
+        <ArrowLeft /> Back To Home
+      </Button>
     </Container>
   );
 };

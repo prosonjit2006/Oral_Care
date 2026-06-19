@@ -6,6 +6,7 @@ export interface AboutTeams {
   position: string;
   rating: number;
   reviews: string;
+  experience: number;
   img: string;
   services: string[];
 }
