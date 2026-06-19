@@ -1,7 +1,6 @@
 import { account, bucket, ID, tablesDB } from "../lib/Appwrite.config";
 import type { PatientPayload } from "../type/interface/patient.interface";
 
-
 export const fetchPatientListFns = async () => {
   const response = await tablesDB.listRows({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
@@ -25,9 +24,9 @@ export const addNewPatientFns = async (data: PatientPayload) => {
   if (data.image) {
     console.log("upcoming image", data.image);
 
-     if (!(data.image instanceof File)) {
-       throw new Error("Image must be a File object, not a URL string");
-     }
+    if (!(data.image instanceof File)) {
+      throw new Error("Image must be a File object, not a URL string");
+    }
 
     const uploadImage = await bucket.createFile({
       bucketId: import.meta.env.VITE_BUCKET_ID,
@@ -59,7 +58,7 @@ export const addNewPatientFns = async (data: PatientPayload) => {
     },
   });
 
-  console.log('res in fnc user', user)
+  console.log("res in fnc user", user);
 
   const patient = await tablesDB.createRow({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
@@ -103,17 +102,6 @@ export const editPatientFns = async ({
   return response;
 };
 
-export const deletePatientFns = async (id: string) => {
-  const response = await tablesDB.deleteRow({
-    databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
-    tableId: "patient",
-    rowId: id,
-  });
-
-  console.log("response in the delete patient fns", response);
-  return response;
-};
-
 export const publishPatientFns = async (id: string) => {
   const response = await tablesDB.updateRow({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
@@ -135,5 +123,16 @@ export const unpublishPatientFns = async (id: string) => {
       status: false,
     },
   });
+  return response;
+};
+
+export const deletePatientFns = async (id: string) => {
+  const response = await tablesDB.deleteRow({
+    databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+    tableId: "patient",
+    rowId: id,
+  });
+
+  console.log("response in the delete patient fns", response);
   return response;
 };

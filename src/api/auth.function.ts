@@ -4,6 +4,7 @@ import type {
   LoginPayload,
   SignupPayload,
 } from "../type/interface/auth.interface";
+import Cookies from 'js-cookie'
 
 export const registerUserfns = async (data: SignupPayload) => {
   const userAuth = await account.create({
@@ -66,18 +67,32 @@ export const registerUserfns = async (data: SignupPayload) => {
 };
 
 export const loginUserfns = async (data: LoginPayload) => {
-  console.log("data cumming in loginfns", data);
+  console.log("data coming in loginfns", data);
   const findUser = await tablesDB.listRows({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
     tableId: "user",
     queries: [Query.equal("email", [data.email])],
   });
+
   console.log("find user", findUser);
+
   if (findUser.rows.length > 0) {
     await account.createEmailPasswordSession({
       email: data.email,
       password: data.password,
     });
+
+
+    // ! based on the user email fetch the patient data and store it on the cookies 
+     const patient = await tablesDB.listRows({
+       databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+       tableId: "patient",
+       queries: [Query.equal("email", findUser.rows[0].email)],
+     });
+     if(patient){
+      Cookies.set('patient', JSON.stringify(patient.rows[0]))
+     }
+
     return {
       success: true,
       message: "Login Successfully",
