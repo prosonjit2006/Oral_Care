@@ -6,11 +6,12 @@ import { ArrowLeft } from "lucide-react";
 const Sidebar = () => {
   const navigate = useNavigate();
 
+  // Added responsive text sizing (text-sm to text-base) and responsive padding
   const linkStyle: NavLinkProps["className"] = ({ isActive }) =>
-    `transition block p-[10px] text-[#ECECEC] ${
+    `transition block p-2 md:p-[10px] text-sm md:text-base text-[#ECECEC] rounded-sm ${
       isActive
-        ? "text-blue-400 font-bold border-r-4 border-blue-200 "
-        : "text-white hover:text-blue-300"
+        ? "text-blue-400 font-bold border-r-4 border-blue-200 bg-black/10"
+        : "text-white hover:text-blue-300 hover:bg-black/5"
     }`;
 
   return (
@@ -19,46 +20,69 @@ const Sidebar = () => {
       maxWidth={false}
       sx={{
         width: "100%",
-        height: "100vh",
+        height: "100vh", // Full viewport height
         position: "sticky",
         top: 0,
         left: 0,
         background: "linear-gradient(155deg, #1D546D, #5F9598)",
         display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        padding: 2,
+        flexDirection: "column", // Stack items vertically
+        padding: { xs: 1.5, sm: 2, lg: 2.5 }, // Responsive padding
       }}
     >
+      {/* ── 1. TOP: FIXED LOGO AREA ── */}
       <Box
+        onClick={() => navigate("/")}
         sx={{
           margin: "0 auto",
           display: "flex",
           flexDirection: "column",
-          borderBottom: "1px solid gray",
-          padding: 2,
-          pb: 3,
+          alignItems: "center",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.2)", // Softer border
+          paddingBottom: { xs: 1.5, md: 2 },
+          marginBottom: { xs: 1, md: 2 },
+          flexShrink: 0, // Prevents this section from squishing when nav items fill up
+          cursor: "pointer",
+          width: "100%",
         }}
       >
-        {/* logo */}
-        <Box
-          // component="a"
-          // href="/"
-          onClick={() => navigate("/")}
-          sx={{ cursor: "pointer" }}
-        >
-          <img src="/logo.png" alt="logo img" />
-        </Box>
+        {/* Made the logo image width responsive via Tailwind */}
+        <img
+          src="/logo.png"
+          alt="logo img"
+          className="w-12 sm:w-14 md:w-16 lg:w-20 object-contain"
+        />
         <Typography
           variant="subtitle1"
-          sx={{ color: "wheat", textAlign: "center", mt: "3px" }}
+          sx={{
+            color: "wheat",
+            textAlign: "center",
+            mt: 1,
+            fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" },
+            fontWeight: 500,
+          }}
         >
           Admin Console
         </Typography>
       </Box>
 
-      {/* nav items */}
-      <Box sx={{ mt: 1 }}>
+      {/* ── 2. MIDDLE: SCROLLABLE NAV ITEMS ── */}
+      <Box
+        sx={{
+          flexGrow: 1, // Takes up all remaining vertical space
+          overflowY: "auto", // Makes only this section scrollable
+          display: "flex",
+          flexDirection: "column",
+          gap: "4px",
+          paddingRight: "4px",
+          // Customizing the scrollbar so it looks clean against the blue gradient
+          "&::-webkit-scrollbar": { width: "4px" },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "rgba(255,255,255,0.2)",
+            borderRadius: "4px",
+          },
+        }}
+      >
         {sidebarNavigation.map((item) => {
           const Icon = item.icon;
           return (
@@ -68,19 +92,46 @@ const Sidebar = () => {
               end={item.path === "/admin/dashboard"}
               className={linkStyle}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: "7px" }}>
-                <Icon />
-
-                {item.name}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: { xs: "8px", md: "12px" },
+                }}
+              >
+                <Icon size={20} className="shrink-0" />
+                {/* Truncate text just in case the screen gets too narrow */}
+                <span className="truncate">{item.name}</span>
               </Box>
             </NavLink>
           );
         })}
       </Box>
 
-      {/* backto home btn */}
-      <Button variant="outlined">
-        <ArrowLeft /> Back To Home
+      {/* ── 3. BOTTOM: FIXED BUTTON ── */}
+      <Button
+        variant="outlined"
+        onClick={() => navigate("/")} // Hooked up the navigate action
+        sx={{
+          mt: "auto", // This is the magic that pushes the button to the absolute bottom
+          flexShrink: 0, // Prevents the button from being squished by the scroll area
+          color: "white",
+          borderColor: "rgba(255,255,255,0.5)",
+          textTransform: "none", // Stops text from being fully capitalized
+          fontWeight: 600,
+          fontSize: { xs: "0.75rem", sm: "0.8rem", md: "0.9rem" },
+          padding: { xs: "8px", md: "10px 16px" },
+          display: "flex",
+          gap: "8px",
+          "&:hover": {
+            borderColor: "white",
+            backgroundColor: "rgba(255,255,255,0.1)",
+          },
+        }}
+      >
+        <ArrowLeft size={18} />
+        {/* Hide text on very small screens, keep just the icon if needed */}
+        <span className="hidden sm:inline">Back To Home</span>
       </Button>
     </Container>
   );
