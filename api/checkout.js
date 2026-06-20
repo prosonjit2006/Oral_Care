@@ -9,6 +9,13 @@ const appwriteClient = new Client()
 
 const tablesDB = new TablesDB(appwriteClient);
 
+console.log({
+  endpoint: process.env.APPWRITE_ENDPOINT,
+  projectId: process.env.APPWRITE_PROJECT_ID,
+  databaseId: process.env.APPWRITE_DATABASE_ID,
+  hasApiKey: !!process.env.APPWRITE_API_KEY,
+});
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
