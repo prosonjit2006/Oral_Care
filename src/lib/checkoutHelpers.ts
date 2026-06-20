@@ -5,7 +5,7 @@
  * Parses the "patient" cookie and returns patient data.
  * Cookie is expected to be a JSON string.
  */
-function getPatientFromCookie(): {
+export function getPatientFromCookie(): {
   patient_id: string;
   name: string;
   email: string;
@@ -77,24 +77,24 @@ export const SubscriptionCheckout = async (
   }
 };
 
-
 // ─────────────────────────────────────────────
 // ✅ SERVICE BOOKING CHECKOUT
 // ─────────────────────────────────────────────
-export const serviceCheckout = async () => {
-  const patient = getPatientFromCookie();
-
-  if (!patient) {
-    console.error("No patient session found. Cannot proceed to checkout.");
-    alert("Your session has expired. Please log in again.");
+export const ServiceCheckout = async (
+  patientName: string,
+  patientEmail: string,
+  patientId?: string,
+) => {
+  if (!patientEmail) {
+    console.error("No patient email provided. Cannot proceed to checkout.");
+    alert("Something went wrong. Please make sure you're logged in.");
     return;
   }
 
-  // Merge service booking payload with patient data
   const payload = {
-    patientId: patient.patient_id,
-    patientName: patient.name,
-    patientEmail: patient.email,
+    patientId: patientId || "",
+    patientName,
+    patientEmail,
   };
 
   try {
@@ -110,7 +110,7 @@ export const serviceCheckout = async () => {
     if (data.url) {
       window.location.href = data.url;
     } else {
-      throw new Error(data.error || "No URL returned from service checkout");
+      throw new Error(data.error || "No URL returned from checkout");
     }
   } catch (error) {
     console.error("Service checkout failed:", error);

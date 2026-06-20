@@ -1,16 +1,15 @@
-// api/stripe-webhook.js — Updates Appwrite record when Stripe confirms payment
 import Stripe from "stripe";
-import { Client, Databases, Query } from "node-appwrite";
+import { Client, TablesDB, Query } from "node-appwrite";
 
 const appwriteClient = new Client()
   .setEndpoint(process.env.APPWRITE_ENDPOINT)
   .setProject(process.env.APPWRITE_PROJECT_ID)
   .setKey(process.env.APPWRITE_API_KEY);
 
-const databases = new Databases(appwriteClient);
+const tablesDB = new TablesDB(appwriteClient);
 
 export const config = {
-  api: { bodyParser: false }, // Stripe needs the raw body
+  api: { bodyParser: false },
 };
 
 async function getRawBody(req) {
@@ -47,7 +46,6 @@ export default async function handler(req, res) {
     const session = event.data.object;
 
     try {
-      // Fetch payment intent to get card details
       let paymentMethod = "";
       let cardBrand = "";
       let cardLast4 = "";
@@ -55,11 +53,13 @@ export default async function handler(req, res) {
       if (session.payment_intent) {
         const paymentIntent = await stripe.paymentIntents.retrieve(
           session.payment_intent,
-          { expand: ["payment_method"] },
+          {
+            expand: ["payment_method"],
+          },
         );
 
         const pm = paymentIntent.payment_method;
-        if (pm && pm.type) {
+        if (pm?.type) {
           paymentMethod = pm.type;
           if (pm.card) {
             cardBrand = pm.card.brand;
@@ -68,32 +68,30 @@ export default async function handler(req, res) {
         }
       }
 
-      // Find the matching record in Appwrite by stripe_session_id
-      const result = await databases.listDocuments(
-        process.env.APPWRITE_DATABASE_ID,
-        process.env.APPWRITE_BOOKING_HISTORY_COLLECTION_ID,
-        [Query.equal("stripe_session_id", session.id)],
-      );
+      const result = await tablesDB.listRows({
+        databaseId: process.env.APPWRITE_DATABASE_ID,
+        tableId: "bookingHistory",
+        queries: [Query.equal("stripe_session_id", session.id)],
+      });
 
-      if (result.documents.length > 0) {
-        const doc = result.documents[0];
+      if (result.rows.length > 0) {
+        const row = result.rows[0];
 
-        // ✅ Update the record with confirmed payment details
-        await databases.updateDocument(
-          process.env.APPWRITE_DATABASE_ID,
-          process.env.APPWRITE_BOOKING_HISTORY_COLLECTION_ID,
-          doc.$id,
-          {
+        await tablesDB.updateRow({
+          databaseId: process.env.APPWRITE_DATABASE_ID,
+          tableId: "bookingHistory",
+          rowId: row.$id,
+          data: {
             payment_status: "completed",
             payment_method: paymentMethod,
             card_brand: cardBrand,
             card_last4: cardLast4,
           },
-        );
+        });
 
         console.log(`✅ Payment confirmed for session: ${session.id}`);
       } else {
-        console.warn(`⚠️ No Appwrite record found for session: ${session.id}`);
+        console.warn(`⚠️ No Appwrite row found for session: ${session.id}`);
       }
     } catch (err) {
       console.error("Appwrite update error:", err.message);

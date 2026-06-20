@@ -1,4 +1,3 @@
-// api/service-checkout.js
 import Stripe from "stripe";
 import { Client, TablesDB, ID } from "node-appwrite";
 
@@ -9,6 +8,8 @@ const appwriteClient = new Client()
 
 const tablesDB = new TablesDB(appwriteClient);
 
+const BOOKING_FEE = 500; // ₹500 flat booking confirmation fee
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -16,17 +17,12 @@ export default async function handler(req, res) {
 
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    const { patientId, patientName, patientEmail } = req.body
-
-    console.log('patient email', patientEmail)
+    const { patientId, patientName, patientEmail } = req.body;
 
     if (!patientEmail) {
       return res
         .status(400)
-        .json({
-          success: false,
-          error: "Missing patientEmail — session expired",
-        });
+        .json({ success: false, error: "Missing patientEmail" });
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -35,9 +31,9 @@ export default async function handler(req, res) {
       line_items: [
         {
           price_data: {
-            currency: "usd",
-            product_data: { name: "Service Booking Fee" },
-            unit_amount: 500,
+            currency: "inr",
+            product_data: { name: "Service Booking Confirmation Fee" },
+            unit_amount: BOOKING_FEE * 100,
           },
           quantity: 1,
         },
@@ -48,7 +44,7 @@ export default async function handler(req, res) {
         patientName: patientName || "",
         patientEmail,
       },
-      success_url: `https://oral-care-tau.vercel.app/paymentsuccess?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `https://oral-care-tau.vercel.app/service-payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: "https://oral-care-tau.vercel.app/profile",
     });
 
@@ -63,9 +59,9 @@ export default async function handler(req, res) {
         stripe_session_id: session.id,
         patient_name: patientName || "",
         patient_email: patientEmail,
-        item_name: "Service Booking Fee",
+        item_name: "Service Booking Confirmation Fee",
         item_type: "service-booking",
-        amount: "5",
+        amount: String(BOOKING_FEE),
         payment_status: "pending",
         payment_method: "",
         card_brand: "",

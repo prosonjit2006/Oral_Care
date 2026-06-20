@@ -26,7 +26,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
-import { serviceCheckout } from "../../lib/checkoutHelpers";
+import { ServiceCheckout } from "../../lib/checkoutHelpers";
 
 
 const ServicesData = ["Service", "Doctor", "Time", "Details"];
@@ -88,27 +88,30 @@ const Booking = () => {
     phone: patient?.phone,
   };
 
-  const onSubmit = async (data: FormValues) => {
-    console.log("Full Form Data:", data);
-    dispatch(
-      bookedService({
-        serviceTitle: data.service,
-        doctorId: data.doctor.id,
-        doctorName: data.doctor.name,
-        appointmentDate: data.datetime.date,
-        appointmentTime: data.datetime.time,
-        patientName: data.name,
-        patientEmail: data.email,
-        patientPhone: data.phone,
-        message: data.message || "",
-        status: false,
-        userId: user?.$id ?? null,
-      }),
-    );
-    await serviceCheckout();
-    toast.success("Appointment booked successfully");
-    reset();
-  };
+ const onSubmit = async (data: FormValues) => {
+   console.log("Full Form Data:", data);
+
+   dispatch(
+     bookedService({
+       serviceTitle: data.service,
+       doctorId: data.doctor.id,
+       doctorName: data.doctor.name,
+       appointmentDate: data.datetime.date,
+       appointmentTime: data.datetime.time,
+       patientName: data.name,
+       patientEmail: data.email,
+       patientPhone: data.phone,
+       message: data.message || "",
+       status: false,
+       userId: user?.$id ?? null,
+     }),
+   );
+
+   await ServiceCheckout(data.name, data.email, user?.$id);
+
+   toast.success("Appointment booked successfully");
+   reset();
+ };
 
   const mergedDoctors = aboutTeams.map((doc) => {
     const available = doctorAvailability.find((d) => d.doctorId === doc.id);
