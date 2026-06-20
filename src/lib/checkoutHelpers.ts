@@ -37,23 +37,23 @@ export const SubscriptionCheckout = async (
   planId: string,
   planName: string,
   planPrice: number,
+  patientId: string,
+  patientName: string,
+  patientEmail: string,
 ) => {
-  const patient = getPatientFromCookie();
-
-  if (!patient) {
+  if (!patientEmail) {
     console.error("No patient session found. Cannot proceed to checkout.");
     alert("Your session has expired. Please log in again.");
     return;
   }
 
-  // Merge plan info + patient data into one payload
   const payload = {
     planId,
     planName,
     planPrice,
-    patientId: patient.patient_id,
-    patientName: patient.name,
-    patientEmail: patient.email,
+    patientId,
+    patientName,
+    patientEmail,
   };
 
   try {
@@ -76,6 +76,7 @@ export const SubscriptionCheckout = async (
     alert("Something went wrong. Please try again.");
   }
 };
+
 
 // ─────────────────────────────────────────────
 // ✅ SERVICE BOOKING CHECKOUT

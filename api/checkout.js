@@ -25,6 +25,8 @@ export default async function handler(req, res) {
       patientEmail,
     } = req.body;
 
+    console.log("patient email", patientEmail);
+
     if (!patientEmail) {
       return res
         .status(400)

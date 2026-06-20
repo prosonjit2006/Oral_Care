@@ -23,6 +23,7 @@ import { useEffect } from "react";
 import { fetchPlanList, setCheckoutPlan } from "../store/slices/plan.slice";
 import { motion } from "motion/react";
 import { SubscriptionCheckout } from "../lib/checkoutHelpers";
+import { getPatientFromCookie } from "../lib/getPatientFromCookie";
 
 const Payments = () => {
   const navigate = useNavigate();
@@ -71,10 +72,15 @@ const Payments = () => {
 
     // stripe checkout fns
 
+    const patient = getPatientFromCookie();
+
     await SubscriptionCheckout(
       selectedPlan.$id,
       selectedPlan.planname,
       selectedPlan.price,
+      patient.$id,
+      patient.name,
+      patient.email,
     );
 
     console.log("checkout", selectedPlan);

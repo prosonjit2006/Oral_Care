@@ -16,7 +16,9 @@ export default async function handler(req, res) {
 
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    const { patientId, patientName, patientEmail } = req.body;
+    const { patientId, patientName, patientEmail } = req.body
+
+    console.log('patient email', patientEmail)
 
     if (!patientEmail) {
       return res
