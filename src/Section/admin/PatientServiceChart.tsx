@@ -21,22 +21,19 @@ ChartJS.register(
   Legend,
 );
 
-// Shape of a single document in the `appointments` Appwrite collection.
 interface Appointment {
   $id: string;
   $createdAt: string;
   $updatedAt: string;
-  serviceTitle: string;
-  doctorName: string;
-  appointmentDate: string;
-  appointmentTime: string;
   patientName: string;
-  patientEmail: string;
-  patientPhone: string;
-  message: string;
-  status: boolean | string;
-  userId: string;
-  doctorId: number;
+  patientId: string | null;
+  serviceName: string;
+  doctorName: string;
+  appointmentDate: string | null;
+  appointmentTime: string | null;
+  patientEmail: string | null;
+  status: boolean | null;
+  message: string | null;
 }
 
 interface RootState {
@@ -47,8 +44,6 @@ interface RootState {
 
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-// One color per service, cycling if there are more services than colors.
-// All chosen to pop against the dark dashboard card.
 const SERVICE_COLOR_PALETTE = [
   "#2DD4BF", // teal-400
   "#FBBF24", // amber-400
@@ -58,30 +53,25 @@ const SERVICE_COLOR_PALETTE = [
   "#FB923C", // orange-400
 ];
 
-// JS's Date.getDay() is Sunday-first (0-6). Convert to Monday-first (0-6)
-// so it lines up with DAY_LABELS.
 const toMondayFirstIndex = (date: Date): number => (date.getDay() + 6) % 7;
 
-// Count how many appointments were *booked* (by $createdAt) on each
-// weekday, broken down per service — so admins can see both booking
-// volume and which services are driving it.
 const buildChartData = (appointments: Appointment[]): ChartData<"bar"> => {
-  const serviceTitles = Array.from(
-    new Set(appointments.map((a) => a.serviceTitle)),
+  const serviceNames = Array.from(
+    new Set(appointments.map((a) => a.serviceName)),
   );
 
-  const datasets = serviceTitles.map((title, index) => {
+  const datasets = serviceNames.map((name, index) => {
     const countsByDay = Array(7).fill(0);
 
     appointments
-      .filter((a) => a.serviceTitle === title)
+      .filter((a) => a.serviceName === name)
       .forEach((a) => {
         const createdAt = new Date(a.$createdAt);
         countsByDay[toMondayFirstIndex(createdAt)] += 1;
       });
 
     return {
-      label: title,
+      label: name,
       data: countsByDay,
       backgroundColor:
         SERVICE_COLOR_PALETTE[index % SERVICE_COLOR_PALETTE.length],
