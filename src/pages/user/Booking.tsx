@@ -134,7 +134,7 @@ const Booking = () => {
         style={{ position: "static", top: 26, left: 24, zIndex: 1000 }}
       >
         <Tooltip title="Back">
-          <Fab color="primary" onClick={() => navigate(-1)}>
+          <Fab color="primary" onClick={() => navigate("/")}>
             <ArrowLeft />
           </Fab>
         </Tooltip>

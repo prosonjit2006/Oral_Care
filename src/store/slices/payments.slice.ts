@@ -8,7 +8,7 @@ const initialState: PaymentRecordState = {
   Payments: [],
 };
 
-//fetch doctors list
+//fetch payments list
 export const fetchPaymentsRecordList = createAsyncThunk(
   "admin/payments",
   async (_, { rejectWithValue }) => {
@@ -17,13 +17,13 @@ export const fetchPaymentsRecordList = createAsyncThunk(
       // console.log('Doctor res from thunk', res)
       return {
         success: true,
-        message: "Successfully Doctors List Fetched",
+        message: "Successfully Payments List Fetched",
         data: res,
       };
     } catch {
       const err = {
         success: false,
-        message: "Faled to fetch doctors list",
+        message: "Faled to fetch Payments list",
       };
       return rejectWithValue(err.message);
     }
