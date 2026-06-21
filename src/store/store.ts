@@ -7,6 +7,7 @@ import planReducer from "./slices/plan.slice";
 import profileReducer from "./slices/profile.slice";
 import bookingReducer from "./slices/booking.slice";
 import appointmentReducer from "./slices/appointment.slice";
+import paymentsReducer from "./slices/payments.slice";
 
 export const Store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const Store = configureStore({
     profile: profileReducer,
     booking: bookingReducer,
     appointment: appointmentReducer,
+    payments: paymentsReducer,
   },
 });
