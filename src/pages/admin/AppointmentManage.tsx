@@ -132,214 +132,305 @@ const AppointmentManage = () => {
     reset();
   };
 
-  return (
-    <Container disableGutters maxWidth={false} sx={{ p: 2 }}>
-      {/* header */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          position: "sticky",
-          top: 0,
-          zIndex: 10,
-          mb: 2,
-        }}
-      >
-        <Typography variant="h5" sx={{ color: "white" }}>
-          All Appointments Lists
-        </Typography>
+ return (
+   <Container
+     disableGutters
+     maxWidth={false}
+     sx={{
+       px: { xs: 1, sm: 2, md: 3, lg: 3, xl: 4 },
+       py: 2,
+     }}
+   >
+     {/* Header */}
+     <Box
+       sx={{
+         display: "flex",
+         flexDirection: { xs: "column", sm: "row" },
+         justifyContent: "space-between",
+         alignItems: { xs: "stretch", sm: "center" },
+         gap: 2,
+         mb: 3,
+       }}
+     >
+       <Typography
+         variant="h5"
+         sx={{
+           color: "white",
+           fontSize: {
+             xs: "1.25rem",
+             sm: "1.4rem",
+             md: "1.6rem",
+           },
+         }}
+       >
+         All Appointments Lists
+       </Typography>
 
-        <Button
-          variant="contained"
-          onClick={() => dispatch(setAppointmentDialogOpen())}
-        >
-          Add New Appointment
-        </Button>
-      </Box>
+       <Button
+         variant="contained"
+         onClick={() => dispatch(setAppointmentDialogOpen())}
+         sx={{
+           width: {
+             xs: "100%",
+             sm: "fit-content",
+           },
+         }}
+       >
+         Add New Appointment
+       </Button>
+     </Box>
 
-      {/* dialog */}
-      <Dialog
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        open={dialog.open}
-        onClose={() => dispatch(setAppointmentDialogClose())}
-        fullWidth
-        maxWidth="xs"
-      >
-        <DialogTitle>
-          {dialog.selectedAppointment
-            ? "Edit Appointment"
-            : "Add New Appointment"}
-        </DialogTitle>
+     {/* Dialog */}
+     <Dialog
+       component="form"
+       onSubmit={handleSubmit(onSubmit)}
+       open={dialog.open}
+       onClose={() => dispatch(setAppointmentDialogClose())}
+       fullWidth
+       maxWidth="sm"
+       slotProps={{
+         paper: {
+           sx: {
+             width: {
+               xs: "95%",
+               sm: "90%",
+               md: 600,
+             },
+           },
+         },
+       }}
+     >
+       <DialogTitle>
+         {dialog.selectedAppointment
+           ? "Edit Appointment"
+           : "Add New Appointment"}
+       </DialogTitle>
 
-        <DialogContent
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-        >
-          {/* * Shared cascading Service -> Doctor -> Date -> Time fields,
-              used for both Add and Edit flows */}
-          <ServiceDoctorDateTimeFields
-            register={register}
-            watch={watch}
-            setValue={setValue}
-            errors={errors}
-            patients={patients}
-            services={services}
-            doctors={doctors}
-          />
+       <DialogContent
+         sx={{
+           display: "flex",
+           flexDirection: "column",
+           gap: 2,
+           pt: 2,
+         }}
+       >
+         <ServiceDoctorDateTimeFields
+           register={register}
+           watch={watch}
+           setValue={setValue}
+           errors={errors}
+           patients={patients}
+           services={services}
+           doctors={doctors}
+         />
 
-          {dialog.selectedAppointment ? (
-            // * Edit mode — only Message is shown beyond the cascading fields
-            <DynamicInput
-              name="message"
-              label="Message"
-              placeholder="Update message or notes"
-              type="text"
-              rows={3}
-              required={false}
-              register={register}
-              errors={errors}
-            />
-          ) : (
-            // * Add mode — full set of patient detail fields
-            appointmentAddInputField.map((field) => (
-              <DynamicInput
-                key={field.name}
-                name={field.name as Path<AppointmentPayload>}
-                label={field.label}
-                placeholder={field.placeholder}
-                type={field.type}
-                rows={field.rows}
-                required={field.required}
-                register={register}
-                errors={errors}
-              />
-            ))
-          )}
-        </DialogContent>
+         {dialog.selectedAppointment ? (
+           <DynamicInput
+             name="message"
+             label="Message"
+             placeholder="Update message or notes"
+             type="text"
+             rows={3}
+             required={false}
+             register={register}
+             errors={errors}
+           />
+         ) : (
+           appointmentAddInputField.map((field) => (
+             <DynamicInput
+               key={field.name}
+               name={field.name as Path<AppointmentPayload>}
+               label={field.label}
+               placeholder={field.placeholder}
+               type={field.type}
+               rows={field.rows}
+               required={field.required}
+               register={register}
+               errors={errors}
+             />
+           ))
+         )}
+       </DialogContent>
 
-        <DialogActions>
-          <Button onClick={() => dispatch(setAppointmentDialogClose())}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained">
-            {dialog.selectedAppointment ? "Update" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+       <DialogActions
+         sx={{
+           px: 3,
+           pb: 2,
+           flexDirection: {
+             xs: "column",
+             sm: "row",
+           },
+           gap: 1,
+         }}
+       >
+         <Button
+           fullWidth
+           onClick={() => dispatch(setAppointmentDialogClose())}
+         >
+           Cancel
+         </Button>
 
-      {/* table ui part */}
-      {isLoading ? (
-        <CircularProgress size={25} />
-      ) : (
-        <>
-          {isError ? (
-            <Typography>{isError}</Typography>
-          ) : (
-            <TableContainer>
-              <Table
-                sx={{ minWidth: 650, color: "#fff" }}
-                aria-label="simple table"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left">Patient Name</TableCell>
-                    <TableCell align="left">Patient Email</TableCell>
-                    <TableCell align="left">Service</TableCell>
-                    <TableCell align="left">Doctor</TableCell>
-                    <TableCell align="center">Date</TableCell>
-                    <TableCell align="center">Time</TableCell>
-                    <TableCell align="center">Status</TableCell>
-                    <TableCell align="center">Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Appointments?.map((row) => (
-                    <TableRow
-                      key={row.$id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <TableCell>{row.patientName}</TableCell>
-                      <TableCell>{row.patientEmail}</TableCell>
-                      <TableCell>{row.serviceName}</TableCell>
-                      <TableCell>{row.doctorName}</TableCell>
-                      <TableCell>{row.appointmentDate}</TableCell>
-                      <TableCell>{row.appointmentTime}</TableCell>
+         <Button fullWidth type="submit" variant="contained">
+           {dialog.selectedAppointment ? "Update" : "Add"}
+         </Button>
+       </DialogActions>
+     </Dialog>
 
-                      <TableCell
-                        align="center"
-                        sx={{
-                          pointerEvents: "visible",
-                          opacity: 1,
-                          color: "white",
-                        }}
-                      >
-                        <Tooltip title={row.status ? "Rejected" : "Approved"}>
-                          <FormControlLabel
-                            label={row.status ? "Approved" : "Rejected"}
-                            control={
-                              <Switch
-                                checked={row.status}
-                                onChange={() =>
-                                  dispatch(
-                                    changeAppointmentStatus({
-                                      id: row.$id,
-                                      status: row.status,
-                                    }),
-                                  )
-                                }
-                              />
-                            }
-                          />
-                        </Tooltip>
-                      </TableCell>
+     {/* Table */}
+     {isLoading ? (
+       <CircularProgress size={25} />
+     ) : isError ? (
+       <Typography>{isError}</Typography>
+     ) : (
+       <TableContainer
+         sx={{
+           width: "100%",
+           overflowX: "auto",
+           borderRadius: 2,
+         }}
+       >
+         <Table
+           aria-label="simple table"
+           sx={{
+             minWidth: {
+               xs: 900,
+               sm: 900,
+               md: 1000,
+               lg: 1100,
+               xl: 1200,
+             },
+           }}
+         >
+           <TableHead>
+             <TableRow>
+               <TableCell>Patient Name</TableCell>
+               <TableCell>Patient Email</TableCell>
+               <TableCell>Service</TableCell>
+               <TableCell>Doctor</TableCell>
+               <TableCell align="center">Date</TableCell>
+               <TableCell align="center">Time</TableCell>
+               <TableCell align="center">Status</TableCell>
+               <TableCell align="center">Action</TableCell>
+             </TableRow>
+           </TableHead>
 
-                      <TableCell align="center" sx={{ marginLeft: "10px " }}>
-                        <Box sx={{ display: "flex", gap: 1 }}>
-                          <Tooltip title="Edit">
-                            <IconButton
-                              onClick={() =>
-                                dispatch(setEditAppointmentDialogOpen(row))
-                              }
-                              sx={{
-                                bgcolor: "#bbdefb",
-                                "&:hover": { bgcolor: "#e3f2fd" },
-                                pointerEvents: "visible",
-                                opacity: 1,
-                              }}
-                            >
-                              <Pencil size={16} className="text-blue-700" />
-                            </IconButton>
-                          </Tooltip>
+           <TableBody>
+             {Appointments?.map((row) => (
+               <TableRow key={row.$id}>
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+                   {row.patientName}
+                 </TableCell>
 
-                          <Tooltip title="Delete">
-                            <IconButton
-                              onClick={() =>
-                                dispatch(deleteAppointment(row.$id))
-                              }
-                              sx={{
-                                bgcolor: "#ffcdd2",
-                                "&:hover": { bgcolor: "#ffebee" },
-                                pointerEvents: "visible",
-                                opacity: 1,
-                              }}
-                            >
-                              <Trash2 size={16} className="text-red-700" />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </>
-      )}
-    </Container>
-  );
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+                   {row.patientEmail}
+                 </TableCell>
+
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+                   {row.serviceName}
+                 </TableCell>
+
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+                   {row.doctorName}
+                 </TableCell>
+
+                 <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+                   {row.appointmentDate}
+                 </TableCell>
+
+                 <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+                   {row.appointmentTime}
+                 </TableCell>
+
+                 <TableCell align="center">
+                   <Tooltip title={row.status ? "Rejected" : "Approved"}>
+                     <FormControlLabel
+                       sx={{
+                         m: 0,
+                         flexDirection: {
+                           xs: "column",
+                           md: "row",
+                         },
+                         gap: 0.5,
+                       }}
+                       label={
+                         <Typography
+                           sx={{
+                             fontSize: {
+                               xs: "0.7rem",
+                               sm: "0.8rem",
+                             },
+                           }}
+                         >
+                           {row.status ? "Approved" : "Rejected"}
+                         </Typography>
+                       }
+                       control={
+                         <Switch
+                           size="small"
+                           checked={row.status}
+                           onChange={() =>
+                             dispatch(
+                               changeAppointmentStatus({
+                                 id: row.$id,
+                                 status: row.status,
+                               }),
+                             )
+                           }
+                         />
+                       }
+                     />
+                   </Tooltip>
+                 </TableCell>
+
+                 <TableCell align="center">
+                   <Box
+                     sx={{
+                       display: "flex",
+                       justifyContent: "center",
+                       gap: 1,
+                     }}
+                   >
+                     <Tooltip title="Edit">
+                       <IconButton
+                         size="small"
+                         onClick={() =>
+                           dispatch(setEditAppointmentDialogOpen(row))
+                         }
+                         sx={{
+                           bgcolor: "#bbdefb",
+                           "&:hover": {
+                             bgcolor: "#e3f2fd",
+                           },
+                         }}
+                       >
+                         <Pencil size={16} className="text-blue-700" />
+                       </IconButton>
+                     </Tooltip>
+
+                     <Tooltip title="Delete">
+                       <IconButton
+                         size="small"
+                         onClick={() => dispatch(deleteAppointment(row.$id))}
+                         sx={{
+                           bgcolor: "#ffcdd2",
+                           "&:hover": {
+                             bgcolor: "#ffebee",
+                           },
+                         }}
+                       >
+                         <Trash2 size={16} className="text-red-700" />
+                       </IconButton>
+                     </Tooltip>
+                   </Box>
+                 </TableCell>
+               </TableRow>
+             ))}
+           </TableBody>
+         </Table>
+       </TableContainer>
+     )}
+   </Container>
+ );
 };
 
 export default AppointmentManage;
