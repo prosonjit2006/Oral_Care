@@ -3,9 +3,9 @@ import AboutUs from "../../Section/Home/AboutUs";
 import Appointment from "../../Section/Home/Appointment";
 import Banner from "../../Section/Home/Banner";
 import DentalServices from "../../Section/Home/DentalServices";
-import Plans from "../../Section/Home/Plans";
 import Reviews from "../../Section/Home/Reviews";
 import ServicesBooking from "../../Section/Home/ServicesBooking";
+import SubscriptionPlans from "../../Section/Subscription/SubscriptionPlans";
 
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
       <Appointment />
       <AboutTeams />
       <Reviews />
-      <Plans />
+      <SubscriptionPlans />
       <ServicesBooking />
     </>
   );

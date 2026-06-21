@@ -10,6 +10,7 @@ export interface Plan {
   price: number;
   status: boolean;
   feature: string;
+  recomended: boolean
 }
 
 export interface PlanState {
