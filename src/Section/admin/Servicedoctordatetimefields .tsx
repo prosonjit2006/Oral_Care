@@ -1,4 +1,4 @@
-import { MenuItem, TextField } from "@mui/material";
+import { Box, MenuItem, TextField, Typography } from "@mui/material";
 import type {
   FieldErrors,
   UseFormRegister,
@@ -7,6 +7,18 @@ import type {
 } from "react-hook-form";
 import type { AppointmentPayload } from "../../type/interface/appointment.interface";
 import { getDoctorSchedule } from "../../services/json/appointment.json";
+import type { Patient } from "../../type/interface/patient.interface";
+import { serviceDoctorMap } from "../../services/json/serviceDoctorMap";
+
+// interface Patient {
+//   $id: string;
+//   userId: string;
+//   patientName: string;
+//   patientEmail: string;
+//   patientPhone: string;
+//   gender?: string;
+//   address?: string;
+// }
 
 interface Service {
   $id: string;
@@ -27,59 +39,134 @@ interface ServiceDoctorDateTimeFieldsProps {
   watch: UseFormWatch<AppointmentPayload>;
   setValue: UseFormSetValue<AppointmentPayload>;
   errors: FieldErrors<AppointmentPayload>;
+  patients: Patient[];
   services: Service[];
   doctors: Doctor[];
 }
 
-// * Cascading Service -> Doctor -> Date -> Time selection fields
-// * Each step resets and disables the following ones until a value is chosen.
 const ServiceDoctorDateTimeFields = ({
   register,
   watch,
   setValue,
   errors,
+  patients,
   services,
   doctors,
 }: ServiceDoctorDateTimeFieldsProps) => {
-  const serviceTitle = watch("serviceTitle");
+  const patientId = watch("patientId");
+  const serviceName = watch("serviceName");
   const doctorName = watch("doctorName");
   const appointmentDate = watch("appointmentDate");
+  const appointmentTime = watch("appointmentTime");
 
-  // * NOTE: doctor.specialization (e.g. "Endodontics") does not match
-  // * service.servicename (e.g. "General Checkups") in the current data,
-  // * so filtering doctors by service was always returning an empty list.
-  // * Until services/specializations share a common field, show all
-  // * active doctors (status === true) once a service is picked.
-  const filteredDoctors = doctors.filter((doctor) => doctor.status !== false);
+  const filteredDoctors =
+    serviceName.length > 0
+      ? doctors.filter(
+          (doctor) =>
+            doctor.status &&
+            serviceDoctorMap[serviceName]?.includes(doctor.name),
+        )
+      : [];
 
-  const selectedDoctor = doctors.find((doctor) => doctor.name === doctorName);
+  //  console.table(
+  //    doctors.map((doctor) => ({
+  //      name: doctor.name,
+  //      status: doctor.status,
+  //      included: serviceDoctorMap[serviceName]?.includes(doctor.name),
+  //    })),
+  //  );
 
-  // * dummy schedule for now, keyed by doctor name
+  const selectedDoctor = filteredDoctors.find(
+    (doctor) => doctor.name === doctorName,
+  );
+
   const schedule = getDoctorSchedule(selectedDoctor?.name);
 
   const availableDates = Object.keys(schedule);
 
-  const selectedSlots = appointmentDate ? schedule[appointmentDate] || [] : [];
+  const selectedSlots =
+    appointmentDate && schedule[appointmentDate]
+      ? schedule[appointmentDate]
+      : [];
 
   return (
     <>
-      {/* Service */}
+      {/* Patient */}
       <TextField
-        {...register("serviceTitle")}
         select
-        label="Service"
         fullWidth
-        value={serviceTitle}
+        label="Patient"
+        // value={patientId}
+        error={!!errors.patientId}
+        helperText={errors.patientId?.message}
         onChange={(e) => {
-          setValue("serviceTitle", e.target.value, { shouldValidate: true });
+          const patient = patients.find((p) => p.$id === e.target.value);
+
+          if (!patient) return;
+
+          setValue("patientId", patient.$id, {
+            shouldValidate: true,
+          });
+
+          setValue("patientId", patient.$id);
+
+          setValue("patientName", patient.name);
+
+          setValue("patientEmail", patient.email);
+
+          setValue("serviceName", "");
           setValue("doctorName", "");
-          setValue("doctorId", "");
           setValue("appointmentDate", "");
           setValue("appointmentTime", "");
         }}
-        error={!!errors.serviceTitle}
-        helperText={errors.serviceTitle?.message}
-        sx={{ mt: 1 }}
+      >
+        {patients.length > 0 ? (
+          patients.map((patient) => (
+            <MenuItem key={patient.$id} value={patient.$id}>
+              {patient.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>No patients available</MenuItem>
+        )}
+      </TextField>
+
+      {/* Patient Preview */}
+      {patientId && (
+        <Box
+          sx={{
+            p: 2,
+            border: "1px solid #ddd",
+            borderRadius: 2,
+            mt: 1,
+          }}
+        >
+          <Typography>Name: {watch("patientName")}</Typography>
+
+          <Typography>Email: {watch("patientEmail")}</Typography>
+        </Box>
+      )}
+
+      {/* Service */}
+      <TextField
+        {...register("serviceName")}
+        select
+        fullWidth
+        label="Service"
+        disabled={!patientId}
+        value={serviceName}
+        error={!!errors.serviceName}
+        helperText={errors.serviceName?.message}
+        sx={{ mt: 2 }}
+        onChange={(e) => {
+          setValue("serviceName", e.target.value, {
+            shouldValidate: true,
+          });
+
+          setValue("doctorName", "");
+          setValue("appointmentDate", "");
+          setValue("appointmentTime", "");
+        }}
       >
         {services.map((service) => (
           <MenuItem key={service.$id} value={service.servicename}>
@@ -92,20 +179,20 @@ const ServiceDoctorDateTimeFields = ({
       <TextField
         {...register("doctorName")}
         select
-        label="Doctor"
         fullWidth
+        disabled={!serviceName}
+        label="Doctor"
         value={doctorName}
+        error={!!errors.doctorName}
+        helperText={errors.doctorName?.message}
         onChange={(e) => {
-          const name = e.target.value;
-          const doc = doctors.find((d) => d.name === name);
-          setValue("doctorName", name, { shouldValidate: true });
-          setValue("doctorId", doc?.$id || doc?.id || "");
+          setValue("doctorName", e.target.value, {
+            shouldValidate: true,
+          });
+
           setValue("appointmentDate", "");
           setValue("appointmentTime", "");
         }}
-        error={!!errors.doctorName}
-        helperText={errors.doctorName?.message}
-        disabled={!serviceTitle}
       >
         {filteredDoctors.length > 0 ? (
           filteredDoctors.map((doctor) => (
@@ -114,9 +201,7 @@ const ServiceDoctorDateTimeFields = ({
             </MenuItem>
           ))
         ) : (
-          <MenuItem disabled value="">
-            Select a service first
-          </MenuItem>
+          <MenuItem disabled>No doctors available</MenuItem>
         )}
       </TextField>
 
@@ -124,59 +209,48 @@ const ServiceDoctorDateTimeFields = ({
       <TextField
         {...register("appointmentDate")}
         select
-        label="Appointment Date"
         fullWidth
+        label="Appointment Date"
+        disabled={!doctorName}
         value={appointmentDate}
+        error={!!errors.appointmentDate}
+        helperText={errors.appointmentDate?.message}
         onChange={(e) => {
           setValue("appointmentDate", e.target.value, {
             shouldValidate: true,
           });
+
           setValue("appointmentTime", "");
         }}
-        error={!!errors.appointmentDate}
-        helperText={errors.appointmentDate?.message}
-        disabled={!doctorName}
       >
-        {availableDates.length > 0 ? (
-          availableDates.map((date) => (
-            <MenuItem key={date} value={date}>
-              {date}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled value="">
-            Select a doctor first
+        {availableDates.map((date) => (
+          <MenuItem key={date} value={date}>
+            {date}
           </MenuItem>
-        )}
+        ))}
       </TextField>
 
       {/* Time */}
       <TextField
         {...register("appointmentTime")}
         select
-        label="Appointment Time"
         fullWidth
-        value={watch("appointmentTime")}
+        label="Appointment Time"
+        disabled={!appointmentDate}
+        value={appointmentTime}
+        error={!!errors.appointmentTime}
+        helperText={errors.appointmentTime?.message}
         onChange={(e) =>
           setValue("appointmentTime", e.target.value, {
             shouldValidate: true,
           })
         }
-        error={!!errors.appointmentTime}
-        helperText={errors.appointmentTime?.message}
-        disabled={!appointmentDate}
       >
-        {selectedSlots.length > 0 ? (
-          selectedSlots.map((time: string) => (
-            <MenuItem key={time} value={time}>
-              {time}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled value="">
-            Select a date first
+        {selectedSlots.map((time) => (
+          <MenuItem key={time} value={time}>
+            {time}
           </MenuItem>
-        )}
+        ))}
       </TextField>
     </>
   );

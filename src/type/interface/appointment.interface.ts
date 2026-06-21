@@ -1,17 +1,14 @@
 export interface Appointment {
   $id: string;
-  $createdAt: string;
-  serviceTitle: string;
-  doctorId: string;
+  patientId: string;
+  patientName: string;
+  patientEmail: string;
+  serviceName: string;
   doctorName: string;
   appointmentDate: string;
   appointmentTime: string;
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
   message: string;
   status: boolean;
-  userId: string;
 }
 
 export interface AppointmentState {
@@ -27,18 +24,16 @@ export interface AppointmentState {
 }
 
 export interface AppointmentPayload {
-    id: string
-  serviceTitle: string;
-  doctorId: string;
+  $id: string;
+  patientId: string;
+  patientName: string;
+  patientEmail: string;
+  serviceName: string;
   doctorName: string;
   appointmentDate: string;
   appointmentTime: string;
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
   message: string;
   status: boolean;
-  userId: string;
 }
 
 /**

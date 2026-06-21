@@ -17,18 +17,18 @@ export const addNewAppointmentFns = async (data: AppointmentPayload) => {
     tableId: "appointments",
     rowId: ID.unique(),
     data: {
-      serviceTitle: data.serviceTitle,
-      doctorId: Number(data.doctorId),
-      doctorName: data.doctorName,
-      appointmentDate: data.appointmentDate,
-      appointmentTime: data.appointmentTime,
+      patientId: data.patientId,
       patientName: data.patientName,
       patientEmail: data.patientEmail,
-      patientPhone: data.patientPhone,
+
+      serviceName: data.serviceName,
+      doctorName: data.doctorName,
+
+      appointmentDate: data.appointmentDate,
+      appointmentTime: data.appointmentTime,
+
       message: data.message,
       status: true,
-      userId: data.userId,
-      //   userId: "",
     },
   });
 
@@ -49,15 +49,18 @@ export const editAppointmentFns = async ({
     tableId: "appointments",
     rowId: id,
     data: {
-      serviceTitle: data.serviceTitle,
-      doctorId: Number(data.doctorId),
-      doctorName: data.doctorName,
-      appointmentDate: data.appointmentDate,
-      appointmentTime: data.appointmentTime,
+      patientId: data.patientId,
       patientName: data.patientName,
       patientEmail: data.patientEmail,
-      patientPhone: data.patientPhone,
+
+      serviceName: data.serviceName,
+      doctorName: data.doctorName,
+
+      appointmentDate: data.appointmentDate,
+      appointmentTime: data.appointmentTime,
+
       message: data.message,
+      status: true,
     },
   });
   console.log("response of editAppointment from fns", response);

@@ -37,11 +37,12 @@ import {
   setAppointmentDialogOpen,
   setEditAppointmentDialogOpen,
 } from "../../store/slices/appointment.slice";
-import { appointmentSchema } from "../../services/validation/appointment.validation";
 import { appointmentAddInputField } from "../../services/json/appointment.json";
 import { fetchServiceList } from "../../store/slices/service.slice";
 import { fetchDoctorList } from "../../store/slices/doctor.slice";
 import ServiceDoctorDateTimeFields from "../../Section/admin/Servicedoctordatetimefields ";
+import { appointmentSchema } from "../../services/validation/appointment.validation";
+import { fetchPatientList } from "../../store/slices/patient.slice";
 
 const AppointmentManage = () => {
   const { isLoading, isError, Appointments, dialog } = useAppSelector(
@@ -50,6 +51,9 @@ const AppointmentManage = () => {
 
   const { services } = useAppSelector((state) => state.service);
   const { doctors } = useAppSelector((state) => state.doctor);
+  const { patients } = useAppSelector((state) => state.patient);
+
+  console.log("doctors", doctors);
 
   const dispatch = useAppDispatch();
 
@@ -63,58 +67,49 @@ const AppointmentManage = () => {
   } = useForm<AppointmentPayload>({
     resolver: yupResolver(appointmentSchema) as any,
     defaultValues: {
-      serviceTitle: "",
-      doctorId: "",
+      patientId: "",
+      patientName: "",
+      patientEmail: "",
+      serviceName: "",
       doctorName: "",
       appointmentDate: "",
       appointmentTime: "",
-      patientName: "",
-      patientEmail: "",
-      patientPhone: "",
       message: "",
-      status: false,
-      userId: "",
+      status: true,
     },
   });
-
-  const selectedDoctor = doctors.find(
-    (doctor) => doctor.name === watch("doctorName"),
-  );
 
   useEffect(() => {
     dispatch(fetchAppointmentList());
     dispatch(fetchServiceList());
     dispatch(fetchDoctorList());
+    dispatch(fetchPatientList());
   }, [dispatch]);
 
   useEffect(() => {
     if (dialog.selectedAppointment) {
       reset({
-        serviceTitle: dialog.selectedAppointment.serviceTitle,
-        doctorId: dialog.selectedAppointment.doctorId,
+        patientId: dialog.selectedAppointment.patientId,
+        patientName: dialog.selectedAppointment.patientName,
+        patientEmail: dialog.selectedAppointment.patientEmail,
+        serviceName: dialog.selectedAppointment.serviceName,
         doctorName: dialog.selectedAppointment.doctorName,
         appointmentDate: dialog.selectedAppointment.appointmentDate,
         appointmentTime: dialog.selectedAppointment.appointmentTime,
-        patientName: dialog.selectedAppointment.patientName,
-        patientEmail: dialog.selectedAppointment.patientEmail,
-        patientPhone: dialog.selectedAppointment.patientPhone,
         message: dialog.selectedAppointment.message,
         status: dialog.selectedAppointment.status,
-        userId: dialog.selectedAppointment.userId,
       });
     } else {
       reset({
-        serviceTitle: "",
-        doctorId: "",
+        patientId: "",
+        patientName: "",
+        patientEmail: "",
+        serviceName: "",
         doctorName: "",
         appointmentDate: "",
         appointmentTime: "",
-        patientName: "",
-        patientEmail: "",
-        patientPhone: "",
         message: "",
-        status: false,
-        userId: "",
+        status: true,
       });
     }
   }, [dialog.selectedAppointment, dispatch, reset]);
@@ -124,18 +119,13 @@ const AppointmentManage = () => {
     if (dialog.selectedAppointment) {
       dispatch(
         editAppointment({
-          id: data.id,
+          id: data.$id,
           data: data,
         }),
       ).unwrap();
       toast.success("Appointment Details Edited Successfully");
     } else {
-      dispatch(
-        addNewAppointment({
-          ...data,
-          doctorId: selectedDoctor?.$id || "",
-        }),
-      ).unwrap();
+      dispatch(addNewAppointment(data)).unwrap();
       toast.success("New Appointment Added Successfully");
     }
     dispatch(setAppointmentDialogClose());
@@ -192,6 +182,7 @@ const AppointmentManage = () => {
             watch={watch}
             setValue={setValue}
             errors={errors}
+            patients={patients}
             services={services}
             doctors={doctors}
           />
@@ -251,13 +242,12 @@ const AppointmentManage = () => {
               >
                 <TableHead>
                   <TableRow>
+                    <TableCell align="left">Patient Name</TableCell>
+                    <TableCell align="left">Patient Email</TableCell>
                     <TableCell align="left">Service</TableCell>
                     <TableCell align="left">Doctor</TableCell>
                     <TableCell align="center">Date</TableCell>
                     <TableCell align="center">Time</TableCell>
-                    <TableCell align="center">Patient Name</TableCell>
-                    <TableCell align="center">Patient Email</TableCell>
-                    <TableCell align="center">Patient Phone</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Action</TableCell>
                   </TableRow>
@@ -270,13 +260,12 @@ const AppointmentManage = () => {
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
-                      <TableCell>{row.serviceTitle}</TableCell>
+                      <TableCell>{row.patientName}</TableCell>
+                      <TableCell>{row.patientEmail}</TableCell>
+                      <TableCell>{row.serviceName}</TableCell>
                       <TableCell>{row.doctorName}</TableCell>
                       <TableCell>{row.appointmentDate}</TableCell>
                       <TableCell>{row.appointmentTime}</TableCell>
-                      <TableCell>{row.patientName}</TableCell>
-                      <TableCell>{row.patientEmail}</TableCell>
-                      <TableCell>{row.patientPhone}</TableCell>
 
                       <TableCell
                         align="center"

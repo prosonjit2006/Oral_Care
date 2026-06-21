@@ -10,7 +10,6 @@ import {
 } from "../../services/validation/booking.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { bookingFormInput } from "../../services/json/bookinfForm.input";
-// import { toast } from "sonner";
 import BookingService from "../../Section/Booking/BookingService";
 import BookingDoctor from "../../Section/Booking/BookingDoctor";
 import BookingTime from "../../Section/Booking/BookingTime";
@@ -28,15 +27,13 @@ import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { ServiceCheckout } from "../../lib/checkoutHelpers";
 
-
 const ServicesData = ["Service", "Doctor", "Time", "Details"];
 
 const userCookie = Cookies.get("user");
 const user = userCookie ? JSON.parse(userCookie) : null;
 
 const Booking = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { patient } = useAppSelector((state) => state.booking);
 
@@ -88,30 +85,28 @@ const Booking = () => {
     phone: patient?.phone,
   };
 
- const onSubmit = async (data: FormValues) => {
-   console.log("Full Form Data:", data);
+  const onSubmit = async (data: FormValues) => {
+    console.log("Full Form Data:", data);
 
-   dispatch(
-     bookedService({
-       serviceTitle: data.service,
-       doctorId: data.doctor.id,
-       doctorName: data.doctor.name,
-       appointmentDate: data.datetime.date,
-       appointmentTime: data.datetime.time,
-       patientName: data.name,
-       patientEmail: data.email,
-       patientPhone: data.phone,
-       message: data.message || "",
-       status: false,
-       userId: user?.$id ?? null,
-     }),
-   );
+    dispatch(
+      bookedService({
+        patientId: patient.$id,
+        patientName: data.name,
+        patientEmail: data.email,
+        serviceName: data.service,
+        doctorName: data.doctor.name,
+        appointmentDate: data.datetime.date,
+        appointmentTime: data.datetime.time,
+        message: data.message || "",
+        status: false,
+      }),
+    );
 
-   await ServiceCheckout(data.name, data.email, user?.$id);
+    await ServiceCheckout(data.name, data.email, user?.$id);
 
-   toast.success("Appointment booked successfully");
-   reset();
- };
+    toast.success("Appointment booked successfully");
+    reset();
+  };
 
   const mergedDoctors = aboutTeams.map((doc) => {
     const available = doctorAvailability.find((d) => d.doctorId === doc.id);

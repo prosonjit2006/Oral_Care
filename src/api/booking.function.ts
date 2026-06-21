@@ -11,24 +11,23 @@ export const fetchPatientDataFns = async (email: string) => {
   return rseponse.rows[0];
 };
 
+// service booking patient side
 export const bookedServiceFns = async (data: BookingPayload) => {
-  const rseponse = await tablesDB.createRow({
+  const response = await tablesDB.createRow({
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
     tableId: "appointments",
     rowId: ID.unique(),
     data: {
-      serviceTitle: data.serviceTitle,
-      doctorId: data.doctorId,
+      patientId: data.patientId,
+      patientName: data.patientName,
+      patientEmail: data.patientEmail,
+      serviceName: data.serviceName,
       doctorName: data.doctorName,
       appointmentDate: data.appointmentDate,
       appointmentTime: data.appointmentTime,
-      patientName: data.patientName,
-      patientEmail: data.patientEmail,
-      patientPhone: data.patientPhone,
       message: data.message,
-      status: false,
-      userId: data.userId,
+      status: data.status,
     },
   });
-  return rseponse.rows[0];
+  return response;
 };

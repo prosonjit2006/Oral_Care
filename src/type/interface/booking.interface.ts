@@ -52,15 +52,13 @@ export interface BookingState {
 }
 
 export interface BookingPayload {
-  serviceTitle: string;
-  doctorId: number;
+  patientId: string | null;
+  patientName: string;
+  patientEmail: string;
+  serviceName: string;
   doctorName: string;
   appointmentDate: string;
   appointmentTime: string;
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
   message: string;
   status: boolean;
-  userId: string | null;
 }

@@ -39,30 +39,6 @@ export const getDoctorSchedule = (
 
 export const appointmentAddInputField = [
   {
-    name: "patientName",
-    label: "Patient Name",
-    placeholder: "Enter patient name",
-    type: "text",
-    required: true,
-    rows: 1,
-  },
-  {
-    name: "patientEmail",
-    label: "Patient Email",
-    placeholder: "Enter patient email",
-    type: "email",
-    required: true,
-    rows: 1,
-  },
-  {
-    name: "patientPhone",
-    label: "Patient Phone",
-    placeholder: "Enter patient phone number",
-    type: "number",
-    required: true,
-    rows: 1,
-  },
-  {
     name: "message",
     label: "Message",
     placeholder: "Add any additional message or notes",
