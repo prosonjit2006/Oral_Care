@@ -111,21 +111,21 @@ const Navbar = () => {
               {role === "admin" ? (
                 <button
                   onClick={() => navigate("/admin/dashboard")}
-                  className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                  className="block md:hidden bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
                 >
                   Admin Dashboard
                 </button>
               ) : (
                 <button
                   onClick={() => navigate("/profile")}
-                  className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                  className="block md:hidden bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
                 >
                   Profile
                 </button>
               )}
               <button
                 onClick={() => dispatch(LogOutUser())}
-                className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                className="block md:hidden bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
               >
                 Logout
               </button>
@@ -134,7 +134,7 @@ const Navbar = () => {
             <button
               onClick={() => dispatch(openLogin())}
               // onClick={() => navigate("/login")}
-              className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+              className="block md:hidden bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
             >
               Login
             </button>
