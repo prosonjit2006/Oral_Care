@@ -104,13 +104,48 @@ const Navbar = () => {
             Get Appointment
           </button>
 
-          {/* Mobile Button */}
-          <button
+          {/* Mobile Button part */}
+
+          {isAuthenticate ? (
+            <>
+              {role === "admin" ? (
+                <button
+                  onClick={() => navigate("/admin/dashboard")}
+                  className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                >
+                  Admin Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+                >
+                  Profile
+                </button>
+              )}
+              <button
+                onClick={() => dispatch(LogOutUser())}
+                className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => dispatch(openLogin())}
+              // onClick={() => navigate("/login")}
+              className="block bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
+            >
+              Login
+            </button>
+          )}
+
+          {/* <button
             onClick={() => navigate("/booking")}
             className="sm:hidden bg-blue-600 text-white px-3 py-1 rounded-full text-xs"
           >
             Get Appointment
-          </button>
+          </button> */}
 
           {/* Toggle */}
           <button
@@ -124,21 +159,30 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="lg:hidden bg-black/35 backdrop-blur-md shadow-lg">
-          <ul className="flex flex-col items-center gap-6 py-6">
-            {navItems.map((item, i) => (
-              <NavLink
-                key={i}
-                to={item.path}
-                end={item.path === "/"} // FIX here also
-                onClick={() => setOpen(false)}
-                className={mobileLinkStyle}
+        <>
+          <div className="lg:hidden bg-black/35 backdrop-blur-md shadow-lg">
+            <ul className="flex flex-col items-center gap-6 py-6">
+              {navItems.map((item, i) => (
+                <NavLink
+                  key={i}
+                  to={item.path}
+                  end={item.path === "/"} // FIX here also
+                  onClick={() => setOpen(false)}
+                  className={mobileLinkStyle}
+                >
+                  {item.name}
+                </NavLink>
+              ))}
+
+              <button
+                onClick={() => navigate("/booking")}
+                className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-700"
               >
-                {item.name}
-              </NavLink>
-            ))}
-          </ul>
-        </div>
+                Get Appointment
+              </button>
+            </ul>
+          </div>
+        </>
       )}
     </header>
   );
